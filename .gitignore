@@ -264,6 +264,7 @@ FakesAssemblies/
 
 # Machiavelli
 #allow
+!data/
 !data/WALI
 !empire_start_wali_only.bat
 
