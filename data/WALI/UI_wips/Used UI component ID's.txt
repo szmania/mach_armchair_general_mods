@@ -1,0 +1,49 @@
+><><><><><><><><><><><><><><><><><><><><><
+All used quick lookup:
+	987654321
+	987654322
+	987654323
+	987654324
+	987654325
+	987654326
+	987654327
+	987654328
+	987654329
+><><><><><><><><><><><><><><><><><><><><><
+
+
+
+Used in ACW mod:
+><><><><><><><><><><><><><><><><><><><><><
+	layout:
+		<title>ACW_date</title>
+		<id>987654321</id>
+		Child of: banners 
+			TGA 1 ID:
+				<id>987654322</id>
+			State 1 ID:
+				<title>ACW_GrandCampaign</title>
+				<id>987654323</id>
+			State 2 ID:
+				<title>ACW_Episodic</title>
+				<id>987654324</id>
+><><><><><><><><><><><><><><><><><><><><><
+
+Used in WALI:
+><><><><><><><><><><><><><><><><><><><><><
+	layout:
+		<title>WALI_AttritionPip</title>
+		<id>987654325</id>
+		Child of: buttons_army 
+			TGA 1 ID:
+				<id>987654326</id>
+			TGA 2 ID:
+				<id>987654327</id>
+			State 1 ID:
+				<title>HasAttrition</title>
+				<id>987654328</id>
+			State 2 ID:
+				<title>NoAttrition</title>
+				<id>987654329</id>
+><><><><><><><><><><><><><><><><><><><><><
+

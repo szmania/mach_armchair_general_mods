@@ -1,0 +1,635 @@
+**** WALI START ****
+
+WALI_Engine.exe:-10/07/2013 21:35:19 ==> WALI tried to open 1.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-7/17/2013 9:36:06 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/17/2013 9:36:29 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/17/2013 9:51:39 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/17/2013 10:00:35 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/17/2013 11:48:39 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/17/2013 11:48:49 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/20/2013 7:42:40 AM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/20/2013 9:59:20 AM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/20/2013 5:42:51 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/20/2013 5:44:52 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/20/2013 7:48:39 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/21/2013 9:23:27 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/21/2013 9:24:09 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/21/2013 9:29:40 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/21/2013 10:18:11 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/21/2013 10:19:23 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/21/2013 10:21:55 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/21/2013 10:22:39 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-1/20/2015 4:39:14 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-1/20/2015 4:39:51 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-1/20/2015 4:49:04 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-1/20/2015 4:56:18 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-1/20/2015 4:58:57 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-1/20/2015 5:03:11 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/20/2015 3:53:45 PM ==> Game instance of -FileLog could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-7/29/2015 9:23:43 PM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/29/2015 9:54:49 PM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/29/2015 10:02:14 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:02:24 PM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/29/2015 10:05:05 PM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/29/2015 10:20:41 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:20:42 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:20:57 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:22:58 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:22:58 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:22:58 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:23:00 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:30:30 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:30:37 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:30:38 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:30:46 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:30:46 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:30:47 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:30:47 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:30:47 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:30:48 PM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/29/2015 10:56:27 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:56:27 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 10:56:27 PM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/29/2015 11:05:59 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:05:59 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:05:59 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:06:13 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:06:13 PM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/29/2015 11:20:47 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:20:47 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:20:47 PM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/29/2015 11:23:37 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:23:37 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:23:37 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:23:45 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:23:45 PM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/29/2015 11:25:41 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:25:41 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:25:41 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:25:41 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:25:41 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:25:46 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:25:46 PM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/29/2015 11:35:34 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:35:35 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:35:35 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:35:36 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:35:36 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:35:38 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:35:38 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:36:02 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:36:02 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:36:02 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:36:02 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:36:09 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/29/2015 11:36:09 PM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/29/2015 11:37:10 PM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/30/2015 12:07:43 AM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/30/2015 12:09:02 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:09:10 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:22:05 AM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/30/2015 12:33:42 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:34:21 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:34:21 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:34:22 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:34:22 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:35:21 AM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/30/2015 12:38:48 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:38:52 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:38:52 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:38:53 AM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/30/2015 12:40:21 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:40:31 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:40:32 AM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/30/2015 12:47:54 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:47:54 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:47:54 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:48:54 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:48:54 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:48:54 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:48:54 AM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/30/2015 12:51:30 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:51:31 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:51:31 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:51:41 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:51:41 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:51:41 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:51:41 AM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/30/2015 12:53:22 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:53:22 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:53:22 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:53:26 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:53:26 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:53:27 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:53:27 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:53:27 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:53:27 AM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/30/2015 12:55:21 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:55:21 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:55:21 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:55:25 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:55:25 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:55:25 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:55:25 AM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/30/2015 12:56:04 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:56:04 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:56:04 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:56:07 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:56:07 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:56:08 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:56:08 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:56:08 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:56:08 AM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/30/2015 12:57:06 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:57:06 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:57:06 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:57:10 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:57:10 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:57:11 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:57:11 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:57:33 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:57:33 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:57:33 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:57:33 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:58:06 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 12:58:06 AM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-7/30/2015 1:01:04 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 1:01:04 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 1:01:04 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 1:01:08 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 1:01:08 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 1:01:08 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 1:01:08 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 1:05:41 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-7/30/2015 1:05:41 AM ==> LUA didn't deal with output.return in time
+**** WALI START ****
+
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:49 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 2:45:57 AM ==> Command Failure: SET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 2:45:58 AM ==> Command Failure: SET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 3:02:05 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 3:02:05 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 3:02:05 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 3:02:05 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 3:02:05 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 3:02:05 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 3:02:05 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 3:02:05 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 3:02:05 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 3:02:05 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/11/2015 3:02:05 AM ==> Command Failure: SET_ARTILLERY
+**** WALI START ****
+
+WALI_Engine.exe:-8/11/2015 7:51:55 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:51:55 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:51:56 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:51:56 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:51:57 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:51:57 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:51:58 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:51:58 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:51:59 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:51:59 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:52:00 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:52:00 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:52:01 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:52:01 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:52:02 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:52:02 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:52:03 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:52:03 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:52:04 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:52:04 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+WALI_Engine.exe:-8/11/2015 7:53:12 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+**** WALI START ****
+
+WALI_Engine.exe:-8/11/2015 7:56:32 PM ==> Command Failure: GET_UNIT_REPLENISHABLE
+**** WALI START ****
+
+WALI_Engine.exe:-8/11/2015 8:07:56 PM ==> Command Failure: GET_ALPHA_POINTER
+**** WALI START ****
+
+WALI_Engine.exe:-8/12/2015 2:39:15 AM ==> WALI tried to open 1058.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-8/12/2015 3:38:54 PM ==> Command Failure: SET_ARTILLERY
+**** WALI START ****
+
+WALI_Engine.exe:-8/13/2015 3:46:40 AM ==> WALI tried to open 1239.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-8/13/2015 4:06:56 AM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/13/2015 4:10:45 AM ==> Command Failure: SET_ARTILLERY
+**** WALI START ****
+
+WALI_Engine.exe:-8/13/2015 3:58:09 PM ==> WALI tried to open 147.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-8/13/2015 4:04:24 PM ==> Command Failure: SET_ARTILLERY
+WALI_Engine.exe:-8/13/2015 4:05:20 PM ==> Command Failure: SET_ARTILLERY
+**** WALI START ****
+
+WALI_Engine.exe:-8/18/2015 2:44:03 AM ==> Command Failure: SET_ARTILLERY
+**** WALI START ****
+
+WALI_Engine.exe:-8/19/2015 1:47:52 AM ==> WALI tried to open 147.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-8/19/2015 3:06:54 AM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-8/19/2015 3:07:08 AM ==> Command Failure: SET_ARTILLERY
+**** WALI START ****
+
+WALI_Engine.exe:-8/19/2015 1:10:17 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-8/19/2015 1:10:58 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-8/19/2015 1:11:01 PM ==> LUA didn't deal with output.return in time
+WALI_Engine.exe:-8/19/2015 1:11:19 PM ==> Command Failure: SET_ARTILLERY
+**** WALI START ****
+
+WALI_Engine.exe:-8/21/2015 1:43:12 AM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-8/24/2015 8:01:07 PM ==> WALI tried to open 132.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-8/27/2015 4:24:04 PM ==> WALI tried to open 2128.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-8/30/2015 3:17:06 PM ==> WALI tried to open 992.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-8/30/2015 9:47:53 PM ==> WALI tried to open 333.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-8/31/2015 12:28:40 AM ==> WALI tried to open 837.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-8/31/2015 3:59:05 PM ==> WALI tried to open 780.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-8/31/2015 8:18:53 PM ==> WALI tried to open 2297.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-9/1/2015 1:44:49 AM ==> WALI tried to open 2373.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-9/1/2015 2:05:00 AM ==> WALI tried to open 1356.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-9/2/2015 9:28:40 PM ==> WALI tried to open 1097.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-9/3/2015 2:34:20 AM ==> WALI tried to open 2232.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-9/3/2015 3:43:19 AM ==> WALI tried to open 2435.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-9/3/2015 11:27:26 AM ==> WALI tried to open 1815.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-9/3/2015 12:11:45 PM ==> WALI tried to open 3383.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-10/14/2015 2:57:34 PM ==> WALI tried to open 625.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-11/11/2015 10:39:54 PM ==> WALI tried to open 132.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-11/13/2015 12:36:28 AM ==> WALI tried to open 10538.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-11/13/2015 12:41:33 AM ==> WALI tried to open 13615.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-11/13/2015 2:12:11 AM ==> WALI tried to open 6880.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-11/18/2015 8:06:30 PM ==> WALI tried to open 2095.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-11/18/2015 8:09:26 PM ==> WALI tried to open 459.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-11/18/2015 8:44:22 PM ==> WALI tried to open 1425.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-11/18/2015 8:50:59 PM ==> WALI tried to open 2031.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-11/18/2015 9:08:41 PM ==> WALI tried to open 3108.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-11/18/2015 9:15:53 PM ==> WALI tried to open 4910.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/14/2015 1:56:13 PM ==> WALI tried to open 1.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/14/2015 9:46:27 PM ==> WALI tried to open 129.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/16/2015 4:34:05 PM ==> WALI tried to open 0.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/16/2015 4:39:12 PM ==> WALI tried to open 2975.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/16/2015 5:16:49 PM ==> WALI tried to open 1873.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/16/2015 5:18:20 PM ==> WALI tried to open 3776.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/16/2015 5:29:54 PM ==> WALI tried to open 100.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/16/2015 5:33:07 PM ==> WALI tried to open 995.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/16/2015 5:46:53 PM ==> WALI tried to open 3766.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-1/6/2016 1:05:43 AM ==> WALI tried to open 7981.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-1/13/2016 2:49:01 PM ==> WALI tried to open 114.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-2/3/2016 8:17:14 PM ==> WALI tried to open 2426.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/18/2016 1:39:42 PM ==> WALI tried to open 7751.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/19/2016 1:11:19 AM ==> WALI tried to open 1287.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/19/2016 2:00:34 AM ==> WALI tried to open 99.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/19/2016 2:13:57 AM ==> WALI tried to open 433.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/19/2016 8:56:40 PM ==> WALI tried to open 229.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/20/2016 12:37:16 AM ==> WALI tried to open 138.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/20/2016 12:38:44 AM ==> WALI tried to open 166.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/20/2016 1:05:30 AM ==> WALI tried to open 4530.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/20/2016 2:07:23 AM ==> WALI tried to open 33.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/20/2016 7:15:26 PM ==> WALI tried to open 811.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/20/2016 8:56:17 PM ==> WALI tried to open 2236.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/21/2016 6:05:39 PM ==> WALI tried to open 117.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/22/2016 1:47:50 AM ==> WALI tried to open 1111.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/22/2016 2:12:43 AM ==> WALI tried to open 175.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/22/2016 2:25:02 AM ==> WALI tried to open 326.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/23/2016 2:20:07 AM ==> WALI tried to open 0.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/23/2016 3:07:13 AM ==> WALI tried to open 56.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/23/2016 3:32:51 AM ==> WALI tried to open 95.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/23/2016 4:20:26 AM ==> WALI tried to open 141.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-12/24/2016 3:10:44 AM ==> WALI tried to open 0.WALI but it didn't exist!
+**** WALI START ****
+
+WALI_Engine.exe:-2/18/2019 2:25:19 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 2:25:28 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 2:25:28 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 2:25:28 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 2:25:28 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 2:25:28 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 2:25:28 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 2:25:28 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 2:25:28 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+**** WALI START ****
+
+WALI_Engine.exe:-2/18/2019 3:53:13 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 3:53:19 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 3:53:19 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 3:53:19 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 3:53:19 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 3:53:19 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 3:53:19 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 3:53:19 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 3:53:19 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+**** WALI START ****
+
+WALI_Engine.exe:-2/18/2019 4:29:00 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 4:29:05 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 4:29:05 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 4:29:05 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 4:29:05 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 4:29:05 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 4:29:05 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 4:29:05 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 4:29:05 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+**** WALI START ****
+
+WALI_Engine.exe:-2/18/2019 6:31:07 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+**** WALI START ****
+
+WALI_Engine.exe:-2/18/2019 6:57:15 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 6:57:47 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 6:57:47 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 6:57:47 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 6:57:47 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 6:57:47 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 6:57:47 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 6:57:48 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+WALI_Engine.exe:-2/18/2019 6:57:48 PM ==> Access to the path 'G:\Program Files (x86)\Empire Total War - Vanilla - MY MOD TESTING\data\WALI\Logs\FileLog.txt' is denied.
+**** WALI START ****
+
+WALI_Engine.exe:-5/11/2019 6:20:13 PM ==> get_campaign_unit_mulitplier.lua wasn't added to manifest (Did not have corresponding wcf file)
+**** WALI START ****
+
+WALI_Engine.exe:-5/11/2019 6:50:12 PM ==> GetCampaignUnitMulitplier.lua wasn't added to manifest (Did not have corresponding wcf file)
+**** WALI START ****
+
+WALI_Engine.exe:-5/11/2019 6:50:27 PM ==> GetCampaignUnitMulitplier.lua wasn't added to manifest (Did not have corresponding wcf file)
+**** WALI START ****
+
+WALI_Engine.exe:-5/11/2019 7:11:09 PM ==> Command Failure: GET_CAMPAIGN_UNIT_MULTIPLIER
+**** WALI START ****
+
+WALI_Engine.exe:-5/11/2019 7:13:11 PM ==> Command Failure: GET_CAMPAIGN_UNIT_MULTIPLIER
+**** WALI START ****
+
+WALI_Engine.exe:-5/11/2019 7:21:53 PM ==> Command Failure: GET_CAMPAIGN_UNIT_MULTIPLIER
+**** WALI START ****
+
+WALI_Engine.exe:-5/11/2019 7:23:11 PM ==> Command Failure: GET_CAMPAIGN_UNIT_MULTIPLIER
+**** WALI START ****
+
+WALI_Engine.exe:-5/11/2019 7:24:34 PM ==> Command Failure: GET_CAMPAIGN_UNIT_MULTIPLIER
+**** WALI START ****
+
+WALI_Engine.exe:-5/11/2019 7:41:01 PM ==> Command Failure: GET_CAMPAIGN_UNIT_MULTIPLIER
+**** WALI START ****
+
+WALI_Engine.exe:-5/11/2019 7:44:48 PM ==> Command Failure: GET_CAMPAIGN_UNIT_MULTIPLIER
+**** WALI START ****
+
+WALI_Engine.exe:-5/11/2019 9:55:36 PM ==> Command Failure: GET_CAMPAIGN_UNIT_MULTIPLIER
+**** WALI START ****
+
+WALI_Engine.exe:-5/11/2019 10:04:49 PM ==> Command Failure: GET_CAMPAIGN_UNIT_MULTIPLIER

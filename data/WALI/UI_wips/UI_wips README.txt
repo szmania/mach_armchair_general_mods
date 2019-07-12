@@ -1,0 +1,3 @@
+compile all loose UI files.bat:		Compiles all xml UI layouts in this directory to extensionless UI files. Will add "compiled" extension, which must be removed. Requires python
+decompile all loose UI files.bat:	Decompiles all extensionless UI layout files in this directory to xml layouts. Requires python
+Used UI component ID's.txt:			List of all unique UI component ID's that have been used by this project.
