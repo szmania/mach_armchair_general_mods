@@ -278,6 +278,7 @@ data/WALI/WIP/*
 
 #allow
 !data/
+!data/.gitignore
 !data/WALI.pack
 !data/WALI/
 !data/WALI/*
