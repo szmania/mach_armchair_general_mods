@@ -263,8 +263,12 @@ FakesAssemblies/
 *.opt
 
 # Machiavelli
+#allow
 !data/WALI
 !empire_start_wali_only.bat
+
+#disallow
+*
 *.backup
 .idea/
 data/WALI/_OLD/
