@@ -278,5 +278,6 @@ data/WALI/WIP/*
 
 #allow
 !data/
+!data/WALI/
 !data/WALI/*
 !empire_start_wali_only.bat
