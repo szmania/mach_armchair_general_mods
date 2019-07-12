@@ -269,7 +269,7 @@ FakesAssemblies/
 /*/
 *.backup
 .idea/
-data/*
+data/*.pack
 data/WALI/_OLD/
 data/WALI/docs/
 data/WALI/Engine/Engine_src - backup
