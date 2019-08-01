@@ -16,7 +16,7 @@ mach_data = require "WALI/mach_data"
 scripting = require "EpisodicScripting"
 
 
-__character_names_file_path__ =	"data/WALI/Misc/character_names.txt"
+__character_names_file_path__ =	"data/WALI/mach_data/character_names.txt"
 __current_year__ = nil
 __current_turn__ = nil
 __current_season_string__ = nil
