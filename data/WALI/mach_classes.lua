@@ -15,21 +15,67 @@ function Army:new (character_details, faction_id, character_context)
 	faction_id = faction_id or nil
 	character_context = character_context or nil
 	local self = setmetatable(MilitaryForce:new(character_details, faction_id, character_context), Army)
+	self.garrison_address = nil
+	self.is_in_garrison = false
+	self.is_on_fleet = false
+	self.fleet_on = nil
+	self.is_in_settlement = false
+	self.settlement_in_name = nil
+	self.settlement_in_id = nil
+	self.settlement_in_region_id = nil
+	self.is_in_fort = false
+	self.fort_in_name = nil
+
 	if character_details then
-		--		self.num_of_units = character_details.Units
-		self.is_in_settlement, self.settlement_in_region_id = mach_lib.is_army_obj_in_settlement(self.faction_id, self.obj)
-		if self.is_in_settlement then
-			self.settlement_in_id = mach_lib.get_settlement_id_from_region_id(self.settlement_in_region_id)
+		mach_lib.update_mach_lua_log("testing")
+		self.garrison_address = CampaignUI.CharacterResidence(self.address)
+		mach_lib.update_mach_lua_log("testing1")
+		mach_lib.update_mach_lua_log(self.garrison_address)
+		if self.garrison_address then
+			mach_lib.update_mach_lua_log(string.format('Garrison address: %s', tostring(self.garrison_address)))
+			mach_lib.update_mach_lua_log("testing2")
+
+			local garrison_entities = CampaignUI.RetrieveContainedEntitiesFromGarrison(self.garrison_address, self.address)
+			self.is_in_settlement, self.settlement_in_id = mach_lib.is_location_settement(self.location)
+			if self.is_in_settlement then
+				mach_lib.update_mach_lua_log("Character is in settlement.")
+				self.settlement_in_name = garrison_entities.ContainerName
+				self.settlement_in_region_id = mach_lib.get_region_id_from_settlement_name(self.settlement_in_name)
+			elseif garrison_entities.ContainerName:find('Fort ') then
+				mach_lib.update_mach_lua_log("Character is in fort.")
+				self.is_in_fort = true
+				self.fort_in_name = garrison_entities.ContainerName
+			end
 		else
-			self.settlement_in_id = nil
+			self.is_on_fleet, self.fleet_on = mach_lib.is_army_obj_on_fleet(self.obj)
 		end
-		self.is_on_fleet, self.fleet_on = mach_lib.is_army_obj_on_fleet(self.faction_id, self.obj)
+
+--		self.is_in_settlement, self.settlement_in_region_id = mach_lib.is_army_obj_in_settlement(self.faction_id, self.obj)
+--		if self.is_in_settlement then
+--			self.settlement_in_id = mach_lib.get_settlement_id_from_region_id(self.settlement_in_region_id)
+--		else
+--			self.settlement_in_id = nil
+--		end
+
 	elseif character_context then
-		self.is_in_settlement = false
-		self.settlement_in_region_id = self.location
-		self.settlement_in_id = nil
-		self.is_on_fleet = false
-		self.fleet_on = nil
+		mach_lib.update_mach_lua_log("testing 190")
+		if conditions.CharacterInBuildingOfChain("government", character_context) or conditions.CharacterInBuildingOfChain("government_minor", character_context) or conditions.CharacterInBuildingOfChain("tribal_government", character_context) or conditions.CharacterInBuildingOfChain("tribal_playable_government", character_context) then
+			mach_lib.update_mach_lua_log("Character is in settlement.")
+			self.is_in_settlement = true
+			self.settlement_in_name = self.location
+			self.settlement_in_id = mach_lib.get_settlement_id_from_settlement_name(self.settlement_in_name)
+			self.settlement_in_region_id = mach_lib.get_region_id_from_settlement_name(self.settlement_in_name)
+		elseif conditions.CharacterInBuildingOfChain("fort", character_context) then
+			mach_lib.update_mach_lua_log("Character is in fort.")
+			self.is_in_fort = true
+			self.fort_in_name = self.location
+		end
+--		self.is_in_settlement = false
+--		self.settlement_in_region_id = self.location
+--		self.settlement_in_id = nil
+--		self.is_in_fort = false
+--		self.is_in_settlement = mach_lib.is_value_in_table(self.location, mach_data.__settlement_names_list__)
+--		self.is_in_fort = self.location:gmatch('Fort') or false
 	end
 
 	self.supplier = nil
@@ -42,10 +88,10 @@ end
 Battle = {}
 Battle.__index = Battle
 function Battle:new ()
-	mach_lib.update_mach_lua_log(string.format('Initializing Battle'))
+	mach_lib.update_mach_lua_log(string.format('Initializing Battle with unique id: %s', #mach_data.__battles_list__ + 1))
 	local self = setmetatable(
 		{
-			battle_id = #mach_data.__battles_list__;
+			battle_unique_id = #mach_data.__battles_list__ + 1;
 			battle_name = nil;
 			pos_x = nil;
 			pos_y = nil;
@@ -56,8 +102,11 @@ function Battle:new ()
 			is_naval_battle = false;
 			is_player_battle = false;
 			is_siege = false;
+			is_settlement_siege = false;
 			besieged_settlement_id = nil;
 			besieged_settlement_name = nil;
+			is_fort_siege = false;
+			besieged_fort_name = nil;
 			winner_faction_ids = {};
 			loser_faction_ids = {};
 			winner_commander_names = {};
@@ -73,6 +122,7 @@ function Battle:new ()
 			winner_nationality = nil;
 			loser_nationality = nil;
 			winner_is_attacker = nil;
+			winner_is_besieger = false;
 			attacker_faction_ids = {};
 			defender_faction_ids = {};
 			attacker_culture = nil;
@@ -193,24 +243,59 @@ function Battle:add_loser_military_force (loser_military_force, is_pre_battle, i
 		self.defender_culture = self.defender_culture or loser_military_force.culture
 		self.defender_nationality = self.defender_nationality or loser_military_force.nationality
 	end
+	mach_lib.update_mach_lua_log('test')
 
 	if #self.pre_battle_loser_military_forces == 0 and #self.post_battle_loser_military_forces == 0 then
 		if is_pre_battle then
-			self.is_siege = loser_military_force.is_in_settlement
-			self.besieged_settlement_id = loser_military_force.settlement_in_id
-			if self.is_siege and self.besieged_settlement_id then
-				self.besieged_settlement_name = CampaignUI.LocalisationString(mach_data.settlement_to_loc_list[self.besieged_settlement_id], true)
-				self.battle_name = _get_battle_name(self)
-			end
+--			mach_lib.update_mach_lua_log('test 1')
+--			self.is_siege = loser_military_force.is_in_settlement or loser_military_force.is_in_fort
+--			mach_lib.update_mach_lua_log('test 2')
+--			self.is_settlement_siege = loser_military_force.is_in_settlement or false
+--			self.is_fort_siege = loser_military_force.is_in_fort or false
+--			mach_lib.update_mach_lua_log('test 3')
+--			mach_lib.update_mach_lua_log('test 4')
+--			if self.is_settlement_siege and self.besieged_settlement_id then
+--				mach_lib.update_mach_lua_log('test 5')
+--				self.besieged_settlement_id = loser_military_force.settlement_in_id
+--				mach_lib.update_mach_lua_log(self.besieged_settlement_id)
+--				self.besieged_settlement_name = loser_military_force.settlement_in_name
+----				self.besieged_settlement_name = CampaignUI.LocalisationString(mach_data.settlement_to_loc_list[self.besieged_settlement_id], true)
+--				mach_lib.update_mach_lua_log('test 6')
+--			elseif self.is_fort_siege then
+--				self.besieged_fort_name = loser_military_force.location
+--			end
+			mach_lib.update_mach_lua_log('test 7')
 		end
 	end
+	mach_lib.update_mach_lua_log('test2')
 
 	self.loser_faction_ids = mach_lib.update_numbered_list(self.loser_faction_ids, loser_military_force.faction_id)
 	self.loser_commander_names = mach_lib.update_numbered_list(self.loser_commander_names, loser_military_force.commander_type_and_name)
 	self.loser_full_commander_names = mach_lib.update_numbered_list(self.loser_full_commander_names, loser_military_force.commander_nationality_and_type_and_name)
+	mach_lib.update_mach_lua_log('test3')
 
 	if is_pre_battle then
 		mach_lib.update_mach_lua_log('Pre-Battle loser')
+
+		if loser_military_force.is_in_settlement then
+			self.is_siege = true
+			self.is_settlement_siege = true
+			if self.winner_is_attacker then
+				self.winner_is_besieger = true
+			end
+			self.besieged_settlement_id = loser_military_force.settlement_in_id
+			self.besieged_settlement_name = loser_military_force.settlement_in_name
+			self.battle_name = _get_battle_name(self)
+		elseif loser_military_force.is_in_fort then
+			self.is_siege = true
+			self.is_fort_siege = true
+			if self.winner_is_attacker then
+				self.winner_is_besieger = true
+			end
+			self.besieged_fort_name = loser_military_force.fort_in_name
+			self.battle_name = _get_battle_name(self)
+		end
+
 		self.pre_battle_loser_military_forces[#self.pre_battle_loser_military_forces+1] = loser_military_force
 
 		self.pre_battle_loser_soldiers = self.pre_battle_loser_soldiers + loser_military_force.num_of_soldiers
@@ -277,9 +362,10 @@ function Battle:add_loser_military_force (loser_military_force, is_pre_battle, i
 
 	self.total_ship_casualties = self.pre_battle_ships - self.post_battle_ships
 	self.total_unit_casualties = self.pre_battle_units - self.post_battle_units
-
 	self.total_ship_casualties_list = _subtract_unit_tables_in_faction_keys(self.pre_battle_ships_list, self.post_battle_ships_list)
 	self.total_unit_casualties_list = _subtract_unit_tables_in_faction_keys(self.pre_battle_units_list, self.post_battle_units_list)
+	mach_lib.update_unit_id_to_unit_unique_ids_list_with_casualties(self.total_ship_casualties_list)
+	mach_lib.update_unit_id_to_unit_unique_ids_list_with_casualties(self.total_unit_casualties_list)
 
 	self.is_naval_battle = self.is_naval_battle or loser_military_force.is_naval
 
@@ -329,11 +415,7 @@ function Battle:add_winner_military_force (winner_military_force, is_pre_battle,
 	end
 
 	if #self.pre_battle_winner_military_forces == 0 and is_pre_battle then
-		self.is_siege = winner_military_force.is_in_settlement
-		self.besieged_settlement_id = winner_military_force.settlement_in_id
-		if self.is_siege and self.besieged_settlement_id then
-			self.besieged_settlement_name = CampaignUI.LocalisationString(mach_data.settlement_to_loc_list[self.besieged_settlement_id], true)
-		end
+
 	elseif not is_pre_battle and #self.post_battle_winner_military_forces == 0 then
 		self.pos_x = winner_military_force.pos_x
 		self.pos_y = winner_military_force.pos_y
@@ -349,6 +431,7 @@ function Battle:add_winner_military_force (winner_military_force, is_pre_battle,
 
 	if is_pre_battle then
 		mach_lib.update_mach_lua_log('Pre-Battle winner')
+
 		self.pre_battle_winner_military_forces[#self.pre_battle_winner_military_forces+1] = winner_military_force
 
 		self.pre_battle_winner_soldiers = self.pre_battle_winner_soldiers + winner_military_force.num_of_soldiers
@@ -366,6 +449,26 @@ function Battle:add_winner_military_force (winner_military_force, is_pre_battle,
 		self.pre_battle_units_list[winner_military_force.faction_id] = mach_lib.concat_tables(self.pre_battle_units_list[winner_military_force.faction_id], self.pre_battle_winner_units_list[winner_military_force.faction_id])
 	else
 		mach_lib.update_mach_lua_log('Post-Battle winner')
+
+		if winner_military_force.is_in_settlement then
+			self.is_siege = true
+			self.is_settlement_siege = true
+			if not self.winner_is_attacker then
+				self.winner_is_besieger = false
+			end
+			self.besieged_settlement_id = winner_military_force.settlement_in_id
+			self.besieged_settlement_name = winner_military_force.settlement_in_name
+			self.battle_name = _get_battle_name(self)
+		elseif winner_military_force.is_in_fort then
+			self.is_siege = true
+			self.is_fort_siege = true
+			if not self.winner_is_attacker then
+				self.winner_is_besieger = false
+			end
+			self.besieged_fort_name = winner_military_force.fort_in_name
+			self.battle_name = _get_battle_name(self)
+		end
+
 		self.post_battle_winner_military_forces[#self.post_battle_winner_military_forces+1] = winner_military_force
 
 		self.post_battle_winner_soldiers = self.post_battle_winner_soldiers + winner_military_force.num_of_soldiers
@@ -418,6 +521,8 @@ function Battle:add_winner_military_force (winner_military_force, is_pre_battle,
 	self.total_unit_casualties = self.pre_battle_units - self.post_battle_units
 	self.total_ship_casualties_list =  _subtract_unit_tables_in_faction_keys(self.pre_battle_ships_list, self.post_battle_ships_list)
 	self.total_unit_casualties_list =  _subtract_unit_tables_in_faction_keys(self.pre_battle_units_list, self.post_battle_units_list)
+	mach_lib.update_unit_id_to_unit_unique_ids_list_with_casualties(self.total_ship_casualties_list)
+	mach_lib.update_unit_id_to_unit_unique_ids_list_with_casualties(self.total_unit_casualties_list)
 
 	self.is_naval_battle = self.is_naval_battle or winner_military_force.is_naval
 	if self.is_naval_battle then
@@ -553,6 +658,7 @@ function MilitaryUnit:new (military_force, unit_details, unit_context)
 			unit_name = unit_details.Name;
 			regiment_name = unit_details.RegimentName;
 			unit_id = unit_details.Id;
+			unit_unique_id = mach_lib.get_latest_unit_unique_id_from_unit_id(unit_details.Id);
 			location = military_force.location;
 			pos_x = military_force.pos_x;
 			pos_y = military_force.pos_y;
@@ -573,12 +679,18 @@ function MilitaryUnit:new (military_force, unit_details, unit_context)
 			culture = military_force.culture;
 			nationality = military_force.nationality;
 			is_rebel = military_force.is_rebel;
-			military_force_address = unit_details.CharacterPtr;
+			military_force_address = military_force.address;
+			character_address = unit_details.CharacterPtr;
 			commander_name = unit_details.CommandersName;
 			commander_type_id = unit_details.CommanderType;
 		},
 		MilitaryUnit
 	)
+
+	if not mach_data.__unit_id_to_unit_unique_ids__[self.unit_id] then
+		mach_data.__unit_id_to_unit_unique_ids__[self.unit_id] = {}
+		mach_data.__unit_id_to_unit_unique_ids__[self.unit_id][#mach_data.__unit_id_to_unit_unique_ids__[self.unit_id]] = self.unit_unique_id
+	end
 
 	if self.unit_scale ~= nil then
 		self.experience = unit_details.RecruitmentInfo.Experience
@@ -622,6 +734,7 @@ function Region:new (region_details, faction_id)
 		{
 			address = region_details.Address;
 			name = region_details.Name;
+			settlement_name = region_details.Settlement;
 			owned_by_protectorate = region_details.OwnedByProtectorate;
 			region_id = mach_lib.get_region_id_from_region_address(region_details.Address);
 			faction_name = mach_lib.get_faction_screen_name_from_faction_id(faction_id);
@@ -654,10 +767,12 @@ function _get_battle_name(battle)
 	mach_lib.update_mach_lua_log('Getting battle name for battle.')
 	local battle_name_short = nil
 	local battle_name = nil
-	if not battle.is_siege then
+	if not battle.is_settlement_siege and not battle.is_fort_siege then
 		battle_name_short = string.format('Battle of %s', battle.location)
-	else
+	elseif battle.is_settlement_siege then
 		battle_name_short = string.format('Battle of %s', battle.besieged_settlement_name)
+	else
+		battle_name_short = string.format('Battle of %s', battle.besieged_fort_name)
 	end
 	battle_name = string.format('%s %s (%s)', mach_lib.convert_str_to_title_case(mach_data.ordinal_num_list[_get_number_of_battles_with_same_name(battle_name_short) + 1]), battle_name_short, mach_lib.__current_year__)
 	mach_lib.update_mach_lua_log(string.format('Finished getting battle name for battle: "%s"', battle_name))
@@ -728,32 +843,12 @@ function _is_major_battle(battle)
 			total_loser_factions_number_of_ships = total_loser_factions_number_of_ships + mach_lib.get_faction_num_of_ships(loser_faction_id)
 		end
 	end
-	mach_lib.update_mach_lua_log(total_loser_factions_number_of_soldiers)
-	mach_lib.update_mach_lua_log(total_loser_factions_number_of_ships)
-	mach_lib.update_mach_lua_log(battle.is_naval_battle)
-	mach_lib.update_mach_lua_log(battle.total_soldier_casualties)
-	mach_lib.update_mach_lua_log(mach_config.__MACH_MAJOR_BATTLE_MIN_TOTAL_SOLDIER_CASUALTIES__)
-	mach_lib.update_mach_lua_log(mach_lib.__unit_scale_factor__)
-	mach_lib.update_mach_lua_log(battle.loser_soldier_casualties)
-	mach_lib.update_mach_lua_log(mach_config.__MACH_MAJOR_BATTLE_MIN_PERCENTAGE_OF_TOTAL_LOSER_FORCES_AS_CASUALTIES__)
-	mach_lib.update_mach_lua_log('test1')
-	mach_lib.update_mach_lua_log(battle.total_ship_casualties)
-	mach_lib.update_mach_lua_log(mach_config.__MACH_MAJOR_BATTLE_MIN_TOTAL_SHIP_CASUALTIES__)
-	mach_lib.update_mach_lua_log(battle.loser_ship_casualties)
-	mach_lib.update_mach_lua_log(mach_config.__MACH_MAJOR_BATTLE_MIN_LAND_UNIT_ON_SHIP_CASUALTIES__)
-	mach_lib.update_mach_lua_log(battle.loser_unit_casualties)
-	mach_lib.update_mach_lua_log('test2')
-	mach_lib.update_mach_lua_log(battle.is_siege)
-	mach_lib.update_mach_lua_log(battle.winner_is_attacker)
-	mach_lib.update_mach_lua_log(battle.loser_unit_casualties)
-	mach_lib.update_mach_lua_log(battle.winner_ship_casualties)
-	mach_lib.update_mach_lua_log(battle.winner_unit_casualties)
 
 	if rebels_are_losers == true and not (battle.is_siege and battle.winner_is_attacker) then
 		mach_lib.update_mach_lua_log('Battle loser was "rebels", and not a siege and attacker is winner. Not a major battle.')
 		is_major_battle = false
-	elseif (battle.is_siege and battle.winner_is_attacker) then
-		mach_lib.update_mach_lua_log('Battle is a siege and attacker is winner. A major battle.')
+	elseif (battle.is_siege and battle.winner_is_besieger) then
+		mach_lib.update_mach_lua_log('Battle is a siege and winner is besieger. A major battle.')
 		is_major_battle = true
 		mach_lib.update_mach_lua_log('Battle is a "Major Battle"!')
 	elseif (not battle.is_naval_battle and

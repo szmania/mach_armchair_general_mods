@@ -32,12 +32,28 @@ function mach_battle_chronicler()
                 image = "data/ui/EventPics/european/naval_win.tga"
             end
         elseif battle.is_siege then
-            if battle.defender_culture == 'middle_east' or battle.defender_culture == 'indian' then
-                image = "data/ui/EventPics/middle_east/besieged-3asian.tga"
-            elseif battle.defender_culture == 'tribal' then
-                image = "data/ui/EventPics/tribal_playable/nat_captured.tga"
+            local besieged_culture
+            if battle.winner_is_besieger then
+                besieged_culture = battle.loser_culture
             else
-                image = "data/ui/EventPics/european/besieged-3.tga"
+                besieged_culture = battle.winner_culture
+            end
+            if battle.is_settlement_siege then
+                if besieged_culture == 'middle_east' or besieged_culture == 'indian' then
+                    image = "data/ui/EventPics/middle_east/besieged-3asian.tga"
+                elseif besieged_culture == 'tribal' then
+                    image = "data/ui/EventPics/tribal_playable/nat_captured.tga"
+                else
+                    image = "data/ui/EventPics/european/besieged-3.tga"
+                end
+            else
+                if besieged_culture == 'middle_east' or besieged_culture == 'indian' then
+                    image = "data/ui/EventPics/middle_east/besieged-asian-fort.tga"
+                elseif besieged_culture == 'tribal' then
+                    image = "data/ui/EventPics/tribal_playable/nat_captured.tga"
+                else
+                    image = "data/ui/EventPics/european/besieged-fort.tga"
+                end
             end
         else
             if battle.winner_culture == 'middle_east' or battle.winner_culture == 'indian' then
@@ -76,19 +92,40 @@ function mach_battle_chronicler()
 
         local text = ''
         if not battle.is_siege then
+            mach_lib.update_mach_lua_log('testing 1')
             text = string.format('The %s: \n\nWe have received a message from a courier telling us of a %sbattle that has taken place in %s.', battle.battle_name, major_str, battle.location)
         else
-            text = string.format('The %s: \n\nWe have received a message from a courier telling us of a %sbattle that has occurred in and around the vicinity of %s.', battle.battle_name, major_str, battle.besieged_settlement_name)
-            if battle.winner_is_attacker then
-                text = text..string.format('\n\nThe city of %s has been captured after an assault on that city!', battle.besieged_settlement_name)
+            mach_lib.update_mach_lua_log('testing 2')
+            mach_lib.update_mach_lua_log(battle.battle_name)
+            mach_lib.update_mach_lua_log(major_str)
+            mach_lib.update_mach_lua_log(battle.besieged_settlement_name)
+
+            if battle.is_settlement_siege then
+                text = string.format('The %s: \n\nWe have received a message from a courier telling us of a %sbattle that has occurred in and around the vicinity of %s.', battle.battle_name, major_str, battle.besieged_settlement_name)
+                mach_lib.update_mach_lua_log('testing 2a')
+                if battle.winner_is_besieger then
+                    mach_lib.update_mach_lua_log('testing 2b')
+                    text = text..string.format('\n\nThe city of %s has been captured after an assault on that city!', battle.besieged_settlement_name)
+                else
+                    mach_lib.update_mach_lua_log('testing 2c')
+                    text = text..string.format('\n\nThe city of %s was under siege, but the siege has been lifted after a battle!', battle.besieged_settlement_name)
+                end
             else
-                text = text..string.format('\n\nThe city of %s was under siege, but the siege has been lifted after a battle!', battle.besieged_settlement_name)
+                text = string.format('The %s: \n\nWe have received a message from a courier telling us of a %sbattle that has occurred in and around the vicinity of %s.', battle.battle_name, major_str, battle.besieged_fort_name)
+                mach_lib.update_mach_lua_log('testing 2d')
+                if battle.winner_is_besieger then
+                    mach_lib.update_mach_lua_log('testing 2e')
+                    text = text..string.format('\n\n%s has been captured after an assault on that fort!', battle.besieged_fort_name)
+                else
+                    mach_lib.update_mach_lua_log('testing 2f')
+                    text = text..string.format('\n\n%s was under siege, but the siege has been lifted after a battle!', battle.besieged_fort_name)
+                end
             end
         end
-
+        mach_lib.update_mach_lua_log('testing 3')
         local winner_details_str = _get_side_details_str(true, battle, winner_faction_names_str, winner_commander_names_str)
         text = text..winner_details_str
-        text = text..'\n\nUnits lost by victors:'
+        text = text..'\n\nUnits and leaders lost by victors:'
         local winner_unit_details_str = _get_unit_details_str(true, false, battle)
         text = text..winner_unit_details_str
         if battle.is_naval_battle or mach_lib.is_value_in_table('MACH Capture Artillery', mach.__mach_features_enabled__) then
@@ -101,7 +138,7 @@ function mach_battle_chronicler()
 
         local loser_details_str = _get_side_details_str(false, battle, loser_faction_names_str, loser_commander_names_str)
         text = text..loser_details_str
-        text = text..'\n\nUnits lost by losers:'
+        text = text..'\n\nUnits and leaders lost by losers:'
         local loser_unit_details_str = _get_unit_details_str(false, false, battle)
         text = text..loser_unit_details_str
 
@@ -113,7 +150,7 @@ function mach_battle_chronicler()
                 text = text..string.format('\n\nTotal soldier casualties embarked on ship(s) in this battle: %s \nTotal soldier(s) embarked on ship(s) engaged in this battle: %s ', battle.total_soldier_casualties, battle.pre_battle_soldiers)
             end
         end
-        mach_lib.update_mach_lua_log('Finished getting Battle message text.')
+        mach_lib.update_mach_lua_log('Finished getting Battle message title and text.')
         return title, text
     end
 
@@ -140,15 +177,54 @@ function mach_battle_chronicler()
     end
 
 
+    local function _get_moused_over_unit_card_unit_address()
+        mach_lib.update_mach_lua_log(string.format('Getting moused over unit card unit address.'))
+        local moused_over_unit_card_unit_address
+        local g_cardgroup = UIComponent(mach_lib.__wali_m_root__:Find("UnitCardGroup"))
+--        mach_lib.update_mach_lua_log(g_cardgroup)
+        local unit_cards = g_cardgroup:LuaCall("Cards")
+        --        mach_lib.output_table_to_mach_log(unit_cards,1)
+        local utils = require("Utilities")
+--        mach_lib.update_mach_lua_log('tard')
+
+        for unit_cards_idx, unit_card in  pairs(unit_cards) do
+--            mach_lib.update_mach_lua_log('drap')
+
+--            mach_lib.update_mach_lua_log(unit_card)
+            local unit_card_component = UIComponent(unit_card)
+--            mach_lib.update_mach_lua_log(unit_card_component)
+
+            local unit_card_unit_address = unit_card_component:LuaCall("ItemAddress")
+--            mach_lib.update_mach_lua_log(unit_card_unit_address)
+--
+--            mach_lib.update_mach_lua_log(utils.Component.MouseOver())
+            local mouse_over_unit_card_component = UIComponent(utils.Component.MouseOver())
+--            mach_lib.update_mach_lua_log(mouse_over_unit_card_component)
+
+            local mouse_over_unit_card_address = mouse_over_unit_card_component:LuaCall("ItemAddress")
+--            mach_lib.update_mach_lua_log(mouse_over_unit_card_address)
+--            mach_lib.update_mach_lua_log('drap1')
+
+            if mouse_over_unit_card_address == unit_card_unit_address then
+                moused_over_unit_card_unit_address = unit_card_unit_address
+--                mach_lib.update_mach_lua_log(moused_over_unit_card_unit_address)
+                break
+            end
+        end
+        mach_lib.update_mach_lua_log(string.format('Finished getting moused over unit card unit address. Unit address: "%s"', tostring(moused_over_unit_card_unit_address)))
+        return moused_over_unit_card_unit_address
+    end
+
+
     local function _get_pre_and_post_battle_loser_military_forces(pre_battle_winner_military_force, pre_battle_all_factions_military_forces_list, post_battle_all_factions_military_forces_list)
         mach_lib.update_mach_lua_log(string.format('Getting battle loser military forces for winner faction "%s"', pre_battle_winner_military_force.faction_id))
         mach_lib.update_mach_lua_log(pre_battle_winner_military_force.faction_id)
 --        local diplomacy_details = CampaignUI.RetrieveDiplomacyDetails(pre_battle_winner_military_force.faction_id)
         local pre_battle_loser_military_forces = {}
         local post_battle_loser_military_forces = {}
-        local faction_ids_at_war_with_faction = mach_lib.get_faction_ids_at_war_with_faction(pre_battle_winner_military_force.faction_id)
+        local faction_ids_at_war_with_faction = mach_lib.get_faction_ids_at_war_with_faction_id(pre_battle_winner_military_force.faction_id)
         for _, enemy_faction_id in pairs(faction_ids_at_war_with_faction) do
-            mach_lib.update_mach_lua_log(string.format('Enemy faction id searching as a possible battle opponent "%s" to battle won by "%s".', enemy_faction_id, pre_battle_winner_military_force.faction_id))
+            mach_lib.update_mach_lua_log(string.format('Searching as a possible battle opponent "%s" to battle won by "%s".', enemy_faction_id, pre_battle_winner_military_force.faction_id))
 
             local pre_battle_enemy_military_forces = pre_battle_all_factions_military_forces_list[enemy_faction_id]
 
@@ -408,35 +484,45 @@ function mach_battle_chronicler()
 
     function _populate_character_info_popup_with_battle_history()
         mach_lib.update_mach_lua_log(string.format('Populating character info popup with battle history.'))
-        local military_force = {}
-        local entity_type_selected = CampaignUI.EntityTypeSelected()
-        if entity_type_selected.Unit or entity_type_selected.Character then
-            local character_details = mach_lib.get_character_details_from_entity_type_selected(entity_type_selected)
-            if not character_details.IsNaval then
-                military_force = mach_classes.Army:new(character_details)
-            else
-                military_force = mach_classes.Navy:new(character_details)
-            end
-        elseif entity_type_selected.Settlement then
-            military_force = mach_lib.get_army_in_settlement_address(entity_type_selected.Entity)
-        end
+--        local military_force = {}
+--        local entity_type_selected = CampaignUI.EntityTypeSelected()
+--        if entity_type_selected.Unit or entity_type_selected.Character then
+--            local character_details = mach_lib.get_character_details_from_entity_type_selected(entity_type_selected)
+--            if not character_details.IsNaval then
+--                military_force = mach_classes.Army:new(character_details)
+--            else
+--                military_force = mach_classes.Navy:new(character_details)
+--            end
+--        elseif entity_type_selected.Settlement then
+--            military_force = mach_lib.get_army_in_settlement_address(entity_type_selected.Entity)
+--        end
 
+        local selected_unit_card_unit_address = _get_moused_over_unit_card_unit_address()
+        local character_faction_id = mach_lib.get_faction_id_from_unit_address(selected_unit_card_unit_address)
         local q_character_name = UIComponent(mach_lib.__wali_m_root__:Find("name_textbox"))
-        local pop_up_charater_name = q_character_name:GetStateText()
-        local utils = require("Utilities")
+        mach_lib.update_mach_lua_log('test')
 
-        local character_battles = mach_lib.get_battles_with_character_name(pop_up_charater_name, military_force.faction_id)
+        local pop_up_charater_name = q_character_name:GetStateText()
+        mach_lib.update_mach_lua_log(pop_up_charater_name)
+
+        local utils = require("Utilities")
+        mach_lib.update_mach_lua_log('test2')
+
+        local character_battles, character_faction_id = mach_lib.get_battles_with_character_name(pop_up_charater_name, character_faction_id)
         local battle_history_str = 'Character Battle History\n\n'
         for character_battle_idx, character_battle in pairs(character_battles) do
             local combatant_faction_str = string.format('(%s vs %s)', mach_lib.get_battle_faction_names_str(character_battle.winner_faction_ids), mach_lib.get_battle_faction_names_str(character_battle.loser_faction_ids))
-            if mach_lib.is_value_in_table(military_force.faction_id, character_battle.winner_faction_ids) then
+            if mach_lib.is_value_in_table(character_faction_id, character_battle.winner_faction_ids) then
                 battle_history_str = battle_history_str..'* '..character_battle.battle_name..' (Victor) '..combatant_faction_str..'\n\n'
             else
                 battle_history_str = battle_history_str..'* '..character_battle.battle_name..' (Loser) '..combatant_faction_str..'\n\n'
             end
         end
+        local char_portrait = UIComponent(mach_lib.__wali_m_root__:Find("char_portrait"))
         if battle_history_str ~= 'Character Battle History\n\n' then
-            local char_portrait = UIComponent(mach_lib.__wali_m_root__:Find("char_portrait"))
+            char_portrait:SetTooltipText(tostring(battle_history_str))
+        else
+            battle_history_str = battle_history_str..'\nNo battle history.\n\n'
             char_portrait:SetTooltipText(tostring(battle_history_str))
         end
         mach_lib.update_mach_lua_log(string.format('Finished populating character info popup with battle history.'))
@@ -563,7 +649,7 @@ function mach_battle_chronicler()
 --        mach_lib.update_mach_lua_lot(regions_tab_ui_2:GetStateText())
 
         --        local player_faction_region_count = #CampaignUI.RetrieveFactionRegionList(CampaignUI.PlayerFactionId())
-        local player_faction_region_count = 0
+        local battle_count = 0
 --        mach_lib.update_mach_lua_log("garbage5")
 
 --        local utils = require("Utilities")
@@ -576,14 +662,14 @@ function mach_battle_chronicler()
 --        end
 
         for battle_idx, battle in pairs(mach_data.__battles_list__) do
-            player_faction_region_count = player_faction_region_count + 1
-            mach_lib.update_mach_lua_log(player_faction_region_count)
-            mach_lib.update_mach_lua_log("item"..tostring(player_faction_region_count))
+            battle_count = battle_count + 1
+            mach_lib.update_mach_lua_log(battle_count)
+            mach_lib.update_mach_lua_log("item"..tostring(battle_count))
 
 --            mach_lib.update_mach_lua_log("garbage5c")
 
 --            mach_lib.update_mach_lua_log("garbage5e")
-            local battle_item = UIComponent(Component.CreateComponentFromTemplate("row_template_region", "item" .. tostring(player_faction_region_count), list_box_ui, 0, 0))
+            local battle_item = UIComponent(Component.CreateComponentFromTemplate("row_template_region", "item" .. tostring(battle_count), list_box_ui, 0, 0))
 --            mach_lib.update_mach_lua_log("garbage5a")
             battle_item:LuaCall("Initialise", battle, true)
 --            mach_lib.update_mach_lua_log("garbage5b")
@@ -638,115 +724,106 @@ function mach_battle_chronicler()
 
     function _populate_unit_info_popup_with_battle_history()
         mach_lib.update_mach_lua_log(string.format('Populating unit info popup with battle history.'))
-        local military_force = {}
-        local entity_type_selected = CampaignUI.EntityTypeSelected()
-        local entity_list = {}
-        if entity_type_selected.Unit or entity_type_selected.Character then
-            local character_details = mach_lib.get_character_details_from_entity_type_selected(entity_type_selected)
-            if not character_details.IsNaval then
-                military_force = mach_classes.Army:new(character_details)
-                entity_list = military_force.units
 
-            else
-                military_force = mach_classes.Navy:new(character_details)
-                entity_list = military_force.ships
+        local selected_unit_card_unit_address = _get_moused_over_unit_card_unit_address()
 
-            end
-        elseif entity_type_selected.Settlement then
-            military_force = mach_lib.get_army_in_settlement_address(entity_type_selected.Entity)
-        end
-        mach_lib.update_mach_lua_log('testers')
+        if selected_unit_card_unit_address then
+            local unit_details = CampaignUI.InitialiseUnitDetails(selected_unit_card_unit_address)
+            mach_lib.update_mach_lua_log(unit_details)
+            mach_lib.update_mach_lua_log('bugger1')
+            mach_lib.update_mach_lua_log(unit_details.Id)
 
-        local g_my_unit_name = UIComponent(mach_lib.__wali_m_root__:Find("name_textbox"))
-        local pop_up_unit_regiment_name = g_my_unit_name:GetStateText()
-        mach_lib.update_mach_lua_log(pop_up_unit_regiment_name)
-        local g_unit_type = UIComponent(mach_lib.__wali_m_root__:Find("tx_unit-type"))
-        local pop_up_unit_name = g_unit_type:GetStateText()
-        mach_lib.update_mach_lua_log(pop_up_unit_name)
-
-        local g_stats_men = UIComponent(mach_lib.__wali_m_root__:Find("dy_men"))
-        local pop_up_unit_men = tostring(g_stats_men:GetStateText())
-        mach_lib.update_mach_lua_log(pop_up_unit_men)
-
-        local g_stats_experience = UIComponent(mach_lib.__wali_m_root__:Find("dy_experience"))
-        local pop_up_unit_experience = g_stats_experience:CurrentState()
-        mach_lib.update_mach_lua_log(pop_up_unit_experience)
-
-        local utils = require("Utilities")
-
-        for entity_idx, entity in pairs(entity_list) do
-            local unit_men
-            if entity.unit_scale ~= nil then
-                unit_men = tostring(utils.TruncToInt(entity.men * entity.unit_scale))
-            else
-                unit_men = tostring(utils.TruncToInt(entity.men))
-            end
-            mach_lib.update_mach_lua_log('bugger4')
-            mach_lib.update_mach_lua_log(pop_up_unit_regiment_name)
-            mach_lib.update_mach_lua_log(entity.regiment_name)
-            mach_lib.update_mach_lua_log(pop_up_unit_name)
-            mach_lib.update_mach_lua_log(entity.unit_name)
-            mach_lib.update_mach_lua_log(pop_up_unit_men)
-            mach_lib.update_mach_lua_log(unit_men)
-            mach_lib.update_mach_lua_log(pop_up_unit_experience)
-            mach_lib.update_mach_lua_log(entity.experience)
-            local g_textview = UIComponent(mach_lib.__wali_m_root__:Find("TextView"))
+            mach_lib.update_mach_lua_log('bugger2')
             local g_textview_text = UIComponent(mach_lib.__wali_m_root__:Find("Text"))
             mach_lib.update_mach_lua_log('bugger5')
 
-            if pop_up_unit_regiment_name == entity.regiment_name and pop_up_unit_name == entity.unit_name and pop_up_unit_men == unit_men and pop_up_unit_experience == tostring(entity.experience) and g_textview_text:GetStateText():find('Unit Battle History') == nil  then
-                mach_lib.update_mach_lua_log(entity.unit_id)
-                local unit_battles = mach_lib.get_battles_with_unit_id(entity.unit_id, entity.faction_id)
-                local battle_history_str = 'Unit Battle History\n'
+            local battle_history_str = 'Unit Battle History\n'
+
+            if g_textview_text:GetStateText():find('Unit Battle History') == nil and mach_data.__unit_id_to_unit_unique_ids__[unit_details.Id] then
+                mach_lib.update_mach_lua_log(unit_details.Id)
+                local unit_unique_id = mach_data.__unit_id_to_unit_unique_ids__[unit_details.Id][#mach_data.__unit_id_to_unit_unique_ids__[unit_details.Id]]
+                mach_lib.update_mach_lua_log('test5')
+                mach_lib.update_mach_lua_log(unit_unique_id)
+
+                local unit_battles = mach_lib.get_battles_with_unit_unique_id(unit_unique_id)
+                mach_lib.update_mach_lua_log('test6')
+
                 for unit_battle_idx, unit_battle in pairs(unit_battles) do
                     local combatant_faction_str = string.format('(%s vs %s)', mach_lib.get_battle_faction_names_str(unit_battle.winner_faction_ids), mach_lib.get_battle_faction_names_str(unit_battle.loser_faction_ids))
                     local casualties_str
                     local pre_battle_entity_list
                     local post_battle_entity_list
-                    if not entity.is_naval then
+                    local unit_faction_id
+                    if not unit_details.IsNaval then
                         mach_lib.update_mach_lua_log('logger')
-                        for pre_battle_unit_idx, pre_battle_unit in pairs(unit_battle.pre_battle_units_list[entity.faction_id]) do
-                            if pre_battle_unit.unit_id == entity.unit_id then
-                                for post_battle_unit_idx, post_battle_unit in pairs(unit_battle.post_battle_units_list[entity.faction_id]) do
-                                    mach_lib.update_mach_lua_log('logger2')
+                        mach_lib.output_table_to_mach_log(unit_battle.pre_battle_units_list, 1)
+                        for pre_battle_faction_id, pre_battle_faction_units_list in pairs(unit_battle.pre_battle_units_list) do
+                            mach_lib.update_mach_lua_log('logger1a')
+                            mach_lib.output_table_to_mach_log(pre_battle_faction_units_list, 1)
+                            mach_lib.update_mach_lua_log(pre_battle_faction_id)
 
-                                    if post_battle_unit.unit_id == entity.unit_id then
-                                        casualties_str = string.format('(%s soldier(s) killed)', pre_battle_unit.men - post_battle_unit.men)
+                            for pre_battle_unit_idx, pre_battle_unit in pairs(pre_battle_faction_units_list) do
+                                mach_lib.update_mach_lua_log('logger1a -b ')
+                                mach_lib.output_table_to_mach_log(pre_battle_unit, 1)
+
+                                if pre_battle_unit.unit_id == unit_details.Id then
+                                    unit_faction_id = pre_battle_faction_id
+                                    for post_battle_faction_id, post_battle_faction_units_list in pairs(unit_battle.post_battle_units_list) do
+                                        mach_lib.update_mach_lua_log('logger1b')
+
+                                        for post_battle_unit_idx, post_battle_unit in pairs(post_battle_faction_units_list) do
+                                            mach_lib.update_mach_lua_log('logger2')
+                                            if post_battle_unit.unit_id == unit_details.Id then
+                                                casualties_str = string.format('(%s soldier(s) killed)', pre_battle_unit.men - post_battle_unit.men)
+                                            end
+                                        end
                                     end
-                                end
-                                if not casualties_str then
-                                    casualties_str = string.format('(%s soldier(s) killed)', pre_battle_unit.men)
+                                    if not casualties_str then
+                                        casualties_str = string.format('(%s soldier(s) killed)', pre_battle_unit.men)
+                                    end
                                 end
                             end
                         end
                     else
-                        for pre_battle_ship_idx, pre_battle_ship in pairs(unit_battle.pre_battle_ships_list[entity.faction_id]) do
-                            if pre_battle_ship.unit_id == entity.unit_id then
-                                for post_battle_ship_idx, post_battle_ship in pairs(unit_battle.post_battle_ships_list[entity.faction_id]) do
-                                    mach_lib.update_mach_lua_log('logger3')
-                                    if post_battle_ship.unit_id == entity.unit_id then
-                                        casualties_str = string.format('(%s men killed, %s gun(s) lost)', pre_battle_ship.men - post_battle_ship.men, pre_battle_ship.guns - post_battle_ship.guns)
+                        for pre_battle_faction_id, pre_battle_faction_ships_list in pairs(unit_battle.pre_battle_ships_list) do
+                            for pre_battle_ship_idx, pre_battle_ship in pairs(unit_battle.pre_battle_faction_ships_list) do
+                                mach_lib.update_mach_lua_log('logger1asdf')
+                                if pre_battle_ship.unit_id == unit_details.Id then
+                                    unit_faction_id = pre_battle_faction_id
+                                    for post_battle_faction_id, post_battle_faction_ships_list in pairs(unit_battle.post_battle_ships_list) do
+                                        for post_battle_ship_idx, post_battle_ship in pairs(post_battle_faction_ships_list) do
+                                            mach_lib.update_mach_lua_log('logger3')
+                                            if post_battle_ship.unit_id == unit_details.Id then
+                                                casualties_str = string.format('(%s men killed, %s gun(s) damaged)', pre_battle_ship.men - post_battle_ship.men, pre_battle_ship.guns - post_battle_ship.guns)
+                                            end
+                                        end
+
                                     end
-                                end
-                                if not casualties_str then
-                                    casualties_str = string.format('(%s men killed, %s gun(s) lost)', pre_battle_ship.men, pre_battle_ship.guns)
+                                    if not casualties_str then
+                                        casualties_str = string.format('(%s men killed, %s gun(s) damaged)', pre_battle_ship.men, pre_battle_ship.guns)
+                                    end
                                 end
                             end
                         end
                     end
                     mach_lib.update_mach_lua_log('logger4')
 
-                    if mach_lib.is_value_in_table(entity.faction_id, unit_battle.winner_faction_ids) then
+                    if mach_lib.is_value_in_table(unit_faction_id, unit_battle.winner_faction_ids) then
                         battle_history_str = battle_history_str..'* '..unit_battle.battle_name..' (Victor) '..combatant_faction_str..' '..casualties_str..'\n'
                     else
                         battle_history_str = battle_history_str..'* '..unit_battle.battle_name..' (Loser) '..combatant_faction_str..' '..casualties_str..'\n'
                     end
                 end
-                if battle_history_str ~= 'Unit Battle History\n' then
-                    g_textview_text:SetStateText(tostring(battle_history_str..'\n\n'..g_textview_text:GetStateText()))
-                    break
-                end
             end
+            if battle_history_str ~= 'Unit Battle History\n' then
+                g_textview_text:SetStateText(tostring(battle_history_str..'\n\n'..g_textview_text:GetStateText()))
+            else
+                battle_history_str = battle_history_str..'\nNo battle history.\n\n'
+                g_textview_text:SetStateText(tostring(battle_history_str..'\n\n'..g_textview_text:GetStateText()))
+            end
+        else
+            mach_lib.update_mach_lua_log(string.format('Error, could not get unit card address to populate unit info popup with battle history!'))
+            return false
         end
         mach_lib.update_mach_lua_log(string.format('Finished populating unit info popup with battle history.'))
         return true
@@ -1005,7 +1082,7 @@ function mach_battle_chronicler()
     local function on_time_trigger(context)
         mach_lib.update_mach_lua_log("Machiavelli's Battle Chronicler - TimeTrigger")
         if context.string == "battle_processing_completed" then
-            mach_lib.update_mach_lua_log('"battle_processing_completed" time trigger.')
+            mach_lib.update_mach_lua_log('Caught "battle_processing_completed" time trigger.')
             if __winner_unit_seen__ == true then
                 mach_lib.update_mach_lua_log('Battle winner unit seen.')
                 if __loser_unit_seen__ == false then
@@ -1037,8 +1114,6 @@ function mach_battle_chronicler()
                 end
                 mach_lib.update_mach_lua_log("Finished processing battle.")
             end
-        elseif context.string == "entity_lists_regions_populated" then
-
         end
         mach_lib.update_mach_lua_log("Machiavelli's Battle Chronicler - Finished TimeTrigger")
     end

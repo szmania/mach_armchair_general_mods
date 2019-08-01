@@ -125,8 +125,7 @@ function convert_str_to_title_case(str)
 	local title_case_str = ''
 	for word in string.gfind(str, "%S+") do
 		local first = string.sub(word,1,1)
-		title_case_str = (title_case_str .. string.upper(first) ..
-				string.lower(string.sub(word,2)))
+		title_case_str = (title_case_str .. string.upper(first) .. string.lower(string.sub(word,2)))
 	end
 	update_mach_lua_log(string.format('Finished converting string to title case: "%s"', title_case_str))
 	return title_case_str
@@ -188,22 +187,6 @@ function export_string(s)
 end
 
 
--- Find region_capital_distance from (x1, y1) to (x2, y2)
--- @param x1: x1 coordinate
--- @param y1: y1 coordinate
--- @param x2: x2 coordinate
--- @param y2: y2 coordinate
--- @return region_capital_distance as double
-function find_distance( x1, y1, x2, y2)
---	update_mach_lua_log(string.format("Finding distance between (%s, %s) and (%s, %s)", x1, y1, x2, y2))
-	local dx = x1 - x2
-    local dy = y1 - y2
-    local distance = math.sqrt( dx * dx + dy * dy )
---	update_mach_lua_log('Distance is: '..distance)
-	return distance
-end
-
-
 function file_exists(file_path)
 	update_mach_lua_log(string.format('Checking if file exists: "%s"', file_path))
 	local f=io.open(file_path,"r")
@@ -214,6 +197,37 @@ function file_exists(file_path)
 	end
 	update_mach_lua_log(string.format('File does NOT exist: "%s"', file_path))
 	return false
+end
+
+
+-- Find region_capital_distance from (x1, y1) to (x2, y2)
+-- @param x1: x1 coordinate
+-- @param y1: y1 coordinate
+-- @param x2: x2 coordinate
+-- @param y2: y2 coordinate
+-- @return region_capital_distance as double
+function find_distance( x1, y1, x2, y2)
+	--	update_mach_lua_log(string.format("Finding distance between (%s, %s) and (%s, %s)", x1, y1, x2, y2))
+	local dx = x1 - x2
+	local dy = y1 - y2
+	local distance = math.sqrt( dx * dx + dy * dy )
+	--	update_mach_lua_log('Distance is: '..distance)
+	return distance
+end
+
+
+function get_all_factions_army_forces()
+    update_mach_lua_log("Getting all factions army forces.")
+    local all_factions_army_forces = {}
+    local total_army_forces = 0
+    local faction_id_list = mach_data.__faction_id_list__
+    for _, faction_id in pairs(faction_id_list) do
+        local faction_army_forces = get_faction_army_forces(faction_id)
+        total_army_forces = total_army_forces + get_num_of_elements_in_table(faction_army_forces)
+        all_factions_army_forces[faction_id] = faction_army_forces
+    end
+    update_mach_lua_log('Finished getting all factions army forces. Total army forces: '..tostring(total_army_forces))
+    return all_factions_army_forces
 end
 
 
@@ -229,6 +243,36 @@ function get_all_factions_military_forces()
 	end
 	update_mach_lua_log('Finished getting all factions military forces. Total military forces: '..tostring(total_military_forces))
 	return all_factions_military_forces
+end
+
+
+function get_all_factions_nval_forces()
+	update_mach_lua_log("Getting all factions naval forces.")
+	local all_factions_naval_forces = {}
+	local total_naval_forces = 0
+	local faction_id_list = mach_data.__faction_id_list__
+	for _, faction_id in pairs(faction_id_list) do
+		local faction_naval_forces = get_faction_naval_forces(faction_id)
+		total_naval_forces = total_naval_forces + get_num_of_elements_in_table(faction_naval_forces)
+		all_factions_naval_forces[faction_id] = total_naval_forces
+	end
+	update_mach_lua_log('Finished getting all factions naval forces. Total naval forces: '..tostring(total_naval_forces))
+	return all_factions_naval_forces
+end
+
+
+function get_all_factions_regions()
+	update_mach_lua_log("Getting all factions regions.")
+	local all_factions_regions = {}
+	local total_regions = 0
+	local faction_id_list = mach_data.__faction_id_list__
+	for _, faction_id in pairs(faction_id_list) do
+		local faction_regions = get_faction_regions(faction_id)
+		total_regions = total_regions + #faction_regions
+		all_factions_regions[faction_id] = faction_regions
+	end
+	update_mach_lua_log('Finished getting all factions regions. Totalregions: '..tostring(total_regions))
+	return all_factions_regions
 end
 
 
@@ -258,6 +302,89 @@ function get_army_from_character_context(character_context)
 end
 
 
+function get_army_from_unit_id(unit_id, faction_id)
+	update_mach_lua_log(string.format('Getting Army of "%s" with unit id "%s"', faction_id, tostring(unit_id)))
+	local army_of_unit_id
+	local faction_army_forces = get_faction_army_forces(faction_id)
+	for army_idx, army in pairs(faction_army_forces) do
+		for unit_idx, unit in pairs(army.units) do
+			if unit_id == unit.unit_id then
+				army_of_unit_id = army
+				break
+			end
+		end
+		if army_of_unit_id then
+			break
+		end
+	end
+	update_mach_lua_log(string.format('Finished getting Army of unit id. Army is under command of "%s"', tostring(army_of_unit_id.commander_name)))
+	return army_of_unit_id
+end
+
+
+function get_army_garrisoned_in_slot_address(slot_address)
+    update_mach_lua_log(string.format('Getting army garrisoned in slot address: "%s"', tostring(slot_address)))
+    local army_garrisoned_in_slot
+	local slot_faction_id
+	local slot_region_id = CampaignUI.RegionKeyFromSlot(slot_address)
+	local all_factions_regions = mach_lib.get_all_factions_regions()
+	for faction_id, faction_regions in pairs(all_factions_regions) do
+		for region_idx, region in pairs(faction_regions) do
+			if slot_region_id == region.region_id then
+				slot_faction_id = region.faction_id
+				local faction_army_forces = get_faction_army_forces(slot_faction_id)
+				for faction_army_force_idx, faction_army_force in pairs(faction_army_forces) do
+					if slot_address == faction_army_force.garrison_address then
+						army_garrisoned_in_slot = faction_army_force
+						update_mach_lua_log(string.format('Finished getting army garrisoned in slot address. Army of "%s" under the command of "%s".', army_garrisoned_in_slot.faction_id, army_garrisoned_in_slot.commander_name))
+						return army_garrisoned_in_slot
+					end
+				end
+				local faction_enemy_army_forces = get_faction_enemy_army_forces(slot_faction_id)
+				for faction_enemy_army_force_idx, faction_enemy_army_force in pairs(faction_enemy_army_forces) do
+					if slot_address == faction_enemy_army_force.garrison_address then
+						army_garrisoned_in_slot = faction_enemy_army_force
+						update_mach_lua_log(string.format('Finished getting army garrisoned in slot address. Army of "%s" under the command of "%s".', army_garrisoned_in_slot.faction_id, army_garrisoned_in_slot.commander_name))
+						return army_garrisoned_in_slot
+					end
+				end
+			end
+		end
+	end
+
+
+
+--	local garrison_address = tostring(slot_address):gsub('REGION_SLOT', 'GARRISON_RESIDENCE')
+--	update_mach_lua_log(garrison_address)
+--    local slot_entities = CampaignUI.RetrieveContainedEntitiesFromGarrison(garrison_address, garrison_address)
+--    update_mach_lua_log(slot_entities)
+--    for slot_entity_idx, slot_entity in pairs(slot_entities.Units) do
+--        update_mach_lua_log(slot_entity_idx)
+--        update_mach_lua_log(slot_entity)
+--        local entity_character_address = slot_entity.CharacterPtr
+--        update_mach_lua_log(entity_character_address)
+--        local entity_faction_id = get_faction_id_from_character_address(entity_character_address)
+--        local entity_character_details = CampaignUI.InitialiseCharacterDetails(entity_character_address)
+--        local army_garrisoned_in_slot = mach_classes.Army:new(entity_character_details, entity_faction_id)
+--        update_mach_lua_log(string.format('Finished getting army garrisoned in slot address. Army of "%s" under the command of "%s".', army_garrisoned_in_slot.faction_id, army_garrisoned_in_slot.commander_name))
+--        return army_garrisoned_in_slot
+--    end
+
+--    local all_factions_army_forces = get_all_factions_army_forces()
+--    for faction_id, faction_army_forces in pairs(all_factions_army_forces) do
+--        for faction_army_force_idx, faction_army_force in pairs(faction_army_forces) do
+--            if slot_address == faction_army_force.garrison_address then
+--                army_garrisoned_in_slot = faction_army_force
+--                update_mach_lua_log(string.format('Finished getting army garrisoned in slot address. Army of "%s" under the command of "%s".', army_garrisoned_in_slot.faction_id, army_garrisoned_in_slot.commander_name))
+--                return army_garrisoned_in_slot
+--            end
+--        end
+--    end
+    update_mach_lua_log(string.format('NO army garrisoned in slot address!'))
+    return nil
+end
+
+
 function get_army_in_settlement_address(settlement_address)
 	update_mach_lua_log(string.format('Getting army in settlement address: "%s"', tostring(settlement_address)))
 	local faction_army_in_settlement
@@ -273,6 +400,7 @@ function get_army_in_settlement_address(settlement_address)
 	update_mach_lua_log(string.format('Finished getting army in settlement address. Army commander: "%s"', faction_army_in_settlement.commander_name))
 	return faction_army_in_settlement
 end
+
 
 -- Determine number of artillery an artillery unit has according to its number of men
 -- @param men: number of men as integer
@@ -308,10 +436,10 @@ end
 
 
 function get_battle_faction_names_str(faction_ids)
-	update_mach_lua_log('Getting faction names str from faction ids list.')
+	update_mach_lua_log(string.format('Getting faction names str from faction ids list. %s faction ids in list.', get_num_of_elements_in_table(faction_ids)))
 	local faction_names_str = ''
-	for faction_id_idx = 1, #faction_ids do
-		local faction_id = faction_ids[faction_id_idx]
+	for faction_id_idx, faction_id in pairs(faction_ids) do
+		update_mach_lua_log(faction_id)
 		if faction_id_idx == 1 then
 			faction_names_str = get_faction_screen_name_from_faction_id(faction_id)
 		else
@@ -326,58 +454,90 @@ function get_battle_faction_names_str(faction_ids)
 end
 
 
-function get_battles_with_character_name(character_name, faction_id)
-	update_mach_lua_log(string.format('Getting battles with character name "%s" of faction "%s".', character_name, faction_id))
+function get_battles_with_character_name(character_name, character_faction_id)
+	character_faction_id = character_faction_id or nil
+	update_mach_lua_log(string.format('Getting battles with character name "%s" of faction "%s".', character_name, character_faction_id))
+
 	local battles_list = {}
 	for battle_idx, battle in pairs(mach_data.__battles_list__) do
---		if is_value_in_table(character_name, battle.winner_commander_names) or is_value_in_table(character_name, battle.loser_commander_names) then
---			battles_list[#battles_list+1] = battle
---		end
 		local pre_battle_faction_units_or_ships = {}
 		if not battle.is_naval_battle then
-			if battle.pre_battle_units_list[faction_id] then
-				pre_battle_faction_units_or_ships = battle.pre_battle_units_list[faction_id]
+			if battle.pre_battle_units_list[character_faction_id] then
+				pre_battle_faction_units_or_ships = battle.pre_battle_units_list[character_faction_id]
+			else
+				for pre_battle_units_faction_id, pre_battle_faction_units_list in pairs(battle.pre_battle_units_list) do
+					pre_battle_faction_units_or_ships = mach_lib.concat_tables(pre_battle_faction_units_or_ships, pre_battle_faction_units_list)
+				end
 			end
 		else
-			if battle.pre_battle_ships_list[faction_id] then
-				pre_battle_faction_units_or_ships = battle.pre_battle_ships_list[faction_id]
+			if battle.pre_battle_ships_list[character_faction_id] then
+				pre_battle_faction_units_or_ships = battle.pre_battle_ships_list[character_faction_id]
+			else
+				for pre_battle_ships_faction_id, pre_battle_faction_ships_list in pairs(battle.pre_battle_ships_list) do
+					pre_battle_faction_units_or_ships = mach_lib.concat_tables(pre_battle_faction_units_or_ships, pre_battle_faction_ships_list)
+				end
 			end
 		end
 		for military_unit_idx, military_unit in pairs(pre_battle_faction_units_or_ships) do
 --			output_table_to_mach_log(military_unit, 1)
 			if military_unit.commander_name == character_name then
+				character_faction_id = military_unit.faction_id
 				update_mach_lua_log(military_unit.commander_name)
+				update_mach_lua_log(battle.battle_name)
 				battles_list[#battles_list+1] = battle
 			end
 		end
-
 	end
-	update_mach_lua_log(string.format('Finished getting battles with character name. Total battles "%s"', #battles_list))
-	return battles_list
+	update_mach_lua_log(string.format('Finished getting battles with character name. Total battles "%s".', #battles_list))
+	return battles_list, character_faction_id
 end
 
 
-function get_battles_with_unit_id(unit_id, faction_id)
-	update_mach_lua_log(string.format('Getting battles with unit id "%s" of faction "%s".', unit_id, faction_id))
-	local battles_list = {}
-	for battle_idx, battle in pairs(mach_data.__battles_list__) do
-		local pre_battle_faction_units_or_ships = {}
-		if not battle.is_naval_battle then
-			if battle.pre_battle_units_list[faction_id] then
-				pre_battle_faction_units_or_ships = battle.pre_battle_units_list[faction_id]
+function get_battles_with_unit_unique_id(unit_unique_id, unit_faction_id)
+	unit_faction_id = unit_faction_id or nil
+	update_mach_lua_log(string.format('Getting battles with unit unique id "%s" of faction "%s".', unit_unique_id, tostring(unit_faction_id)))
+    local battles_list = {}
+	if #mach_data.__battles_list__ > 0 then
+		update_mach_lua_log(string.format('Searching "%s" battles for unit unique id.', #mach_data.__battles_list__))
+		for battle_idx, battle in pairs(mach_data.__battles_list__) do
+			update_mach_lua_log(string.format('Searching battle unique id "%s" for unit unique id.', battle.battle_unique_id))
+
+			local pre_battle_faction_units_and_ships = {}
+			if unit_faction_id then
+				if battle.pre_battle_units_list[unit_faction_id] then
+					pre_battle_faction_units_and_ships = mach_lib.concat_tables(pre_battle_faction_units_and_ships, battle.pre_battle_units_list[unit_faction_id])
+				end
+				if battle.pre_battle_ships_list[unit_faction_id] then
+					pre_battle_faction_units_and_ships =  mach_lib.concat_tables(pre_battle_faction_units_and_ships, battle.pre_battle_ships_list[unit_faction_id])
+				end
+			else
+				for faction_id, faction_pre_battle_units_list in pairs(battle.pre_battle_units_list) do
+					pre_battle_faction_units_and_ships =  mach_lib.concat_tables(pre_battle_faction_units_and_ships, faction_pre_battle_units_list)
+				end
+				for faction_id, faction_pre_battle_ships_list in pairs(battle.pre_battle_ships_list) do
+					pre_battle_faction_units_and_ships =  mach_lib.concat_tables(pre_battle_faction_units_and_ships, faction_pre_battle_ships_list)
+				end
 			end
-		else
-			if battle.pre_battle_ships_list[faction_id] then
-				pre_battle_faction_units_or_ships = battle.pre_battle_ships_list[faction_id]
+
+			for military_unit_idx, military_unit in pairs(pre_battle_faction_units_and_ships) do
+	--			update_mach_lua_log(military_unit_idx)
+	--			update_mach_lua_log(military_unit)
+	--			update_mach_lua_log(military_unit.is_naval)
+	--			update_mach_lua_log(military_unit.unit_unique_id)
+	--			update_mach_lua_log(unit_unique_id)
+				if military_unit.unit_unique_id == unit_unique_id then
+					update_mach_lua_log(string.format('Battle unique id "%s" contains unit unique id "%s".', battle.battle_unique_id, unit_unique_id))
+					battles_list[#battles_list+1] = battle
+					break
+				end
 			end
 		end
-		for military_unit_idx, military_unit in pairs(pre_battle_faction_units_or_ships) do
-			if military_unit.unit_id == unit_id then
-				battles_list[#battles_list+1] = battle
-			end
-		end
+	else
+		update_mach_lua_log(string.format('No battles to search for unit unique id.'))
+
 	end
-	update_mach_lua_log(string.format('Finished getting battles with unit id. Total battles "%s"', #battles_list))
+
+	update_mach_lua_log(string.format('Finished getting battles with unit unique id. Total battles "%s"', #battles_list))
 	return battles_list
 end
 
@@ -394,7 +554,7 @@ function get_besieged_settlements()
 
 	local faction_id_list = mach_data.__faction_id_list__
 	for _, faction_id in pairs(faction_id_list) do
-		local enemy_faction_ids = get_faction_ids_at_war_with_faction(faction_id)
+		local enemy_faction_ids = get_faction_ids_at_war_with_faction_id(faction_id)
 --		local diplomacy_details = CampaignUI.RetrieveDiplomacyDetails(faction_id)
 --		if diplomacy_details then
 		for _, enemy_faction_id in pairs(enemy_faction_ids) do
@@ -480,7 +640,8 @@ function get_character_details_from_character_context(context, context_type)
 	update_mach_lua_log('Getting character details for context type: "'..tostring(context_type)..'"')
 	local character_details = nil
 	if context_type == "CharacterSelected" then
-		local entity_type_selected = CampaignUI.EntityTypeSelected()
+        update_mach_lua_log('Context is "CharacterSelected".')
+        local entity_type_selected = CampaignUI.EntityTypeSelected()
 		if conditions.CharacterType("admiral", context) or conditions.CharacterType("General", context) then
 			update_mach_lua_log("Character is a admiral or General. Returning character details.")
 			character_details = CampaignUI.InitialiseCharacterDetails(entity_type_selected.Entity)
@@ -490,7 +651,8 @@ function get_character_details_from_character_context(context, context_type)
 			character_details =  CampaignUI.InitialiseCharacterDetails(unitDetails.CharacterPtr)
 		end
 	elseif context_type == "CharacterCompletedBattle" or context_type == 'CharacterCreated' then
-		local character_full_name = get_character_full_name_from_character_context(context)
+        update_mach_lua_log('Context is "CharacterCompletedBattle" or "CharacterCreated".')
+        local character_full_name = get_character_full_name_from_character_context(context)
 		local faction_id = get_faction_id_from_context(context, "CharacterCompletedBattle")
 		local faction_military_forces = get_faction_military_forces(faction_id)
 		for faction_military_force_key, faction_military_force in pairs(faction_military_forces) do
@@ -511,7 +673,7 @@ function get_character_details_from_character_context(context, context_type)
 			update_mach_lua_log(string.format('Error, unable to get character details of character "%s"!', character_full_name))
 		end
 	end
-	update_mach_lua_log("Finished getting character details.")
+	update_mach_lua_log(string.format('Finished getting character details from context "%s".', context_type))
 	return character_details
 end
 
@@ -520,19 +682,23 @@ function get_character_full_name_from_character_context(character_context)
 	update_mach_lua_log('Getting character full name from character context')
 	local character_forename = nil
 	local character_surname = nil
-	for character_names_key, character_names_value in pairs(mach_data.__character_names_list__) do
-		if conditions.CharacterForename(character_names_key, character_context) then
-			character_forename = character_names_value
+    update_mach_lua_log(get_num_of_elements_in_table(mach_data.__character_names_list__))
+	assert(next(mach_data.__character_names_list__))
+	for character_name_loc_id, character_name in pairs(mach_data.__character_names_list__) do
+		if conditions.CharacterForename(character_name_loc_id, character_context) then
+			character_forename = character_name
+			update_mach_lua_log(string.format('Found character forename: "%s"', character_forename))
 		end
-		if conditions.CharacterSurname(character_names_key, character_context) then
-			character_surname = character_names_value
+		if conditions.CharacterSurname(character_name_loc_id, character_context) then
+			character_surname = character_name
+			update_mach_lua_log(string.format('Found character forename: "%s"', character_surname))
 		end
 		if character_forename and character_surname then
 			break
 		end
 	end
 	local character_full_name = character_forename.." "..character_surname
-	update_mach_lua_log(string.format('Finished getting character full name from character context. Character full name: %s', character_full_name))
+	update_mach_lua_log(string.format('Finished getting character full name from character context. Character full name: "%s"', character_full_name))
 	return character_full_name
 end
 
@@ -622,8 +788,8 @@ function get_faction_army_forces(faction_id)
     update_mach_lua_log("Getting faction army forces for faction_id: "..tostring(faction_id))
     local faction_forces_list = CampaignUI.RetrieveFactionMilitaryForceLists(faction_id, true) or {}
 	local faction_army_forces = {}
-	for faction_forces_idx = 1, #faction_forces_list do
-		local faction_army_force = mach_classes.Army:new(faction_forces_list[faction_forces_idx], faction_id)
+	for faction_army_force_idx, faction_army_force in pairs(faction_forces_list) do
+		local faction_army_force = mach_classes.Army:new(faction_army_force, faction_id)
 		faction_army_forces[faction_army_force.address] = faction_army_force
 	end
 	update_mach_lua_log('Finished getting army forces for faction_id "'..tostring(faction_id)..'". Total army forces: '..tostring(get_num_of_elements_in_table(faction_army_forces)))
@@ -631,10 +797,79 @@ function get_faction_army_forces(faction_id)
 end
 
 
+function get_faction_id_from_character_address(character_address)
+	update_mach_lua_log(string.format('Getting faction id from character address: "%s"', tostring(character_address)))
+	local character_faction_id
+--	local all_factions_military_forces = get_all_factions_military_forces()
+--	for faction_id, faction_military_forces in pairs(all_factions_military_forces) do
+--		for faction_military_force_idx, faction_military_force in pairs(faction_military_forces) do
+--			for faction_military_force_unit_idx, faction_military_force_unit in pairs(faction_military_force.units) do
+--				if character_address == faction_military_force_unit.character_address then
+--					character_faction_id = faction_military_force_unit.faction_id
+--					update_mach_lua_log(string.format('Finished getting faction id from character address. Faction id: "%s"', tostring(character_faction_id)))
+--					return character_faction_id
+--				end
+--			end
+--			for faction_military_force_ship_idx, faction_military_force_ship in pairs(faction_military_force.ships) do
+--				if character_address == faction_military_force_ship.character_address then
+--					character_faction_id = faction_military_force_ship.faction_id
+--					update_mach_lua_log(string.format('Finished getting faction id from character address. Faction id: "%s"', tostring(character_faction_id)))
+--					return character_faction_id
+--				end
+--			end
+--		end
+--	end
+
+
+	for faction_id_idx, faction_id_value in pairs(mach_data.__faction_id_list__) do
+		local faction_army_forces = CampaignUI.RetrieveFactionMilitaryForceLists(faction_id_value, true) or {}
+		for faction_army_force_idx, faction_army_force in pairs(faction_army_forces) do
+            if character_address == faction_army_force.Address then
+				character_faction_id = faction_id_value
+				update_mach_lua_log(string.format('Finished getting faction id from character address. Faction id: "%s"', tostring(character_faction_id)))
+				return character_faction_id
+			else
+				local contained_entities = CampaignUI.RetrieveContainedEntitiesFromCharacter(faction_army_force.Address, faction_army_force.Address)
+				if contained_entities.Units then
+					for entity_idx, entity in pairs(contained_entities.Units) do
+						if character_address == entity.CharacterPtr then
+							character_faction_id = faction_id_value
+							update_mach_lua_log(string.format('Finished getting faction id from character address. Faction id: "%s"', tostring(character_faction_id)))
+							return character_faction_id
+						end
+					end
+				end
+			end
+		end
+		local faction_naval_forces = CampaignUI.RetrieveFactionMilitaryForceLists(faction_id_value, false) or {}
+		for faction_naval_force_idx, faction_naval_force  in pairs(faction_naval_forces) do
+			if character_address == faction_naval_force.Address then
+				character_faction_id = faction_id_value
+				update_mach_lua_log(string.format('Finished getting faction id from character address. Faction id: "%s"', tostring(character_faction_id)))
+				return character_faction_id
+			else
+				local contained_entities = CampaignUI.RetrieveContainedEntitiesFromCharacter(faction_naval_force.Address, faction_naval_force.Address)
+				if contained_entities.Ships then
+					for entity_idx, entity in pairs(contained_entities.Ships) do
+						if character_address == entity.CharacterPtr then
+							character_faction_id = faction_id_value
+							update_mach_lua_log(string.format('Finished getting faction id from character address. Faction id: "%s"', tostring(character_faction_id)))
+							return character_faction_id
+						end
+					end
+				end
+			end
+		end
+	end
+	update_mach_lua_log(string.format('Error, unable to get faction id from character address.'))
+    return nil
+end
+
+
 function get_faction_id_from_settlement_id(settlement_id)
 	update_mach_lua_log(string.format('Getting faction id from settlement id "%s".', settlement_id))
 	local faction_id
-	local region_id = mach_data.settlement_to_region_list[settlement_id]
+	local region_id = mach_data.__settlement_to_region_list__[settlement_id]
 	for faction_id_idx, faction_id_value in pairs(mach_data.__faction_id_list__) do
 		local faction_regions = get_faction_regions(faction_id_value)
 		for faction_region_idx, faction_region_value in pairs(faction_regions) do
@@ -650,35 +885,70 @@ function get_faction_id_from_settlement_id(settlement_id)
 end
 
 
-function get_faction_id_from_character_address(character_address)
-	update_mach_lua_log(string.format('Getting faction id from character address: "%s"', tostring(character_address)))
-	local faction_id
-	for faction_id_idx, faction_id_value in pairs(mach_data.__faction_id_list__) do
-		local faction_land_forces_list = CampaignUI.RetrieveFactionMilitaryForceLists(faction_id_value, true) or {}
-		for faction_land_forces_idx = 1, #faction_land_forces_list do
-			local faction_land_force = faction_land_forces_list[faction_land_forces_idx]
-			if character_address == faction_land_force.Address then
-				faction_id = faction_id_value
-				break
-			end
-		end
-		if faction_id then
-			break
-		end
-		local faction_naval_forces_list = CampaignUI.RetrieveFactionMilitaryForceLists(faction_id_value, false) or {}
-		for faction_naval_forces_idx = 1, #faction_naval_forces_list do
-			local faction_naval_force = faction_naval_forces_list[faction_naval_forces_idx]
-			if character_address == faction_naval_force.Address then
-				faction_id = faction_id_value
-				break
-			end
-		end
-		if faction_id then
-			break
-		end
-	end
-	update_mach_lua_log(string.format('Finished getting faction id from character address. Faction id: "%s"', tostring(faction_id)))
-    return faction_id
+function get_faction_id_from_unit_address(unit_address)
+    update_mach_lua_log(string.format('Getting faction id from unit address: "%s"', tostring(unit_address)))
+    local unit_faction_id
+    --	local all_factions_military_forces = get_all_factions_military_forces()
+    --	for faction_id, faction_military_forces in pairs(all_factions_military_forces) do
+    --		for faction_military_force_idx, faction_military_force in pairs(faction_military_forces) do
+    --			for faction_military_force_unit_idx, faction_military_force_unit in pairs(faction_military_force.units) do
+    --				if unit_address == faction_military_force_unit.address then
+    --					unit_faction_id = faction_id
+    --					update_mach_lua_log(string.format('Finished getting faction id from unit address. Faction id: "%s"', tostring(unit_faction_id)))
+    --					return unit_faction_id
+    --				end
+    --			end
+    --			for faction_military_force_ship_idx, faction_military_force_ship in pairs(faction_military_force.ships) do
+    --				if unit_address == faction_military_force_ship.address then
+    --					unit_faction_id = faction_id
+    --					update_mach_lua_log(string.format('Finished getting faction id from unit address. Faction id: "%s"', tostring(unit_faction_id)))
+    --					return unit_faction_id
+    --				end
+    --			end
+    --		end
+    --	end
+
+    for faction_id_idx, faction_id_value in pairs(mach_data.__faction_id_list__) do
+        local faction_army_forces = CampaignUI.RetrieveFactionMilitaryForceLists(faction_id_value, true) or {}
+        for faction_army_force_idx, faction_army_force in pairs(faction_army_forces) do
+--            update_mach_lua_log('testing')
+            local contained_entities = CampaignUI.RetrieveContainedEntitiesFromCharacter(faction_army_force.Address, faction_army_force.Address)
+--            update_mach_lua_log(faction_army_force.Address)
+            if contained_entities.Units then
+--                update_mach_lua_log(contained_entities.Units)
+--                output_table_to_mach_log(contained_entities.Units, 1)
+                for entity_idx, entity in pairs(contained_entities.Units) do
+--					update_mach_lua_log('testing')
+--					output_table_to_mach_log(entity)
+
+--					update_mach_lua_log(entity.Address)
+                    if unit_address == entity.Address then
+                        unit_faction_id = faction_id_value
+                        update_mach_lua_log(string.format('Finished getting faction id from unit address. Faction id: "%s"', tostring(unit_faction_id)))
+                        return unit_faction_id
+                    end
+                end
+            end
+        end
+        local faction_naval_forces = CampaignUI.RetrieveFactionMilitaryForceLists(faction_id_value, false) or {}
+--        update_mach_lua_log('testing2')
+        for faction_naval_force_idx, faction_naval_force  in pairs(faction_naval_forces) do
+--            update_mach_lua_log(faction_naval_force.Address)
+            local contained_entities = CampaignUI.RetrieveContainedEntitiesFromCharacter(faction_naval_force.Address, faction_naval_force.Address)
+            if contained_entities.Ships then
+                for entity_idx, entity in pairs(contained_entities.Ships) do
+--                    update_mach_lua_log(entity.Address)
+                    if unit_address == entity.Address then
+                        unit_faction_id = faction_id_value
+                        update_mach_lua_log(string.format('Finished getting faction id from unit address. Faction id: "%s"', tostring(unit_faction_id)))
+                        return unit_faction_id
+                    end
+                end
+            end
+        end
+    end
+    update_mach_lua_log(string.format('Error, unable to get faction id from unit address.'))
+    return nil
 end
 
 
@@ -729,7 +999,7 @@ function get_faction_id_from_context(context, context_type)
 end
 
 
-function get_faction_ids_at_war_with_faction(faction_id)
+function get_faction_ids_at_war_with_faction_id(faction_id)
 	update_mach_lua_log(string.format('Getting faction ids at war with faction "%s".', faction_id))
 	local enemy_faction_id_list = {}
 	if not string.find(faction_id, 'rebels') then
@@ -789,12 +1059,29 @@ function get_faction_protectorate_and_ally_military_forces(faction_id)
 end
 
 
+function get_faction_enemy_army_forces(faction_id)
+	update_mach_lua_log("Getting enemy army forces for faction_id: "..tostring(faction_id))
+	local enemy_factions_army_forces = {}
+	local total_enemy_military_forces = 0
+	--	local diplomacy_details = CampaignUI.RetrieveDiplomacyDetails(faction_id)
+	local enemy_faction_list = get_faction_ids_at_war_with_faction_id(faction_id)
+	--	enemy_faction_list['pirates'] = {}
+	for _, enemy_faction_id in pairs(enemy_faction_list) do
+		local enemy_faction_army_forces = get_faction_army_forces(enemy_faction_id)
+		enemy_faction_army_forces[enemy_faction_id] = enemy_faction_army_forces
+		total_enemy_military_forces = total_enemy_military_forces + get_num_of_elements_in_table(enemy_faction_military_forces)
+	end
+	update_mach_lua_log('Finished getting enemy army forces for faction_id "'..tostring(faction_id)..'". Total enemy army forces: '..tostring(total_enemy_military_forces))
+	return enemy_factions_army_forces
+end
+
+
 function get_faction_enemy_military_forces(faction_id)
 	update_mach_lua_log("Getting enemy military forces for faction_id: "..tostring(faction_id))
 	local enemy_factions_military_forces = {}
 	local total_enemy_military_forces = 0
 --	local diplomacy_details = CampaignUI.RetrieveDiplomacyDetails(faction_id)
-	local enemy_faction_list = get_faction_ids_at_war_with_faction(faction_id)
+	local enemy_faction_list = get_faction_ids_at_war_with_faction_id(faction_id)
 --	enemy_faction_list['pirates'] = {}
 	for _, enemy_faction_id in pairs(enemy_faction_list) do
 		local enemy_faction_military_forces = get_faction_military_forces(enemy_faction_id)
@@ -846,21 +1133,21 @@ function get_faction_num_of_soldiers(faction_id)
 end
 
 
-function get_faction_and_protectorates_regions(faction_key)
-	update_mach_lua_log("Getting faction_key and its protectorates regions for faction_key: "..tostring(faction_key))
-	local faction_and_protectorates_regions = CampaignUI.RegionsOwnedByFactionOrByProtectorates(faction_key)
+function get_faction_and_protectorates_regions(faction_id)
+	update_mach_lua_log("Getting faction_key and its protectorates regions for faction_key: "..tostring(faction_id))
+	local faction_and_protectorates_regions = CampaignUI.RegionsOwnedByFactionOrByProtectorates(faction_id)
 	update_mach_lua_log("Finished getting faction_key and its protectorates regions.")
 	return faction_and_protectorates_regions
 end
 
 
-function get_faction_regions(faction_key)
-	update_mach_lua_log("Getting regions for faction_key: "..tostring(faction_key))
+function get_faction_regions(faction_id)
+	update_mach_lua_log("Getting regions for faction_key: "..tostring(faction_id))
 	local faction_regions = {}
-	local faction_and_protectorates_regions = CampaignUI.RegionsOwnedByFactionOrByProtectorates(faction_key) or {}
+	local faction_and_protectorates_regions = CampaignUI.RegionsOwnedByFactionOrByProtectorates(faction_id) or {}
 	for k, v in pairs(faction_and_protectorates_regions) do
 		if faction_and_protectorates_regions[k].OwnedByProtectorate == false then
-			local region = mach_classes.Region:new(faction_and_protectorates_regions[k], faction_key)
+			local region = mach_classes.Region:new(faction_and_protectorates_regions[k], faction_id)
 			faction_regions[k] = region
 		end
 	end
@@ -937,6 +1224,30 @@ function get_intersection_point_of_two_lines(line_slope_1, y_intercept_1, x2, li
 	local intersection_pos_x = (((line_slope_2 * x2) + y_intercept_2) - y_intercept_1) / line_slope_1
 	local intersection_pos_y = (line_slope_2 * intersection_pos_x) + y_intercept_2
 	return intersection_pos_x, intersection_pos_y
+end
+
+
+function get_latest_unit_unique_id_from_unit_id(unit_id)
+	update_mach_lua_log(string.format('Getting latest unit unique id from unit id: "%s"', unit_id))
+	local latest_unit_unique_id
+	--	update_mach_lua_log(mach_data.__unit_id_to_unit_unique_ids__)
+	--	update_mach_lua_log(mach_data.__unit_id_to_unit_unique_ids__[unit_id])
+
+	if mach_data.__unit_id_to_unit_unique_ids__[unit_id] ~= nil then
+		--		update_mach_lua_log(string.format('test'))
+		--		update_mach_lua_log(mach_data.__unit_id_to_unit_unique_ids__[unit_id])
+		--		update_mach_lua_log(mach_data.__unit_id_to_unit_unique_ids__[unit_id][#mach_data.__unit_id_to_unit_unique_ids__[unit_id]])
+		latest_unit_unique_id = mach_data.__unit_id_to_unit_unique_ids__[unit_id][#mach_data.__unit_id_to_unit_unique_ids__[unit_id]]
+	else
+		--		update_mach_lua_log(string.format('test2'))
+		--		update_mach_lua_log(string.format('%s1', unit_id:gsub('unit', '')))
+		--		update_mach_lua_log(tonumber(string.format('%s1', unit_id:gsub('unit', ''))))
+		latest_unit_unique_id = string.format('%s-1', unit_id)
+		mach_data.__unit_id_to_unit_unique_ids__[unit_id] = {}
+		mach_data.__unit_id_to_unit_unique_ids__[unit_id][#mach_data.__unit_id_to_unit_unique_ids__[unit_id]] = latest_unit_unique_id
+	end
+	update_mach_lua_log(string.format('Finished getting latest unit unique id from unit id. Unit unique id: "%s"', latest_unit_unique_id))
+	return latest_unit_unique_id
 end
 
 
@@ -1028,6 +1339,35 @@ function get_nationality_from_faction_id(faction_id, location)
 end
 
 
+function get_navy_from_unit_id(unit_id, faction_id)
+	update_mach_lua_log(string.format('Getting Navy of "%s" with unit id: "%s"', faction_id, tostring(unit_id)))
+	local navy_of_unit_id
+	local faction_naval_forces = get_faction_naval_forces(faction_id)
+	for navy_idx, navy in pairs(faction_naval_forces) do
+		for unit_idx, unit in pairs(navy.ships) do
+			if unit_id == unit.unit_id then
+				navy_of_unit_id = navy
+				break
+			end
+		end
+		if navy_of_unit_id then
+			break
+		end
+		for unit_idx, unit in pairs(navy.units) do
+			if unit_id == unit.unit_id then
+				navy_of_unit_id = navy
+				break
+			end
+		end
+		if navy_of_unit_id then
+			break
+		end
+	end
+	update_mach_lua_log(string.format('Finished getting Navy from unit id. Navy is under command of "%s"', tostring(navy_of_unit_id.commander_name)))
+	return navy_of_unit_id
+end
+
+
 function get_num_of_elements_in_table(tbl)
 	update_mach_lua_log("Getting number of elements in table.")
 	local count = 0
@@ -1059,20 +1399,6 @@ function get_region_id_from_region_address(region_address)
 end
 
 
-function get_region_id_from_region_name(region_name)
-	update_mach_lua_log("Getting region id from region name: "..tostring(region_name))
-	local found_region_id
-	for region_id, region_loc_str in pairs(mach_data.region_to_loc_list) do
-		local loc_region_name = CampaignUI.LocalisationString(region_loc_str, true)
-		if region_name == loc_region_name then
-			found_region_id = region_id
-			break
-		end
-	end
-	update_mach_lua_log("Region id is: "..tostring(found_region_id))
-	return found_region_id
-end
-
 function get_region_address_from_settlement_address(settlement_address)
 	update_mach_lua_log("Getting region address from settlement address: "..tostring(settlement_address))
 	local region_address = CampaignUI.SettlementsRegion(settlement_address)
@@ -1089,6 +1415,38 @@ function get_region_details_from_region_address(region_address)
 end
 
 
+function get_region_id_from_region_name(region_name)
+	update_mach_lua_log("Getting region id from region name: "..tostring(region_name))
+	local found_region_id
+	for region_id, region_loc_str in pairs(mach_data.region_to_loc_list) do
+		local loc_region_name = CampaignUI.LocalisationString(region_loc_str, true)
+		if region_name == loc_region_name then
+			found_region_id = region_id
+			break
+		end
+	end
+	update_mach_lua_log("Region id is: "..tostring(found_region_id))
+	return found_region_id
+end
+
+
+function get_region_id_from_settlement_name(settlement_name)
+	update_mach_lua_log('Getting region id from settlement name: "'..tostring(settlement_name)..'"')
+	local found_region_id
+	local settlement_lowercase_underscores = string.lower(settlement_name):gsub(" ", "_")
+	for settlement_id, region_id in pairs(mach_data.__settlement_to_region_list__) do
+		local generated_settlement_id = string.format("settlement:%s:%s", region_id, settlement_lowercase_underscores)
+--		update_mach_lua_log(settlement_id)
+--		update_mach_lua_log(generated_settlement_id)
+		if settlement_id == generated_settlement_id then
+			found_region_id = region_id
+			break
+		end
+	end
+	update_mach_lua_log('Region id for settlement name is: "'..tostring(found_region_id)..'"')
+	return found_region_id
+end
+
 
 function get_region_id_list()
 	update_mach_lua_log("Getting region id list")
@@ -1102,7 +1460,7 @@ function get_region_id_list()
 			end
 		end
 	end
-	update_mach_lua_log("Finished Getting region id list")
+	update_mach_lua_log(string.format('Finished getting region id list. Number of regions: %s', #region_id_list))
 	return region_id_list
 end
 
@@ -1146,7 +1504,7 @@ end
 -- function to determine the settlement key from region key
 function get_settlement_id_from_region_id(region_id)
 	update_mach_lua_log('Getting settlement id from region id "'..tostring(region_id)..'"')
-	for settlement_id, region_id_value in pairs(mach_data.settlement_to_region_list) do
+	for settlement_id, region_id_value in pairs(mach_data.__settlement_to_region_list__) do
 		if region_id_value == region_id then
 			update_mach_lua_log('Settlement id of region "'..tostring(region_id)..'" is "'..tostring(settlement_id)..'"')
 			return settlement_id
@@ -1166,20 +1524,74 @@ function get_settlement_id_from_settlement_address(settlement_address)
 end
 
 
-function get_slot_from_context(slot_context)
+function get_settlement_id_from_settlement_name(settlement_name)
+	update_mach_lua_log('Getting settlement id from settlement name "'..tostring(settlement_name)..'"')
+	local region_id = get_region_id_from_settlement_name(settlement_name)
+	local settlement_id = string.format("settlement:%s:%s", region_id, string.lower(settlement_name):gsub(" ", "_"))
+	update_mach_lua_log('Settlement id from settlement name is: "'..tostring(settlement_id)..'"')
+	return settlement_id
+end
+
+
+function get_settlement_names_list()
+	update_mach_lua_log("Getting settlement names list")
+	local settlement_names_list = {}
+	local factions_list = mach_data.__faction_id_list__
+	for faction_id_idx, faction_id in pairs(factions_list) do
+		for regions_owned_by_faction_or_protectorates_key, regions_owned_by_faction_or_protectorates_value in pairs(CampaignUI.RegionsOwnedByFactionOrByProtectorates(faction_id) or {}) do
+			if not regions_owned_by_faction_or_protectorates_value.OwnedByProtectorate then
+				local region_details = CampaignUI.InitialiseRegionInfoDetails(regions_owned_by_faction_or_protectorates_value.Address)
+				settlement_names_list[#settlement_names_list+1] = region_details.Settlement
+			end
+		end
+	end
+	update_mach_lua_log(string.format('Finished getting settlement names list. Number of settlements: %s', #settlement_names_list))
+	return settlement_names_list
+end
+
+
+function get_settlement_to_region_list()
+	update_mach_lua_log("Getting settlement to region list")
+	local region_id_list = {}
+	local settlement_names_list = {}
+	local settlement_to_region_list = {}
+	local factions_list = mach_data.__faction_id_list__
+	for faction_id_idx, faction_id in pairs(factions_list) do
+		for regions_owned_by_faction_or_protectorates_key, regions_owned_by_faction_or_protectorates_value in pairs(CampaignUI.RegionsOwnedByFactionOrByProtectorates(faction_id) or {}) do
+			if not regions_owned_by_faction_or_protectorates_value.OwnedByProtectorate then
+				local region_id = CampaignUI.RegionKeyFromAddress(regions_owned_by_faction_or_protectorates_value.Address)
+				region_id_list[#region_id_list+1] = region_id
+				local region_details = CampaignUI.InitialiseRegionInfoDetails(regions_owned_by_faction_or_protectorates_value.Address)
+				settlement_names_list[#settlement_names_list+1] = region_details.Settlement
+				local settlement_id = string.format("settlement:%s:%s", region_id, string.lower(region_details.Settlement):gsub(" ", "_"))
+--				update_mach_lua_log(settlement_id)
+				settlement_to_region_list[settlement_id] = region_id
+			end
+		end
+	end
+	update_mach_lua_log(string.format('Finished getting settlement to region list.'))
+	mach_data.__region_id_list__ = region_id_list
+	mach_data.__settlement_names_list__ = settlement_names_list
+	return settlement_to_region_list
+end
+
+
+function get_slot_id_from_context(slot_context)
     update_mach_lua_log("Getting current slot.")
     local last_search_slot = "town:england:cambridge"
 
     if conditions.SlotName(last_search_slot, slot_context) then
         return last_search_slot
     end
-    for kk, vv in pairs(mach_data.slotsList) do
-        if conditions.SlotName(kk, slot_context) then
-            last_search_slot = kk
-            return kk
+    for slot_id, region_id in pairs(mach_data.slots_to_region_list) do
+        if conditions.SlotName(slot_id, slot_context) then
+            last_search_slot = slot_id
+			update_mach_lua_log(string.format('Current slot: "%s"', slot_id))
+			return slot_id
         end
-    end
-    return "No ID slot"
+	end
+	update_mach_lua_log(string.format("No ID slot"))
+	return "No ID slot"
 end
 
 
@@ -1200,64 +1612,95 @@ function get_unit_culture_from_unit_context(unit_context)
 end
 
 
---determine if army is located in a settlement
-function is_army_obj_in_settlement(faction_key, army_obj)
-    update_mach_lua_log("Determining if army is in a settlement.")
-    local regions = CampaignUI.RegionsOwnedByFactionOrByProtectorates(faction_key)
-    local region_id = nil
-    local distance = false
-    local army_in_settlement = false
-    for k = 1, #regions do
-		region_id = CampaignUI.RegionKeyFromAddress(regions[k].Address)
-        distance = find_distance(army_obj.PosX, army_obj.PosY, mach_data.region_capital_coord_list[region_id][1], mach_data.region_capital_coord_list[region_id][2])
-        if (distance < 0.001) and (distance > -0.001) and (distance ~= nil) then
-            update_mach_lua_log("Army is in a settlement. Region name: "..tostring(region_id))
-            return true, region_id
-        end
-    end
-    update_mach_lua_log("Army is NOT in a settlement.")
-    return false, region_id
-end
-
-
 --determine if army is located on a friendly fleet
-function is_army_obj_on_fleet(faction_id, army_obj)
-	update_mach_lua_log("Determining if army is on a friendly fleet.")
+function is_army_obj_on_fleet(army_obj)
+	update_mach_lua_log("Determining if army obj is on a fleet.")
+	local faction_id = mach_lib.get_faction_id_from_character_address(army_obj.Address)
+	if not faction_id then
+		update_mach_lua_log("Error, could not get faction id to determine if army is on fleet.")
+		return false
+	end
+
 	local army_pos_x = army_obj.PosX
 	local army_pos_y = army_obj.PosY
 	local on_fleet = false
-	local fleet_army_is_on = nil
+	local fleet_army_is_on
+	local army_unit_to_find_address
+	local army_contained_entities = CampaignUI.RetrieveContainedEntitiesFromCharacter(army_obj.Address, army_obj.Address)
+	for army_contained_entity_idx, army_contained_entity_details in pairs(army_contained_entities.Units) do
+		army_unit_to_find_address = army_contained_entity_details.Address
+		break
+	end
 	local faction_naval_forces = get_faction_naval_forces(faction_id)
 	for naval_force_key, naval_force in pairs(faction_naval_forces) do
-		if find_distance(army_pos_x, army_pos_y, naval_force.obj.PosX, naval_force.obj.PosY) < 1.55 then
-			on_fleet = true
-			fleet_army_is_on = naval_force
+--		update_mach_lua_log(naval_force.address)
+		local naval_contained_entities = CampaignUI.RetrieveContainedEntitiesFromCharacter(naval_force.address, naval_force.address)
+--		update_mach_lua_log(naval_contained_entities)
+--		output_table_to_mach_log(naval_contained_entities, 1)
+		if naval_contained_entities.Units then
+			for naval_contained_entity_idx, naval_contained_entity_details in pairs(naval_contained_entities.Units) do
+--				update_mach_lua_log(naval_contained_entity_idx)
+--				update_mach_lua_log(naval_contained_entity_details)
+--				update_mach_lua_log(army_unit_to_find_address)
+--				update_mach_lua_log(naval_contained_entity_details.Address)
+				if army_unit_to_find_address == naval_contained_entity_details.Address then
+					fleet_army_is_on = naval_force
+					update_mach_lua_log(string.format('Army IS on a fleet of "%s" under the command of "%s".', naval_force.faction_id, fleet_army_is_on.commander_name))
+					return true, fleet_army_is_on
+				end
+			end
 		end
+--		if find_distance(army_pos_x, army_pos_y, naval_force.obj.PosX, naval_force.obj.PosY) < 1.55 then
+--			on_fleet = true
+--			fleet_army_is_on = naval_force
+--			update_mach_lua_log(string.format('Army IS on a fleet of "%s" under the command of "%s".', naval_force.faction_id, fleet_army_is_on.commander_name))
+--			return true, fleet_army_is_on
+--		end
 	end
 	local faction_diplomacy_details = CampaignUI.RetrieveDiplomacyDetails(faction_id)
 	for key, value in pairs(faction_diplomacy_details.Protectorates) do
 		local faction_naval_forces = get_faction_naval_forces(value.Label)
 		for faction_naval_force_key, naval_force in pairs(faction_naval_forces) do
-			if find_distance(army_pos_x, army_pos_y, naval_force.obj.PosX, naval_force.obj.PosY) < 1.55 then
-				on_fleet = true
-				fleet_army_is_on = naval_force
+			local naval_contained_entities = CampaignUI.RetrieveContainedEntitiesFromCharacter(naval_force.address, naval_force.address)
+			if naval_contained_entities.Units then
+				for naval_contained_entity_idx, naval_contained_entity_details in pairs(naval_contained_entities.Units) do
+					if army_unit_to_find_address == naval_contained_entity_details.Address then
+						fleet_army_is_on = naval_force
+						update_mach_lua_log(string.format('Army IS on a fleet of "%s" under the command of "%s".', naval_force.faction_id, fleet_army_is_on.commander_name))
+						return true, fleet_army_is_on
+					end
+				end
 			end
+--			if find_distance(army_pos_x, army_pos_y, naval_force.obj.PosX, naval_force.obj.PosY) < 1.55 then
+--				on_fleet = true
+--				fleet_army_is_on = naval_force
+--				update_mach_lua_log(string.format('Army IS on a fleet of "%s" under the command of "%s".', naval_force.faction_id, fleet_army_is_on.commander_name))
+--				return true, fleet_army_is_on
+--			end
 		end
 	end
 
 	for key, value in pairs(faction_diplomacy_details.Allies) do
 		local faction_naval_forces = get_faction_naval_forces(value.Label)
 		for faction_naval_force_key, naval_force in pairs(faction_naval_forces) do
-			if find_distance(army_pos_x, army_pos_y, naval_force.obj.PosX, naval_force.obj.PosY) < 1.55 then
-				on_fleet = true
-				fleet_army_is_on = naval_force
+			local naval_contained_entities = CampaignUI.RetrieveContainedEntitiesFromCharacter(naval_force.address, naval_force.address)
+			if naval_contained_entities.Units then
+				for naval_contained_entity_idx, naval_contained_entity_details in pairs(naval_contained_entities.Units) do
+					if army_unit_to_find_address == naval_contained_entity_details.Address then
+						fleet_army_is_on = naval_force
+						update_mach_lua_log(string.format('Army IS on a fleet of "%s" under the command of "%s".', naval_force.faction_id, fleet_army_is_on.commander_name))
+						return true, fleet_army_is_on
+					end
+				end
 			end
-		end
-	end
 
-	if on_fleet then
-		update_mach_lua_log("Army IS on a fleet under the command of: "..tostring(fleet_army_is_on.commander_name))
-		return true, fleet_army_is_on
+--			if find_distance(army_pos_x, army_pos_y, naval_force.obj.PosX, naval_force.obj.PosY) < 1.55 then
+--				on_fleet = true
+--				fleet_army_is_on = naval_force
+--				update_mach_lua_log(string.format('Army IS on a fleet of "%s" under the command of "%s".', naval_force.faction_id, fleet_army_is_on.commander_name))
+--				return true, fleet_army_is_on
+--			end
+		end
 	end
 
 	update_mach_lua_log("Army is NOT on a fleet.")
@@ -1347,6 +1790,44 @@ function is_character_in_safe_region(faction, character_pointer)
 end
 
 
+function is_empire_total_war()
+	update_mach_lua_log("Checking if game is Empire: Total War")
+	local save_game_extension, save_game_path = CampaignUI.FileExtenstionAndPathForWriteClass("save_game")
+	local game_mod_scripts_file_path
+	if save_game_path:find('Empire') ~= nil then
+		update_mach_lua_log("Game is Empire: Total War.")
+		return true
+	else
+		update_mach_lua_log("Game is not Empire: Total War.")
+		return false
+	end
+end
+
+
+function is_location_settement(location)
+	update_mach_lua_log(string.format('Determining if location "%s" is a settlement.', location))
+	if is_value_in_table(location, mach_data.__settlement_names_list__) then
+		local settlement_id = get_settlement_id_from_settlement_name(location)
+		update_mach_lua_log(string.format('Location "%s" is a settlement: "%s"', location, settlement_id))
+		return true, settlement_id
+	end
+	--	local regions = CampaignUI.RegionsOwnedByFactionOrByProtectorates(faction_key)
+	--    local region_id = nil
+	--    local distance = false
+	--    local army_in_settlement = false
+	--    for k = 1, #regions do
+	--		region_id = CampaignUI.RegionKeyFromAddress(regions[k].Address)
+	--        distance = find_distance(army_obj.PosX, army_obj.PosY, mach_data.region_capital_coord_list[region_id][1], mach_data.region_capital_coord_list[region_id][2])
+	--        if (distance < 0.001) and (distance > -0.001) and (distance ~= nil) then
+	--            update_mach_lua_log("Army is in a settlement. Region name: "..tostring(region_id))
+	--            return true, region_id
+	--        end
+	--    end
+	update_mach_lua_log(string.format('Location "%s" is NOT a settlement.', location))
+	return false, nil
+end
+
+
 --[[
 Description:
     Finds out if a region is attrition safe (i.e. owned by player or an ally)
@@ -1372,11 +1853,21 @@ end
 
 function is_value_in_table(value_to_find, tbl)
 	update_mach_lua_log(string.format('Checking if value "%s" is in table.', value_to_find))
+--	value_to_find = unicode_to_utf8(value_to_find)
+--	update_mach_lua_log('test')
+	update_mach_lua_log(value_to_find)
 	for idx, value in pairs(tbl) do
+--		update_mach_lua_log(value)
 		if value_to_find == value then
 			update_mach_lua_log(string.format('Value "%s" is in table.', value_to_find))
 			return true
 		end
+--		if type(value) == 'string' then
+--			for match in value_to_find:gmatch(string.format('^%s$', value)) do
+--				update_mach_lua_log(string.format('Value "%s" is in table via gmatch.', value_to_find))
+--				return true
+--			end
+--		end
 	end
 	update_mach_lua_log(string.format('Value "%s" is NOT in table!', value_to_find))
 	return false
@@ -1394,7 +1885,7 @@ end
 
 
 function load_mach_save_game(mach_loaded_game_id)
-	update_mach_lua_log(string.format('Loading Machiavelli Mod game with game ID: %s', mach_loaded_game_id))
+	update_mach_lua_log(string.format('Loading Machiavelli Mod save game with game ID: %s', mach_loaded_game_id))
 	mach_data.__mach_saved_games_list__ = get_mach_saved_games_list()
 	local empire_save_game_file_name_no_ext = mach_data.__mach_saved_games_list__[mach_loaded_game_id].FileName:gsub(".empire_save", "")
 	local loaded_game_file_name = empire_save_game_file_name_no_ext..'.mach_save'
@@ -1402,7 +1893,13 @@ function load_mach_save_game(mach_loaded_game_id)
 	local extension, path = CampaignUI.FileExtenstionAndPathForWriteClass("save_game")
 	local mach_load_game_file_path = path..'mach_mod\\'..loaded_game_file_name
 	local loaded_tbl = load_table_from_file(mach_load_game_file_path)
-	mach_data.__battles_list__ = loaded_tbl['__battles_list__']
+	if get_num_of_elements_in_table(loaded_tbl) > 0 then
+		mach_data.__battles_list__ = loaded_tbl['__battles_list__']
+		mach_data.__unit_id_to_unit_unique_ids__ = loaded_tbl['__unit_id_to_unit_unique_ids__']
+	else
+		update_mach_lua_log(string.format('Error, no table loaded from Machiavelli Mod save game.'))
+		return false
+	end
 --	if type(loaded_tbl['__battles_list__'][1].is_naval_battle, "boolean") then
 --		update_mach_lua_log(loaded_tbl['__battles_list__'][1].is_naval_battle)
 --	end
@@ -1416,6 +1913,7 @@ end
 
 function load_table_from_file(file_path)
 	update_mach_lua_log(string.format('Loading table from file path: "%s"', file_path))
+	if not file_exists(file_path) then return {} end
 	local ftables, err = loadfile(file_path)
 	if err then return _,err end
 	if err then
@@ -1444,7 +1942,7 @@ function load_table_from_file(file_path)
 			tables[idx][v[2]],tables[idx][v[1]] = tables[idx][v[1]],nil
 		end
 	end
-	update_mach_lua_log(string.format('Finished loading table from file name: "%s"', file_path))
+	update_mach_lua_log(string.format('Finished loading table from file name: "%s". Table has %s elements.', file_path, get_num_of_elements_in_table(tables[1])))
 	return tables[1]
 end
 
@@ -1521,6 +2019,15 @@ end
 -- @param contect: faction_key context
 function on_faction_turn_end(context)
 	update_mach_lua_log("MACH LIB - FactionTurnEnd.")
+	if __saving_game__ then
+		__saving_game__ = false
+		--		update_mach_lua_log('nerd')
+
+		--		update_mach_lua_log(mach_save_game_file_path)
+		if not save_mach_save_game() then
+			update_mach_lua_log("Error, unable to save game of Machiavelli's Mods!")
+		end
+	end
 	mach_data.__all_factions_military_forces_list__[__current_faction_turn_id__] = get_faction_military_forces(__current_faction_turn_id__)
 	update_mach_lua_log("MACH LIB - Finished FactionTurnEnd.")
 end
@@ -1623,7 +2130,9 @@ function on_ui_created(context)
 		mach_data.__faction_id_list__ = get_faction_id_list()
 		__current_faction_turn_id__ = get_faction_id_from_context(context, "UICreated")
 		mach_data.__character_names_list__ = get_character_names_list()
-		mach_data.__region_id_list__ = get_region_id_list()
+--		mach_data.__region_id_list__ = get_region_id_list()
+--		mach_data.__settlement_names_list__ = get_settlement_names_list()
+		mach_data.__settlement_to_region_list__ = get_settlement_to_region_list()
 		mach_data.__all_factions_military_forces_list__ = get_all_factions_military_forces()
 	end
 	update_mach_lua_log("MACH LIB - Finished UICreated.")
@@ -1739,6 +2248,33 @@ function output_table_to_mach_log(tbl, level)
 end
 
 
+function read_lines_from_file(file_path)
+	update_mach_lua_log(string.format('Reading lines from file: "%s"', file_path))
+	if not file_exists(file_path) then return {} end
+	local lines = {}
+--	local file = io.open(file_path, "rb")
+--	while true do
+--		local line = file:read("*line")
+--		if line == nil then
+--			break
+--		end
+--		if line:gmatch('mod mach_asdffbattle_chronicler.pack;!') then
+--			update_mach_lua_log('yay!')
+--		end
+--
+--		update_mach_lua_log(tostring(line))
+--		lines[lines+1] = line
+--	end
+--	file:close()
+	for line in io.lines(file_path) do
+		update_mach_lua_log(tostring(line))
+		lines[#lines + 1] = line
+	end
+	update_mach_lua_log(string.format('Finished reading lines from file. %s lines read from file.', #lines))
+	return lines
+end
+
+
 function remove_str_accents(str)
 	update_mach_lua_log(string.format('Removing accents from string: %s', str))
 	local table_accents = {}
@@ -1850,9 +2386,11 @@ function save_mach_save_game()
 	--	update_mach_lua_log('terry1')
 	tbl_to_save['save_game'] = latest_save_game
 	tbl_to_save['__battles_list__'] = mach_data.__battles_list__
+	tbl_to_save['__unit_id_to_unit_unique_ids__'] = mach_data.__unit_id_to_unit_unique_ids__
+
 	--	local json = require("json")
 	if not save_table_to_file(tbl_to_save, mach_save_game_file_path) then
-		update_mach_lua_log('Error, unable to save mach_data.__battles_list__ table tof file!')
+		update_mach_lua_log('Error, unable to save mach_data tables to file!')
 		return false
 	end
 	update_mach_lua_log(string.format('Finished saving Machiavelli Mod game to file path: "%s"', mach_save_game_file_path))
@@ -2152,6 +2690,19 @@ function update_numbered_list(existing_list, new_value)
 	end
 	update_mach_lua_log(string.format('Finished adding new value "%s" to list if not already exists.', new_value))
 	return existing_list
+end
+
+
+function update_unit_id_to_unit_unique_ids_list_with_casualties(unit_casualties_list)
+	update_mach_lua_log(string.format('Updating __unit_id_to_unit_unique_ids__ list with battle casualties.'))
+	for faction_id, unit_casualty in pairs(unit_casualties_list) do
+		if mach_data.__unit_id_to_unit_unique_ids__[unit_casualty.unit_id] then
+			local new_unit_unique_id = string.format('%s-%s', unit_casualty.unit_id, #mach_data.__unit_id_to_unit_unique_ids__[unit_casualty.unit_id])
+			mach_data.__unit_id_to_unit_unique_ids__[unit_casualty.unit_id][#mach_data.__unit_id_to_unit_unique_ids__[unit_casualty.unit_id]] = new_unit_unique_id
+		end
+	end
+	update_mach_lua_log(string.format('Finished updating __unit_id_to_unit_unique_ids__ list with battle casualties.'))
+	return true
 end
 
 
