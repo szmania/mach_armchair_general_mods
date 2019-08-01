@@ -284,7 +284,6 @@ data/WALI/WIP/*
 !data/
 !.gitignore
 !data/WALI.pack
-!data/mach.pack
 !data/mach_battle_chronicler.pack
 !data/WALI/
 !data/WALI/*
