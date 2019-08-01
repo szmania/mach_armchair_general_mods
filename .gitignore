@@ -287,6 +287,6 @@ data/WALI/WIP/*
 !data/mach_battle_chronicler.pack
 !data/WALI/
 !data/WALI/*
-!empire_start_wali_only.bat
+!empire_start_wali_mach.bat
 
 data/WALI/.idea/
