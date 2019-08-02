@@ -964,10 +964,13 @@ function mach_battle_chronicler()
             mach_lib.update_mach_lua_log("Character lost battle.")
             local pre_battle_loser_military_force = nil
             if not character_details then
+--                mach_lib.update_mach_lua_log("test")
                 pre_battle_loser_military_force = post_battle_military_force
             else
+--                mach_lib.update_mach_lua_log("test2")
                 pre_battle_loser_military_force = mach_data.__all_factions_military_forces_list__[faction_id][post_battle_military_force.address]
             end
+            mach_lib.update_mach_lua_log("test3")
             __current_battle__:add_loser_military_force(pre_battle_loser_military_force, true, is_attacker)
             __current_battle__:add_loser_military_force(post_battle_military_force, false, is_attacker)
             __loser_unit_seen__ = true
@@ -976,6 +979,12 @@ function mach_battle_chronicler()
         mach_lib.update_mach_lua_log("Machiavelli's Battle Chronicler - Finished CharacterCompletedBattle")
     end
 
+
+    local function on_character_created(context)
+        mach_lib.update_mach_lua_log("Machiavelli's Battle Chronicler - CharacterCreated")
+        local character_details = mach_lib.get_character_details_from_character_context(context, "CharacterCreated")
+        mach_lib.update_mach_lua_log("Machiavelli's Battle Chronicler - Finished CharacterCreated")
+    end
 
     local function on_component_left_click_up(context)
         mach_lib.update_mach_lua_log("Machiavelli's Battle Chronicler - ComponentLClickUp")
@@ -1113,6 +1122,8 @@ function mach_battle_chronicler()
                     mach_data.__all_factions_military_forces_list__[participant_faction_id] = mach_lib.get_faction_military_forces(participant_faction_id)
                 end
                 mach_lib.update_mach_lua_log("Finished processing battle.")
+            else
+                mach_lib.update_mach_lua_log(string.format('Battle winner unit NOT seen! Cannot finish processing battle of unique id "%s"', __current_battle__.battle_unique_id))
             end
         end
         mach_lib.update_mach_lua_log("Machiavelli's Battle Chronicler - Finished TimeTrigger")
@@ -1172,6 +1183,7 @@ function mach_battle_chronicler()
 
     mach_lib.scripting.AddEventCallBack("CampaignSettlementAttacked", on_campaign_settlement_attacked)
     mach_lib.scripting.AddEventCallBack("CharacterCompletedBattle", on_character_completed_battle)
+    mach_lib.scripting.AddEventCallBack("CharacterCreated", on_character_created)
     mach_lib.scripting.AddEventCallBack("ComponentLClickUp", on_component_left_click_up)
     mach_lib.scripting.AddEventCallBack("FactionTurnStart", on_faction_turn_start)
     mach_lib.scripting.AddEventCallBack("GarrisonResidenceCaptured", on_garrison_residence_captured)

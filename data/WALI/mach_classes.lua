@@ -27,9 +27,9 @@ function Army:new (character_details, faction_id, character_context)
 	self.fort_in_name = nil
 
 	if character_details then
-		mach_lib.update_mach_lua_log("testing")
+--		mach_lib.update_mach_lua_log("testing")
 		self.garrison_address = CampaignUI.CharacterResidence(self.address)
-		mach_lib.update_mach_lua_log("testing1")
+--		mach_lib.update_mach_lua_log("testing1")
 		mach_lib.update_mach_lua_log(self.garrison_address)
 		if self.garrison_address then
 			mach_lib.update_mach_lua_log(string.format('Garrison address: %s', tostring(self.garrison_address)))
@@ -267,12 +267,12 @@ function Battle:add_loser_military_force (loser_military_force, is_pre_battle, i
 			mach_lib.update_mach_lua_log('test 7')
 		end
 	end
-	mach_lib.update_mach_lua_log('test2')
+--	mach_lib.update_mach_lua_log('test2')
 
 	self.loser_faction_ids = mach_lib.update_numbered_list(self.loser_faction_ids, loser_military_force.faction_id)
 	self.loser_commander_names = mach_lib.update_numbered_list(self.loser_commander_names, loser_military_force.commander_type_and_name)
 	self.loser_full_commander_names = mach_lib.update_numbered_list(self.loser_full_commander_names, loser_military_force.commander_nationality_and_type_and_name)
-	mach_lib.update_mach_lua_log('test3')
+--	mach_lib.update_mach_lua_log('test3')
 
 	if is_pre_battle then
 		mach_lib.update_mach_lua_log('Pre-Battle loser')
@@ -356,9 +356,9 @@ function Battle:add_loser_military_force (loser_military_force, is_pre_battle, i
 
 	self.total_soldier_casualties = self.pre_battle_soldiers - self.post_battle_soldiers
 
-	mach_lib.update_mach_lua_log('gibberish')
-	mach_lib.update_mach_lua_log(self.pre_battle_ships)
-	mach_lib.update_mach_lua_log(self.post_battle_ships)
+--	mach_lib.update_mach_lua_log('gibberish')
+--	mach_lib.update_mach_lua_log(self.pre_battle_ships)
+--	mach_lib.update_mach_lua_log(self.post_battle_ships)
 
 	self.total_ship_casualties = self.pre_battle_ships - self.post_battle_ships
 	self.total_unit_casualties = self.pre_battle_units - self.post_battle_units

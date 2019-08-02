@@ -682,7 +682,7 @@ function get_character_full_name_from_character_context(character_context)
 	update_mach_lua_log('Getting character full name from character context')
 	local character_forename = nil
 	local character_surname = nil
-    update_mach_lua_log(get_num_of_elements_in_table(mach_data.__character_names_list__))
+--    update_mach_lua_log(get_num_of_elements_in_table(mach_data.__character_names_list__))
 	assert(next(mach_data.__character_names_list__))
 	for character_name_loc_id, character_name in pairs(mach_data.__character_names_list__) do
 		if conditions.CharacterForename(character_name_loc_id, character_context) then
