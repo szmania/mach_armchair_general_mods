@@ -2125,6 +2125,7 @@ function on_ui_created(context)
 		__wali_m_root__ = UIComponent(context.component)
 
 		if mach_config.__MACH_DEBUG_MODE__ then
+			update_mach_lua_log('DEBUG MODE is enabled. Setting Fog of War to "Fase"')
 			set_fog_of_war(false)
 		end
 		mach_data.__faction_id_list__ = get_faction_id_list()

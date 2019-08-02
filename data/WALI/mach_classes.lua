@@ -208,6 +208,13 @@ end
 
 
 function Battle:add_loser_military_force (loser_military_force, is_pre_battle, is_attacker)
+    mach_lib.update_mach_lua_log('test')
+    mach_lib.update_mach_lua_log(loser_military_force.num_of_units)
+    mach_lib.update_mach_lua_log(loser_military_force.num_of_ships)
+    mach_lib.update_mach_lua_log(loser_military_force.commander_name)
+    mach_lib.update_mach_lua_log(loser_military_force.faction_id)
+    mach_lib.update_mach_lua_log(tostring(is_pre_battle))
+
 	mach_lib.update_mach_lua_log(string.format('Adding loser military force to Battle object of "%s" units and "%s" ships under command of "%s" of "%s" and is_pre_battle "%s".', loser_military_force.num_of_units, loser_military_force.num_of_ships, loser_military_force.commander_name, loser_military_force.faction_id, tostring(is_pre_battle)))
 	self.pre_battle_ships_list[loser_military_force.faction_id] = self.pre_battle_ships_list[loser_military_force.faction_id] or {}
 	self.pre_battle_loser_ships_list[loser_military_force.faction_id] = self.pre_battle_loser_ships_list[loser_military_force.faction_id] or {}
@@ -604,7 +611,7 @@ function MilitaryForce:new (character_details, faction_id, character_context)
 		else
 			if self.contained_entities.Units then
 				self.num_of_units = #self.contained_entities.Units
-			end
+            end
 			for _, contained_ship_details in pairs(self.contained_entities.Ships) do
 				local military_unit = MilitaryUnit:new(self, contained_ship_details)
 				self.ships[military_unit.unit_id] = military_unit
