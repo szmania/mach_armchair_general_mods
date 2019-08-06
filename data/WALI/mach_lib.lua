@@ -1311,6 +1311,30 @@ function get_mach_saved_games_list()
 end
 
 
+function get_military_force_from_unit_id(faction_military_forces, unit_id)
+	update_mach_lua_log(string.format('Getting military force from unit id: "%s"', unit_id))
+	local military_force
+	for military_force_address, military_force in pairs(faction_military_forces) do
+		local military_units
+		if not military_force.is_naval then
+--            update_mach_lua_log(string.format('Not a naval unit.'))
+            military_units = military_force.units
+        else
+--            update_mach_lua_log(string.format('Is a naval unit.'))
+            military_units = military_force.ships
+		end
+		for military_unit_id, military_unit in pairs(military_units) do
+--            update_mach_lua_log(string.format(military_unit_id))
+            if unit_id == military_unit_id then
+				update_mach_lua_log(string.format('Finished getting military force from unit id "%s". Military force under command of "%s".', unit_id, military_force.commander_name))
+				return military_force
+			end
+		end
+	end
+	update_mach_lua_log(string.format('Error, unable to get military force from unit id: "%s"', unit_id))
+	return military_force
+end
+
 --function get_mach_saved_games_list()
 --	update_mach_lua_log(string.format('Getting Machiavelli Mod saved games list.'))
 --	local extension, path = CampaignUI.FileExtenstionAndPathForWriteClass("save_game")

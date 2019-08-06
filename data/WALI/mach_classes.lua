@@ -805,12 +805,12 @@ function _get_ship_captured_list(pre_battle_faction_ships_list, post_battle_fact
 	mach_lib.update_mach_lua_log(string.format('Getting ships captured list.'))
 	local ship_captured_list = {}
 	local found = false
-	mach_lib.update_mach_lua_log(string.format('test'))
+--	mach_lib.update_mach_lua_log(string.format('test'))
 	for post_battle_faction_key, post_battle_faction_ships_list in pairs(post_battle_faction_ships_list) do
-		mach_lib.update_mach_lua_log(string.format(post_battle_faction_key))
+--		mach_lib.update_mach_lua_log(string.format(post_battle_faction_key))
 		for post_battle_ship_idx, post_battle_ship in pairs(post_battle_faction_ships_list) do
 			for pre_battle_faction_key, pre_battle_faction_ships_list in pairs(pre_battle_faction_ships_list) do
-				mach_lib.update_mach_lua_log(string.format(pre_battle_faction_key))
+--				mach_lib.update_mach_lua_log(string.format(pre_battle_faction_key))
 				for pre_battle_ship_idx, pre_battle_ship in pairs(pre_battle_faction_ships_list) do
 					if post_battle_ship.unit_id == pre_battle_ship.unit_id then
 						found = true
