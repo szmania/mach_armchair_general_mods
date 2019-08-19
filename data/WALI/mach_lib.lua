@@ -1461,6 +1461,16 @@ function get_port_id_from_port_name(port_name)
 --		return port_name
 --	end
 
+	for region_id_idx, region_id in pairs(mach_data.__region_id_list__) do
+		local port_id = string.format('port:%s:%s', region_id, string.lower(port_name:gsub(' ', '_')))
+		local port_loc_str = get_port_loc_str_from_port_id(port_id)
+		local port_name_test = CampaignUI.LocalisationString(port_loc_str, true)
+		if port_name_test ~= nil then
+			update_mach_lua_log(string.format('Found port ID of port name "%s". Town ID is "%s".', port_name, port_id))
+			return port_id
+		end
+	end
+
 	update_mach_lua_log(string.format('Error, unable to get port ID from port name "%s".', port_name))
 	return nil
 end
@@ -1748,6 +1758,15 @@ function get_town_id_from_town_name(town_name)
 			return town_id
 		end
 	end
+	for region_id_idx, region_id in pairs(mach_data.__region_id_list__) do
+		local town_id = string.format('town:%s:%s', region_id, string.lower(town_name:gsub(' ', '_')))
+		local town_loc_str = get_town_loc_str_from_town_id(town_id)
+		local town_name_test = CampaignUI.LocalisationString(town_loc_str, true)
+		if town_name_test ~= nil then
+			update_mach_lua_log(string.format('Found town ID of town name "%s". Town ID is "%s".', town_name, town_id))
+			return town_id
+		end
+	end
 	update_mach_lua_log(string.format('Error, unable to get town ID from town name "%s".', town_name))
 	return nil
 end
@@ -1780,7 +1799,8 @@ function get_town_name_from_town_id(town_id)
 		local town_loc_str = get_town_loc_str_from_town_id(town_id)
 		town_name = CampaignUI.LocalisationString(town_loc_str, true)
 	end
-	update_mach_lua_log(string.format('Getting town name of town ID "%s" is "%s"', town_id, town_name))
+
+	update_mach_lua_log(string.format('Finished getting town name of town ID "%s". Town name is "%s"', town_id, town_name))
 	return town_name
 end
 
@@ -2054,7 +2074,7 @@ function is_location_town(location)
 	update_mach_lua_log(string.format('Determining if location "%s" is a town.', location))
 --	if is_value_in_table(location, mach_data.__town_id_to_town_name_list__) then
 	local town_id = get_town_id_from_town_name(location)
-	if town_id then
+	if town_id ~= nil then
 		update_mach_lua_log(string.format('Location "%s" is town: "%s"', location, town_id))
 		return true, town_id
 --	else

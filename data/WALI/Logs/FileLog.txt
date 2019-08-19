@@ -223,3 +223,21 @@
 
 [0:43:29:991] 0.WALI - Deleting
 
+[1:23:40:149] 0.WALI - Registered
+
+[1:23:40:150] 0.WALI - Checking if file is in use...
+
+[1:23:40:150] 0.WALI - File not locked
+
+[1:23:40:151] 0.WALI - Attempting Read...
+
+[1:23:40:151] 0.WALI - Read Success (nil;CHECK_STATUS;0;0)
+
+[1:23:40:152] 0.WALI - Expects command in format: Address/Command/Value
+
+[1:23:40:152] 0.WALI - Sorted extra values (0/0)
+
+[1:23:40:153] 0.WALI - Command activator matched: CHECK_STATUS
+
+[1:23:40:153] 0.WALI - Deleting
+
