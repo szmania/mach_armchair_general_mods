@@ -2012,14 +2012,14 @@ function is_location_port(location)
 		local port_id = get_port_id_from_port_name(location)
 		update_mach_lua_log(string.format('Location "%s" is port: "%s"', location, port_id))
 		return true, port_id
-	else
-		local port_id = get_port_id_from_port_name(location)
-		if port_id then
---		local port_name = get_port_name_from_port_id(port_id)
---		if port_name ~= nil then
-			update_mach_lua_log(string.format('Location "%s" is port: "%s"', location, port_id))
-			return true, port_id
-		end
+--	else
+--		local port_id = get_port_id_from_port_name(location)
+--		if port_id then
+----		local port_name = get_port_name_from_port_id(port_id)
+----		if port_name ~= nil then
+--			update_mach_lua_log(string.format('Location "%s" is port: "%s"', location, port_id))
+--			return true, port_id
+--		end
 	end
 	update_mach_lua_log(string.format('Location "%s" is NOT a port.', location))
 	return false, nil
@@ -2057,14 +2057,14 @@ function is_location_town(location)
 	if town_id then
 		update_mach_lua_log(string.format('Location "%s" is town: "%s"', location, town_id))
 		return true, town_id
-	else
-		local town_id = get_town_id_from_town_name(location)
-		if town_id then
---		local town_name = get_town_name_from_town_id(town_id)
---		if town_name ~= nil then
-			update_mach_lua_log(string.format('Location "%s" is town: "%s"', location, town_id))
-			return true, town_id
-		end
+--	else
+--		local town_id = get_town_id_from_town_name(location)
+--		if town_id then
+----		local town_name = get_town_name_from_town_id(town_id)
+----		if town_name ~= nil then
+--			update_mach_lua_log(string.format('Location "%s" is town: "%s"', location, town_id))
+--			return true, town_id
+--		end
 	end
 	update_mach_lua_log(string.format('Location "%s" is NOT a town.', location))
 	return false, nil
