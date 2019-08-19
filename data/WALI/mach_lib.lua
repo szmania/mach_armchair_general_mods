@@ -638,7 +638,7 @@ end
 
 function get_character_details_from_character_context(context, context_type)
 	update_mach_lua_log('Getting character details for context type: "'..tostring(context_type)..'"')
-	local character_details = nil
+	local character_details
 	if context_type == "CharacterSelected" then
         update_mach_lua_log('Context is "CharacterSelected".')
         local entity_type_selected = CampaignUI.EntityTypeSelected()
@@ -653,6 +653,10 @@ function get_character_details_from_character_context(context, context_type)
 	elseif context_type == "CharacterCompletedBattle" or context_type == 'CharacterCreated' then
         update_mach_lua_log('Context is "CharacterCompletedBattle" or "CharacterCreated".')
         local character_full_name = get_character_full_name_from_character_context(context)
+		if character_full_name == nil then
+			update_mach_lua_log(string.format('Error, unable to get character details of character "%s"!', character_full_name))
+			return nil
+		end
 		local faction_id = get_faction_id_from_context(context, "CharacterCompletedBattle")
 		local faction_military_forces = get_faction_military_forces(faction_id)
 		for faction_military_force_key, faction_military_force in pairs(faction_military_forces) do
@@ -669,7 +673,7 @@ function get_character_details_from_character_context(context, context_type)
 				break
 			end
 		end
-		if not character_details then
+		if character_details == nil then
 			update_mach_lua_log(string.format('Error, unable to get character details of character "%s"!', character_full_name))
 		end
 	end
@@ -680,24 +684,43 @@ end
 
 function get_character_full_name_from_character_context(character_context)
 	update_mach_lua_log('Getting character full name from character context')
-	local character_forename = nil
-	local character_surname = nil
+	local character_forename
+	local character_surname
+	local character_full_name
+
 --    update_mach_lua_log(get_num_of_elements_in_table(mach_data.__character_names_list__))
-	assert(next(mach_data.__character_names_list__))
+	update_mach_lua_log(assert(get_num_of_elements_in_table(mach_data.__character_names_list__) ~= 0, 'Error, __character_names_list__ is empty!'))
 	for character_name_loc_id, character_name in pairs(mach_data.__character_names_list__) do
-		if conditions.CharacterForename(character_name_loc_id, character_context) then
+		--		update_mach_lua_log(character_name_loc_id)
+		if character_forename == nil and conditions.CharacterForename(character_name_loc_id, character_context) then
 			character_forename = character_name
 			update_mach_lua_log(string.format('Found character forename: "%s"', character_forename))
 		end
-		if conditions.CharacterSurname(character_name_loc_id, character_context) then
+		if character_surname == nil and conditions.CharacterSurname(character_name_loc_id, character_context) then
 			character_surname = character_name
-			update_mach_lua_log(string.format('Found character forename: "%s"', character_surname))
+			update_mach_lua_log(string.format('Found character surname: "%s"', character_surname))
 		end
 		if character_forename and character_surname then
+			update_mach_lua_log(string.format('Found both character forename and surname.'))
 			break
 		end
 	end
-	local character_full_name = character_forename.." "..character_surname
+	if character_forename == nil or character_surname == nil then
+--		local faction_id = get_faction_id_from_context(character_context, "CharacterCompletedBattle")
+--		local nationality = get_nationality_from_faction_id(faction_id)
+		if character_forename ~= nil then
+			update_mach_lua_log(string.format('Error, unable to get character full name from character context. Using character forename only.'))
+			character_full_name = character_forename
+		elseif character_surname ~= nil then
+			update_mach_lua_log(string.format('Error, unable to get character full name from character context. Using character surname only.'))
+			character_full_name = character_surname
+		else
+			update_mach_lua_log(string.format('Error, unable to get character full name from character context.'))
+			return nil
+		end
+	else
+	 	character_full_name = character_forename.." "..character_surname
+	end
 	update_mach_lua_log(string.format('Finished getting character full name from character context. Character full name: "%s"', character_full_name))
 	return character_full_name
 end
@@ -1418,13 +1441,26 @@ end
 
 function get_port_id_from_port_name(port_name)
 	update_mach_lua_log(string.format('Getting port ID from port name "%s"".', port_name))
-	local port_id = string.lower(port_name):gsub(' ', '_')
-	local port_loc_str = get_port_loc_str_from_port_id(port_id)
-	local port_name = CampaignUI.LocalisationString(port_loc_str, true)
-	if port_name ~= nil then
-		update_mach_lua_log(string.format('Port name of port ID "%s" is "%s".', port_id, port_name))
-		return port_name
+	for port_id, port_name_value in pairs(mach_data.__port_id_to_port_name_list__) do
+		if port_name == port_name_value then
+
+			--	local town_id_sub_str = string.lower(town_name):gsub(' ', '_')
+			--	local town_loc_str = get_town_loc_str_from_town_id(town_id_sub_str)
+			--	local town_name = CampaignUI.LocalisationString(town_loc_str, true)
+			--	if town_name ~= nil then
+			update_mach_lua_log(string.format('Found port ID of port name "%s". Port ID is "%s".', port_name, port_id))
+			return port_id
+		end
 	end
+
+--	local port_id = string.lower(port_name):gsub(' ', '_')
+--	local port_loc_str = get_port_loc_str_from_port_id(port_id)
+--	local port_name = CampaignUI.LocalisationString(port_loc_str, true)
+--	if port_name ~= nil then
+--		update_mach_lua_log(string.format('Port name of port ID "%s" is "%s".', port_id, port_name))
+--		return port_name
+--	end
+
 	update_mach_lua_log(string.format('Error, unable to get port ID from port name "%s".', port_name))
 	return nil
 end
@@ -1452,8 +1488,12 @@ end
 
 function get_port_name_from_port_id(port_id)
 	update_mach_lua_log(string.format('Getting port name from port ID "%s"', port_id))
-	local port_loc_str = get_port_loc_str_from_port_id(port_id)
-	local port_name = CampaignUI.LocalisationString(port_loc_str, true)
+	local port_name = mach_data.__port_id_to_port_name_list__[port_id]
+	if port_name == nil then
+		local port_loc_str = get_port_loc_str_from_port_id(port_id)
+		port_name = CampaignUI.LocalisationString(port_loc_str, true)
+	end
+--	update_mach_lua_log('test')
 	update_mach_lua_log(string.format('Finished getting port name of port ID "%s". Port name is "%s"', port_id, port_name))
 	return port_name
 end
@@ -1697,12 +1737,16 @@ end
 
 function get_town_id_from_town_name(town_name)
 	update_mach_lua_log(string.format('Getting town ID from town name "%s"".', town_name))
-	local town_id = string.lower(town_name):gsub(' ', '_')
-	local town_loc_str = get_town_loc_str_from_town_id(town_id)
-	local town_name = CampaignUI.LocalisationString(town_loc_str, true)
-	if town_name ~= nil then
-		update_mach_lua_log(string.format('Town name of town ID "%s" is "%s".', town_id, town_name))
-		return town_name
+	for town_id, town_name_value in pairs(mach_data.__town_id_to_town_name_list__) do
+		if town_name == town_name_value then
+
+		--	local town_id_sub_str = string.lower(town_name):gsub(' ', '_')
+--	local town_loc_str = get_town_loc_str_from_town_id(town_id_sub_str)
+--	local town_name = CampaignUI.LocalisationString(town_loc_str, true)
+--	if town_name ~= nil then
+			update_mach_lua_log(string.format('Found town ID of town name "%s". Town ID is "%s".', town_name, town_id))
+			return town_id
+		end
 	end
 	update_mach_lua_log(string.format('Error, unable to get town ID from town name "%s".', town_name))
 	return nil
@@ -1731,8 +1775,11 @@ end
 
 function get_town_name_from_town_id(town_id)
 	update_mach_lua_log(string.format('Getting town name from town ID "%s"', town_id))
-	local town_loc_str = get_town_loc_str_from_town_id(town_id)
-	local town_name = CampaignUI.LocalisationString(town_loc_str, true)
+	local town_name = mach_data.__town_id_to_town_name_list__[town_id]
+	if town_name == nil then
+		local town_loc_str = get_town_loc_str_from_town_id(town_id)
+		town_name = CampaignUI.LocalisationString(town_loc_str, true)
+	end
 	update_mach_lua_log(string.format('Getting town name of town ID "%s" is "%s"', town_id, town_name))
 	return town_name
 end
@@ -1759,7 +1806,7 @@ end
 function is_army_obj_on_fleet(army_obj)
 	update_mach_lua_log("Determining if army obj is on a fleet.")
 	local faction_id = mach_lib.get_faction_id_from_character_address(army_obj.Address)
-	if not faction_id then
+	if faction_id == nil then
 		update_mach_lua_log("Error, could not get faction id to determine if army is on fleet.")
 		return false
 	end
@@ -1967,8 +2014,9 @@ function is_location_port(location)
 		return true, port_id
 	else
 		local port_id = get_port_id_from_port_name(location)
-		local port_name = get_port_name_from_port_id(port_id)
-		if port_name ~= nil then
+		if port_id then
+--		local port_name = get_port_name_from_port_id(port_id)
+--		if port_name ~= nil then
 			update_mach_lua_log(string.format('Location "%s" is port: "%s"', location, port_id))
 			return true, port_id
 		end
@@ -2004,14 +2052,16 @@ end
 
 function is_location_town(location)
 	update_mach_lua_log(string.format('Determining if location "%s" is a town.', location))
-	if is_value_in_table(location, mach_data.__town_id_to_town_name_list__) then
-		local town_id = get_town_id_from_town_name(location)
+--	if is_value_in_table(location, mach_data.__town_id_to_town_name_list__) then
+	local town_id = get_town_id_from_town_name(location)
+	if town_id then
 		update_mach_lua_log(string.format('Location "%s" is town: "%s"', location, town_id))
 		return true, town_id
 	else
 		local town_id = get_town_id_from_town_name(location)
-		local town_name = get_town_name_from_town_id(town_id)
-		if town_name ~= nil then
+		if town_id then
+--		local town_name = get_town_name_from_town_id(town_id)
+--		if town_name ~= nil then
 			update_mach_lua_log(string.format('Location "%s" is town: "%s"', location, town_id))
 			return true, town_id
 		end
@@ -2133,7 +2183,11 @@ function load_mach_save_game(mach_loaded_game_id)
 	local loaded_tbl = load_table_from_file(mach_load_game_file_path)
 	if get_num_of_elements_in_table(loaded_tbl) > 0 then
 		mach_data.__battles_list__ = loaded_tbl['__battles_list__']
-		mach_data.__unit_id_to_unit_unique_ids__ = loaded_tbl['__unit_id_to_unit_unique_ids__']
+		mach_data.__unit_id_to_unit_unique_ids__ = loaded_tbl['__unit_id_to_unit_unique_ids__'] or {}
+		mach_data.__port_id_to_port_name_list__ = loaded_tbl['__port_id_to_port_name_list__'] or {}
+		mach_data.port_id_to_coordinates_list = loaded_tbl['port_id_to_coordinates_list'] or mach_data.port_id_to_coordinates_list
+		mach_data.__town_id_to_town_name_list__ = loaded_tbl['__town_id_to_town_name_list__'] or {}
+		mach_data.town_id_to_coordinates_list = loaded_tbl['town_id_to_coordinates_list'] or mach_data.town_id_to_coordinates_list
 	else
 		update_mach_lua_log(string.format('Error, no table loaded from Machiavelli Mod save game.'))
 		return false
@@ -2372,8 +2426,15 @@ function on_ui_created(context)
 --		mach_data.__region_id_list__ = get_region_id_list()
 --		mach_data.__settlement_names_list__ = get_settlement_names_list()
 		mach_data.__settlement_to_region_list__ = get_settlement_to_region_list()
+		mach_data.__port_id_to_port_name_list__ = mach_data.__port_id_to_port_name_list__
+		if get_num_of_elements_in_table(mach_data.__port_id_to_port_name_list__) == 0 then
+			mach_data.__port_id_to_port_name_list__ = get_port_id_to_port_name_list()
+		end
+		mach_data.__town_id_to_town_name_list__ = mach_data.__town_id_to_town_name_list__
+		if get_num_of_elements_in_table(mach_data.__town_id_to_town_name_list__) == 0 then
+			mach_data.__town_id_to_town_name_list__ = get_town_id_to_town_name_list()
+		end
 		mach_data.__all_factions_military_forces_list__ = get_all_factions_military_forces()
-		mach_data.__port_id_to_port_name_list__ = get_port_id_to_port_name_list()
 	end
 	update_mach_lua_log("MACH LIB - Finished UICreated.")
 end
@@ -2627,6 +2688,10 @@ function save_mach_save_game()
 	tbl_to_save['save_game'] = latest_save_game
 	tbl_to_save['__battles_list__'] = mach_data.__battles_list__
 	tbl_to_save['__unit_id_to_unit_unique_ids__'] = mach_data.__unit_id_to_unit_unique_ids__
+	tbl_to_save['__port_id_to_port_name_list__'] = mach_data.__port_id_to_port_name_list__
+	tbl_to_save['port_id_to_coordinates_list'] = mach_data.port_id_to_coordinates_list
+	tbl_to_save['__town_id_to_town_name_list__'] = mach_data.__town_id_to_town_name_list__
+	tbl_to_save['town_id_to_coordinates_list'] = mach_data.town_id_to_coordinates_list
 
 	--	local json = require("json")
 	if not save_table_to_file(tbl_to_save, mach_save_game_file_path) then
