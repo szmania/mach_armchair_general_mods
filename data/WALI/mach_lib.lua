@@ -564,7 +564,7 @@ function get_besieged_settlements()
 				local faction_regions = CampaignUI.RegionsOwnedByFactionOrByProtectorates(faction_id)
 				for faction_region_idx = 1, #faction_regions do
 					region_id = CampaignUI.RegionKeyFromAddress(faction_regions[faction_region_idx].Address)
-					distance = find_distance(army.PosX, army.PosY, mach_data.region_capital_coord_list[region_id][1], mach_data.region_capital_coord_list[region_id][2])
+					distance = find_distance(army.PosX, army.PosY, mach_data.region_to_settlement_coordinates_list[region_id][1], mach_data.region_to_settlement_coordinates_list[region_id][2])
 					if (distance < 1.5 and distance > -1.5) and distance ~= nil then
 						update_mach_lua_log(string.format('Settlement is besieged: %s', region_id))
 						army_besieged_settlement = true
@@ -1415,6 +1415,50 @@ function get_perpendicular_line_slope(line_slope)
 end
 
 
+
+function get_port_id_from_port_name(port_name)
+	update_mach_lua_log(string.format('Getting port ID from port name "%s"".', port_name))
+	local port_id = string.lower(port_name):gsub(' ', '_')
+	local port_loc_str = get_port_loc_str_from_port_id(port_id)
+	local port_name = CampaignUI.LocalisationString(port_loc_str, true)
+	if port_name ~= nil then
+		update_mach_lua_log(string.format('Port name of port ID "%s" is "%s".', port_id, port_name))
+		return port_name
+	end
+	update_mach_lua_log(string.format('Error, unable to get port ID from port name "%s".', port_name))
+	return nil
+end
+
+
+function get_port_id_to_port_name_list()
+	update_mach_lua_log(string.format("Getting __port_id_to_port_name_list__."))
+	local port_id_to_port_name_list = {}
+	for port_id, port_coords in pairs(mach_data.port_id_to_coordinates_list) do
+		local port_name = get_port_name_from_port_id(port_id)
+		port_id_to_port_name_list[port_id] = port_name
+	end
+	update_mach_lua_log(string.format("Finished getting __port_id_to_port_name_list__."))
+	return port_id_to_port_name_list
+end
+
+
+function get_port_loc_str_from_port_id(port_id)
+	update_mach_lua_log(string.format('Getting port loc str from port ID "%s"', port_id))
+	local port_loc_str = string.format('campaign_map_towns_and_ports_onscreen_name_%s', port_id)
+	update_mach_lua_log(string.format('Finished getting port loc str of port ID "%s". Port loc str is "%s"', port_id, port_loc_str))
+	return port_loc_str
+end
+
+
+function get_port_name_from_port_id(port_id)
+	update_mach_lua_log(string.format('Getting port name from port ID "%s"', port_id))
+	local port_loc_str = get_port_loc_str_from_port_id(port_id)
+	local port_name = CampaignUI.LocalisationString(port_loc_str, true)
+	update_mach_lua_log(string.format('Finished getting port name of port ID "%s". Port name is "%s"', port_id, port_name))
+	return port_name
+end
+
+
 function get_region_id_from_region_address(region_address)
 	update_mach_lua_log("Getting region id from region address: "..tostring(region_address))
 	local region_id = CampaignUI.RegionKeyFromAddress(region_address)
@@ -1436,6 +1480,30 @@ function get_region_details_from_region_address(region_address)
 	local region_details = CampaignUI.InitialiseRegionInfoDetails(region_address)
 	update_mach_lua_log("Finished getting region details from region address.")
 	return region_details
+end
+
+
+function get_region_id_from_port_id(port_id)
+	update_mach_lua_log("Getting region id from port id: "..tostring(port_id))
+	local region_id = split_str(port_id, ':')[1]
+	update_mach_lua_log("Region id is: "..tostring(region_id))
+	return region_id
+end
+
+
+function get_region_id_from_port_name(port_name)
+	update_mach_lua_log("Getting region id from port name: "..tostring(port_name))
+	local found_region_id
+	for region_id_idx, region_id in pairs(mach_data.__region_id_list__) do
+		local port_loc_str = string.format('campaign_map_towns_and_ports_onscreen_name_port:%s:%s', region_id, string.lower(port_name))
+		local loc_port_name = CampaignUI.LocalisationString(port_loc_str, true)
+		if loc_port_name ~= nil then
+			found_region_id = region_id
+			break
+		end
+	end
+	update_mach_lua_log("Region id is: "..tostring(found_region_id))
+	return found_region_id
 end
 
 
@@ -1469,6 +1537,14 @@ function get_region_id_from_settlement_name(settlement_name)
 	end
 	update_mach_lua_log('Region id for settlement name is: "'..tostring(found_region_id)..'"')
 	return found_region_id
+end
+
+
+function get_region_id_from_town_id(town_id)
+	update_mach_lua_log("Getting region id from town id: "..tostring(town_id))
+	local region_id = split_str(town_id, ':')[1]
+	update_mach_lua_log("Region id is: "..tostring(region_id))
+	return region_id
 end
 
 
@@ -1619,6 +1695,49 @@ function get_slot_id_from_context(slot_context)
 end
 
 
+function get_town_id_from_town_name(town_name)
+	update_mach_lua_log(string.format('Getting town ID from town name "%s"".', town_name))
+	local town_id = string.lower(town_name):gsub(' ', '_')
+	local town_loc_str = get_town_loc_str_from_town_id(town_id)
+	local town_name = CampaignUI.LocalisationString(town_loc_str, true)
+	if town_name ~= nil then
+		update_mach_lua_log(string.format('Town name of town ID "%s" is "%s".', town_id, town_name))
+		return town_name
+	end
+	update_mach_lua_log(string.format('Error, unable to get town ID from town name "%s".', town_name))
+	return nil
+end
+
+
+function get_town_id_to_town_name_list()
+	update_mach_lua_log(string.format("Getting __town_id_to_town_name_list__."))
+	local town_id_to_town_name_list = {}
+	for town_id, town_coords in pairs(mach_data.town_id_to_coordinates_list) do
+		local town_name = get_town_name_from_town_id(town_id)
+		town_id_to_town_name_list[town_id] = town_name
+	end
+	update_mach_lua_log(string.format("Finished getting __town_id_to_town_name_list__."))
+	return town_id_to_town_name_list
+end
+
+
+function get_town_loc_str_from_town_id(town_id)
+	update_mach_lua_log(string.format('Getting town loc str from town ID "%s"', town_id))
+	local town_loc_str = string.format('campaign_map_towns_and_ports_onscreen_name_%s', town_id)
+	update_mach_lua_log(string.format('Getting town loc str of town ID "%s" is "%s"', town_id, town_loc_str))
+	return town_loc_str
+end
+
+
+function get_town_name_from_town_id(town_id)
+	update_mach_lua_log(string.format('Getting town name from town ID "%s"', town_id))
+	local town_loc_str = get_town_loc_str_from_town_id(town_id)
+	local town_name = CampaignUI.LocalisationString(town_loc_str, true)
+	update_mach_lua_log(string.format('Getting town name of town ID "%s" is "%s"', town_id, town_name))
+	return town_name
+end
+
+
 function get_unit_culture_from_unit_context(unit_context)
 	update_mach_lua_log('Getting unit culture from unit context.')
 	local unit_culture = nil
@@ -1751,7 +1870,6 @@ end
 --CharacterSelected event calls this
 function is_character_admiral(context)
 	update_mach_lua_log("Deterimining if character is admiral.")
-
 --	local ETS = CampaignUI.EntityTypeSelected()
 	if conditions.CharacterType("admiral", context) then
 		update_mach_lua_log("Character is a admiral.")
@@ -1764,7 +1882,6 @@ end
 
 function is_character_naval_captain(context)
 	update_mach_lua_log("Deterimining if character is naval captain.")
-
 	--	local ETS = CampaignUI.EntityTypeSelected()
 	if conditions.CharacterType("captain", context) then
 		update_mach_lua_log("Character is a naval captain.")
@@ -1788,7 +1905,6 @@ end
 
 function is_character_general(context)
 	update_mach_lua_log("Deterimining if character is general.")
-
 	if conditions.CharacterType("General", context) then
 		update_mach_lua_log("Character is a General.")
 		return true
@@ -1828,7 +1944,41 @@ function is_empire_total_war()
 end
 
 
-function is_location_settement(location)
+function is_key_in_table(key_to_find, tbl)
+	update_mach_lua_log(string.format('Checking if key "%s" is in table.', key_to_find))
+--	output_table_to_mach_log(tbl, 1)
+	for key, value in pairs(tbl) do
+--		update_mach_lua_log('test')
+		if key_to_find == key then
+			update_mach_lua_log(string.format('Key "%s" is in table.', key_to_find))
+			return true
+		end
+	end
+	update_mach_lua_log(string.format('Key "%s" is NOT in table!', key_to_find))
+	return false
+end
+
+
+function is_location_port(location)
+	update_mach_lua_log(string.format('Determining if location "%s" is a port.', location))
+	if is_value_in_table(location, mach_data.__port_id_to_port_name_list__) then
+		local port_id = get_port_id_from_port_name(location)
+		update_mach_lua_log(string.format('Location "%s" is port: "%s"', location, port_id))
+		return true, port_id
+	else
+		local port_id = get_port_id_from_port_name(location)
+		local port_name = get_port_name_from_port_id(port_id)
+		if port_name ~= nil then
+			update_mach_lua_log(string.format('Location "%s" is port: "%s"', location, port_id))
+			return true, port_id
+		end
+	end
+	update_mach_lua_log(string.format('Location "%s" is NOT a port.', location))
+	return false, nil
+end
+
+
+function is_location_settlement(location)
 	update_mach_lua_log(string.format('Determining if location "%s" is a settlement.', location))
 	if is_value_in_table(location, mach_data.__settlement_names_list__) then
 		local settlement_id = get_settlement_id_from_settlement_name(location)
@@ -1841,13 +1991,32 @@ function is_location_settement(location)
 	--    local army_in_settlement = false
 	--    for k = 1, #regions do
 	--		region_id = CampaignUI.RegionKeyFromAddress(regions[k].Address)
-	--        distance = find_distance(army_obj.PosX, army_obj.PosY, mach_data.region_capital_coord_list[region_id][1], mach_data.region_capital_coord_list[region_id][2])
+	--        distance = find_distance(army_obj.PosX, army_obj.PosY, mach_data.settlement_coordinates_list[region_id][1], mach_data.settlement_coordinates_list[region_id][2])
 	--        if (distance < 0.001) and (distance > -0.001) and (distance ~= nil) then
 	--            update_mach_lua_log("Army is in a settlement. Region name: "..tostring(region_id))
 	--            return true, region_id
 	--        end
 	--    end
 	update_mach_lua_log(string.format('Location "%s" is NOT a settlement.', location))
+	return false, nil
+end
+
+
+function is_location_town(location)
+	update_mach_lua_log(string.format('Determining if location "%s" is a town.', location))
+	if is_value_in_table(location, mach_data.__town_id_to_town_name_list__) then
+		local town_id = get_town_id_from_town_name(location)
+		update_mach_lua_log(string.format('Location "%s" is town: "%s"', location, town_id))
+		return true, town_id
+	else
+		local town_id = get_town_id_from_town_name(location)
+		local town_name = get_town_name_from_town_id(town_id)
+		if town_name ~= nil then
+			update_mach_lua_log(string.format('Location "%s" is town: "%s"', location, town_id))
+			return true, town_id
+		end
+	end
+	update_mach_lua_log(string.format('Location "%s" is NOT a town.', location))
 	return false, nil
 end
 
@@ -1877,9 +2046,6 @@ end
 
 function is_value_in_table(value_to_find, tbl)
 	update_mach_lua_log(string.format('Checking if value "%s" is in table.', value_to_find))
---	value_to_find = unicode_to_utf8(value_to_find)
---	update_mach_lua_log('test')
-	update_mach_lua_log(value_to_find)
 	for idx, value in pairs(tbl) do
 --		update_mach_lua_log(value)
 		if value_to_find == value then
@@ -1895,6 +2061,54 @@ function is_value_in_table(value_to_find, tbl)
 	end
 	update_mach_lua_log(string.format('Value "%s" is NOT in table!', value_to_find))
 	return false
+end
+
+
+function is_within_distance_of_port_id(pos_x, pos_y, distance)
+	update_mach_lua_log(string.format('Determining if coordinates (%s, %s) are within %s of a port ID.', pos_x, pos_y, distance))
+	local nearest_port_id
+	local nearest_port_distance = 9999999
+	for port_id, coordinates in pairs(mach_data.port_id_to_coordinates_list) do
+		local port_pos_x = coordinates[1]
+		local port_pos_y = coordinates[2]
+		local distance_from_port = find_distance(pos_x, pos_y, port_pos_x, port_pos_y)
+		update_mach_lua_log(string.format('Port %s is at coordinates (%s, %s), a distance of %s', port_id, port_pos_x, port_pos_y, distance_from_port))
+		if distance_from_port <= distance and distance_from_port < nearest_port_distance then
+			update_mach_lua_log(string.format('Coordinates (%s, %s) are within %s of port ID "%s".', pos_x, pos_y, distance, port_id))
+			nearest_port_id = port_id
+			nearest_port_distance = distance_from_port
+		end
+	end
+	if nearest_port_id then
+		update_mach_lua_log(string.format('Coordinates (%s, %s) are within %s of port ID "%s".', pos_x, pos_y, distance, nearest_port_id))
+	else
+		update_mach_lua_log(string.format('Coordinates (%s, %s) are NOT within %s of a port ID!', pos_x, pos_y, distance))
+	end
+	return nearest_port_id
+end
+
+
+function is_within_distance_of_town_id(pos_x, pos_y, distance)
+	update_mach_lua_log(string.format('Determining if coordinates (%s, %s) are within %s of a town ID.', pos_x, pos_y, distance))
+	local nearest_town_id
+	local nearest_town_distance = 9999999
+	for town_id, coordinates in pairs(mach_data.town_id_to_coordinates_list) do
+		local town_pos_x = coordinates[1]
+		local town_pos_y = coordinates[2]
+		local distance_from_town = find_distance(pos_x, pos_y, town_pos_x, town_pos_y)
+		update_mach_lua_log(string.format('Town %s is at coordinates (%s, %s), a distance of %s', town_id, town_pos_x, town_pos_y, distance_from_town))
+		if distance_from_town <= distance and distance_from_town < nearest_town_distance then
+			update_mach_lua_log(string.format('Coordinates (%s, %s) are within %s of town ID "%s".', pos_x, pos_y, distance, town_id))
+			nearest_town_id = town_id
+			nearest_town_distance = distance_from_town
+		end
+	end
+	if nearest_town_id then
+		update_mach_lua_log(string.format('Coordinates (%s, %s) are within %s of town ID "%s".', pos_x, pos_y, distance, nearest_town_id))
+	else
+		update_mach_lua_log(string.format('Coordinates (%s, %s) are NOT within %s of a town ID!', pos_x, pos_y, distance))
+	end
+	return nearest_town_id
 end
 
 
@@ -2159,6 +2373,7 @@ function on_ui_created(context)
 --		mach_data.__settlement_names_list__ = get_settlement_names_list()
 		mach_data.__settlement_to_region_list__ = get_settlement_to_region_list()
 		mach_data.__all_factions_military_forces_list__ = get_all_factions_military_forces()
+		mach_data.__port_id_to_port_name_list__ = get_port_id_to_port_name_list()
 	end
 	update_mach_lua_log("MACH LIB - Finished UICreated.")
 end

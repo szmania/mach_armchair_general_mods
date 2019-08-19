@@ -22,37 +22,77 @@ function Army:new (character_details, faction_id, character_context)
 	self.is_in_settlement = false
 	self.settlement_in_name = nil
 	self.settlement_in_id = nil
-	self.settlement_in_region_id = nil
+	self.is_in_town = false
+	self.town_in_name = nil
+	self.town_in_id = nil
+	self.region_in_id = nil
 	self.is_in_fort = false
 	self.fort_in_name = nil
+	self.is_in_port = false
+	self.port_in_name = nil
 
 	if character_details then
 --		mach_lib.update_mach_lua_log("testing")
 		self.garrison_address = CampaignUI.CharacterResidence(self.address)
---		mach_lib.update_mach_lua_log("testing1")
-		mach_lib.update_mach_lua_log(self.garrison_address)
+		mach_lib.update_mach_lua_log("testing - garrison army")
 		if self.garrison_address then
 			mach_lib.update_mach_lua_log(string.format('Garrison address: %s', tostring(self.garrison_address)))
 			mach_lib.update_mach_lua_log("testing2")
 
 			local garrison_entities = CampaignUI.RetrieveContainedEntitiesFromGarrison(self.garrison_address, self.address)
-			self.is_in_settlement, self.settlement_in_id = mach_lib.is_location_settement(self.location)
+			mach_lib.output_table_to_mach_log(garrison_entities, 1)
+			self.is_in_settlement, self.settlement_in_id = mach_lib.is_location_settlement(self.location)
+			self.is_in_port = CampaignUI.IsCharacterInPortResidence(self.address)
+			self.is_in_town, self.town_in_id = mach_lib.is_location_town(garrison_entities.ContainerName)
 			if self.is_in_settlement then
-				mach_lib.update_mach_lua_log("Character is in settlement.")
+				mach_lib.update_mach_lua_log("Army is in settlement.")
 				self.settlement_in_name = garrison_entities.ContainerName
-				self.settlement_in_region_id = mach_lib.get_region_id_from_settlement_name(self.settlement_in_name)
+				self.region_in_id = mach_lib.get_region_id_from_settlement_name(self.settlement_in_name)
+				mach_lib.update_mach_lua_log("testing3232")
+				if not mach_lib.is_key_in_table(self.region_in_id, mach_data.region_to_settlement_coordinates_list) then
+					mach_data.region_to_settlement_coordinates_list[self.region_in_id] = {}
+					mach_data.region_to_settlement_coordinates_list[self.region_in_id][1] = self.pos_x
+					mach_data.region_to_settlement_coordinates_list[self.region_in_id][2] = self.pos_y
+				end
 			elseif garrison_entities.ContainerName:find('Fort ') then
-				mach_lib.update_mach_lua_log("Character is in fort.")
+				mach_lib.update_mach_lua_log("Army is in fort.")
 				self.is_in_fort = true
 				self.fort_in_name = garrison_entities.ContainerName
+			elseif self.is_in_town then
+				mach_lib.update_mach_lua_log("Army is in town.")
+				self.town_in_name = garrison_entities.ContainerName
+				self.region_in_id = mach_lib.get_region_id_from_town_id(self.town_in_id)
+				if not mach_lib.is_key_in_table(self.town_in_id, mach_data.town_id_to_coordinates_list) then
+					mach_lib.update_mach_lua_log(string.format('Adding town "%s" to town_id_to_coordinates_list at coordinates (%s, %s).', self.town_in_id, self.pos_x, self.pos_y))
+					mach_data.town_id_to_coordinates_list[self.town_in_id] = {}
+					mach_data.town_id_to_coordinates_list[self.town_in_id][1] = self.pos_x
+					mach_data.town_id_to_coordinates_list[self.town_in_id][2] = self.pos_y
+				end
+				if not mach_lib.is_value_in_table(self.town_in_name, mach_data.__town_id_to_town_name_list__) then
+					mach_data.__town_id_to_town_name_list__[self.town_in_id] = self.town_in_name
+				end
+			elseif self.is_in_port then
+				mach_lib.update_mach_lua_log("Army is in port.")
+				self.port_in_name = garrison_entities.ContainerName
+				self.region_in_id = mach_lib.get_region_id_from_port_name(self.port_in_name)
+				self.port_in_id = string.format('port:%s:%s', self.region_in_id, string.lower(self.port_in_name))
+				if not mach_lib.is_key_in_table(self.port_in_id, mach_data.port_id_to_coordinates_list) then
+					mach_lib.update_mach_lua_log(string.format('Adding port "%s" to port_id_to_coordinates_list at coordinates (%s, %s).', self.port_in_id, self.pos_x, self.pos_y))
+					mach_data.port_id_to_coordinates_list[self.port_in_id] = {}
+					mach_data.port_id_to_coordinates_list[self.port_in_id][1] = self.pos_x
+					mach_data.port_id_to_coordinates_list[self.port_in_id][2] = self.pos_y
+				end
+				if not mach_lib.is_value_in_table(self.port_in_name, mach_data.__port_id_to_port_name_list__) then
+					mach_data.__port_id_to_port_name_list__[self.port_in_id] = self.port_in_name
+				end
 			end
 		else
 			self.is_on_fleet, self.fleet_on = mach_lib.is_army_obj_on_fleet(self.obj)
 		end
 
---		self.is_in_settlement, self.settlement_in_region_id = mach_lib.is_army_obj_in_settlement(self.faction_id, self.obj)
+--		self.is_in_settlement, self.region_in_id = mach_lib.is_army_obj_in_settlement(self.faction_id, self.obj)
 --		if self.is_in_settlement then
---			self.settlement_in_id = mach_lib.get_settlement_id_from_region_id(self.settlement_in_region_id)
+--			self.settlement_in_id = mach_lib.get_settlement_id_from_region_id(self.region_in_id)
 --		else
 --			self.settlement_in_id = nil
 --		end
@@ -64,14 +104,14 @@ function Army:new (character_details, faction_id, character_context)
 			self.is_in_settlement = true
 			self.settlement_in_name = self.location
 			self.settlement_in_id = mach_lib.get_settlement_id_from_settlement_name(self.settlement_in_name)
-			self.settlement_in_region_id = mach_lib.get_region_id_from_settlement_name(self.settlement_in_name)
+			self.region_in_id = mach_lib.get_region_id_from_settlement_name(self.settlement_in_name)
 		elseif conditions.CharacterInBuildingOfChain("fort", character_context) then
 			mach_lib.update_mach_lua_log("Character is in fort.")
 			self.is_in_fort = true
 			self.fort_in_name = self.location
 		end
 --		self.is_in_settlement = false
---		self.settlement_in_region_id = self.location
+--		self.region_in_id = self.location
 --		self.settlement_in_id = nil
 --		self.is_in_fort = false
 --		self.is_in_settlement = mach_lib.is_value_in_table(self.location, mach_data.__settlement_names_list__)
@@ -641,8 +681,8 @@ function MilitaryForce:new (character_details, faction_id, character_context)
 		self.commander_nationality_and_type_and_name = self.nationality..' '..self.commander_type_and_name
         self.is_naval = self.commander_type == 'Admiral' or self.commander_type == 'Captain'
 		self.culture = mach_lib.get_character_culture_from_character_context(character_context)
-		self.pos_x = mach_data.region_capital_coord_list[region_id][1] or 0
-		self.pos_y = mach_data.region_capital_coord_list[region_id][2] or 0
+		self.pos_x = mach_data.region_to_settlement_coordinates_list[region_id][1] or 0
+		self.pos_y = mach_data.region_to_settlement_coordinates_list[region_id][2] or 0
 		self.character_context = character_context
 	end
 	self.is_rebel = string.find(self.faction_id, 'rebels')
@@ -727,6 +767,22 @@ function Navy:new (character_details, faction_id, character_context)
 		self.num_of_ship_guns = self.num_of_ship_guns + ship.guns
 	end
 
+
+--	self.garrison_address = CampaignUI.CharacterResidence(self.address)
+--	mach_lib.update_mach_lua_log("testing - garrison navy")
+--	mach_lib.update_mach_lua_log(self.garrison_address)
+--	local garrison_entities = CampaignUI.RetrieveContainedEntitiesFromGarrison(self.garrison_address, self.address)
+--	mach_lib.output_table_to_mach_log(garrison_entities, 1)
+--	self.is_in_port = CampaignUI.IsCharacterInPortResidence(self.address)
+--	mach_lib.update_mach_lua_log(self.is_in_port)
+--	if self.is_in_port or conditions.InPort(character_context) then
+--		mach_lib.update_mach_lua_log("Navy is in port.")
+--		self.port_in_name = garrison_entities.ContainerName
+--	else
+--		mach_lib.update_mach_lua_log('Navy is NOT in port.')
+--	end
+
+
     mach_lib.update_mach_lua_log(string.format('Finished initializing navy of "%s" under command of "%s"', self.faction_id, self.commander_name))
     return self
 end
@@ -748,8 +804,8 @@ function Region:new (region_details, faction_id)
 			faction_id = faction_id;
 			pos_x = nil;
 			pos_y = nil;
-			capital_pos_x = nil;
-			capital_pos_y = nil;
+			settlement_pos_x = nil;
+			settlement_pos_y = nil;
 			obj = region_details;
 			supplied_armies = {};
 		},
@@ -757,11 +813,11 @@ function Region:new (region_details, faction_id)
 	)
 
 	if self.region_id ~= nil then
-		self.capital_pos_x = mach_data.region_capital_coord_list[self.region_id][1]
-		self.capital_pos_y = mach_data.region_capital_coord_list[self.region_id][2]
+		self.settlement_pos_x = mach_data.region_to_settlement_coordinates_list[self.region_id][1]
+		self.settlement_pos_y = mach_data.region_to_settlement_coordinates_list[self.region_id][2]
 		if not pos_x and not pos_y then
-			self.pos_x = self.capital_pos_x
-			self.pos_y = self.capital_pos_y
+			self.pos_x = self.settlement_pos_x
+			self.pos_y = self.settlement_pos_y
 		end
 	end
 	mach_lib.update_mach_lua_log(string.format('Finished initializing region of "%s" with region key "%s"', tostring(self.faction_id),
@@ -774,12 +830,32 @@ function _get_battle_name(battle)
 	mach_lib.update_mach_lua_log('Getting battle name for battle.')
 	local battle_name_short = nil
 	local battle_name = nil
-	if not battle.is_settlement_siege and not battle.is_fort_siege then
-		battle_name_short = string.format('Battle of %s', battle.location)
-	elseif battle.is_settlement_siege then
+--	mach_lib.update_mach_lua_log(battle.location)
+	battle_name_short = string.format('Battle of %s', battle.location)
+	if battle.is_settlement_siege then
 		battle_name_short = string.format('Battle of %s', battle.besieged_settlement_name)
-	else
+	elseif battle.is_fort_siege then
 		battle_name_short = string.format('Battle of %s', battle.besieged_fort_name)
+	elseif not battle.is_naval_battle then
+		local town_distance_to_consider_as_battle_name = 25
+--		mach_lib.update_mach_lua_log(battle.location)
+		local town_id_near = mach_lib.is_within_distance_of_town_id(battle.pos_x, battle.pos_y, town_distance_to_consider_as_battle_name)
+		if town_id_near ~= nil then
+			local town_name_near = mach_lib.get_town_name_from_town_id(town_id_near)
+			if town_name_near ~= nil then
+				battle_name_short = string.format('Battle of %s', town_name_near)
+			end
+		end
+	elseif battle.is_naval_battle then
+		local port_distance_to_consider_as_battle_name = 35
+--		mach_lib.update_mach_lua_log(battle.location)
+		local port_id_near = mach_lib.is_within_distance_of_port_id(battle.pos_x, battle.pos_y, port_distance_to_consider_as_battle_name)
+		if port_id_near then
+			local port_name_near = mach_lib.get_port_name_from_port_id(port_id_near)
+			if port_name_near ~= nil then
+				battle_name_short = string.format('Battle of %s', port_name_near)
+			end
+		end
 	end
 	battle_name = string.format('%s %s (%s)', mach_lib.convert_str_to_title_case(mach_data.ordinal_num_list[_get_number_of_battles_with_same_name(battle_name_short) + 1]), battle_name_short, mach_lib.__current_year__)
 	mach_lib.update_mach_lua_log(string.format('Finished getting battle name for battle: "%s"', battle_name))
@@ -868,7 +944,7 @@ function _is_major_battle(battle)
 					(battle.total_ship_casualties >= mach_config.__MACH_MAJOR_BATTLE_MIN_TOTAL_SHIP_CASUALTIES__ and
 							((battle.loser_ship_casualties >= (total_loser_factions_number_of_ships + battle.loser_ship_casualties) * mach_config.__MACH_MAJOR_BATTLE_MIN_PERCENTAGE_OF_TOTAL_LOSER_FORCES_AS_CASUALTIES__) or
 					(battle.loser_unit_casualties >= mach_config.__MACH_MAJOR_BATTLE_MIN_LAND_UNIT_ON_SHIP_CASUALTIES__)))) then
-		mach_lib.update_mach_lua_log('testsadfasdf')
+--		mach_lib.update_mach_lua_log('testsadfasdf')
 		mach_lib.update_mach_lua_log(string.format('Battle is a naval battle. Total ship casualties "%s" >= "%s", and loser ship casualties "%s" are >= total loser factions number of ships "%s" + "%s" * "%s", or loser unit casualties "%s" >= "%s". A major battle.', battle.total_ship_casualties, mach_config.__MACH_MAJOR_BATTLE_MIN_TOTAL_SHIP_CASUALTIES__, battle.loser_ship_casualties, total_loser_factions_number_of_ships, battle.loser_ship_casualties, tostring(mach_config.__MACH_MAJOR_BATTLE_MIN_PERCENTAGE_OF_TOTAL_LOSER_FORCES_AS_CASUALTIES__), battle.loser_unit_casualties, tostring(mach_lib.__MACH_MAJOR_BATTLE_MIN_LAND_UNIT_ON_SHIP_CASUALTIES__)))
 		is_major_battle = true
 		mach_lib.update_mach_lua_log('Battle is a "Major Battle"!')

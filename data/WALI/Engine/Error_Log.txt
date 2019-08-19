@@ -633,3 +633,6 @@ WALI_Engine.exe:-2/18/2019 6:57:48 PM ==> Access to the path 'G:\Program Files (
 **** WALI START ****
 
 WALI_Engine.exe:-5/11/2019 10:04:49 PM ==> Command Failure: GET_CAMPAIGN_UNIT_MULTIPLIER
+**** WALI START ****
+
+WALI_Engine.exe:-8/18/2019 2:18:51 AM ==> Game instance of Empire could not be found!

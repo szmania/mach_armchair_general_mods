@@ -811,15 +811,15 @@ function mach_battle_chronicler()
                     local unit_faction_id
                     if not unit_details.IsNaval then
                         mach_lib.update_mach_lua_log('logger')
-                        mach_lib.output_table_to_mach_log(unit_battle.pre_battle_units_list, 1)
+--                        mach_lib.output_table_to_mach_log(unit_battle.pre_battle_units_list, 1)
                         for pre_battle_faction_id, pre_battle_faction_units_list in pairs(unit_battle.pre_battle_units_list) do
                             mach_lib.update_mach_lua_log('logger1a')
-                            mach_lib.output_table_to_mach_log(pre_battle_faction_units_list, 1)
+--                            mach_lib.output_table_to_mach_log(pre_battle_faction_units_list, 1)
                             mach_lib.update_mach_lua_log(pre_battle_faction_id)
 
                             for pre_battle_unit_idx, pre_battle_unit in pairs(pre_battle_faction_units_list) do
                                 mach_lib.update_mach_lua_log('logger1a -b ')
-                                mach_lib.output_table_to_mach_log(pre_battle_unit, 1)
+--                                mach_lib.output_table_to_mach_log(pre_battle_unit, 1)
 
                                 if pre_battle_unit.unit_id == unit_details.Id then
                                     unit_faction_id = pre_battle_faction_id
@@ -1129,6 +1129,7 @@ function mach_battle_chronicler()
         __winner_unit_seen__ = false
         __loser_unit_seen__ = false
         __rebel_character_completed_battle__ = false
+        mach_lib.update_mach_lua_log("Machiavelli's Battle Chronicler - Finished FactionTurnStart")
     end
 
 
