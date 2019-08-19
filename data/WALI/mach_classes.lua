@@ -847,7 +847,7 @@ function _get_battle_name(battle)
 			end
 		end
 	elseif battle.is_naval_battle then
-		local port_distance_to_consider_as_battle_name = 35
+		local port_distance_to_consider_as_battle_name = 30
 --		mach_lib.update_mach_lua_log(battle.location)
 		local port_id_near = mach_lib.is_within_distance_of_port_id(battle.pos_x, battle.pos_y, port_distance_to_consider_as_battle_name)
 		if port_id_near then
