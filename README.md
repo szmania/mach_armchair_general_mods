@@ -30,3 +30,7 @@ This Mod adds a battle chronicler to Empire: Total War. This is a mechanism that
 2. Add mod packs to your "C:\Users\<user>\AppData\Roaming\The Creative Assembly\Empire\scripts\user.empire_script.txt" file.
 ie:```mod mach_battle_chronicler.pack;```
 3. Run with empire_start_wali_mach.bat file. (this will start WALI and Empire Total War; and monitor if Empire.exe is running and kill WALI when Empire.exe closes)
+
+
+## Found a Bug???
+Post bugs [HERE](https://github.com/szmania/MACH_armchair_general_mods/issues).
