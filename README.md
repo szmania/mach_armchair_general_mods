@@ -33,5 +33,9 @@ ie:```mod mach_battle_chronicler.pack;```
 3. Run with empire_start_wali_mach.bat file. (this will start WALI and Empire Total War; and monitor if Empire.exe is running and kill WALI when Empire.exe closes)
 
 
+## Is it Compatible with my mods?
+Machiavelli's Armchair General Mods should be compatible with ALL mods.
+
+
 ## Found a Bug???
 Post bugs [HERE](https://github.com/szmania/MACH_armchair_general_mods/issues)
