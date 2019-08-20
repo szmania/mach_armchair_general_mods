@@ -3,7 +3,7 @@ Machiavelli's Armchair General Mods collection for Empire: Total War.
 
 This Mod collection uses WALI "Warscape Added Lua Interface" (http://www.twcenter.net/forums/showthread.php?604949-W-A-L-I) which was originally created by .Mitch and TC of the TWCenter Community.
 
-This Mod was also inspired by the work VadAntS of the TWCenter Community.
+This Mod was also inspired by the work of VadAntS of the TWCenter Community.
 
 ## What this Mod adds to Empire: Total War
 This Mod is intended to be a collection of mods to enhance Empire: Total War.
@@ -21,3 +21,12 @@ This Mod adds a battle chronicler to Empire: Total War. This is a mechanism that
 * Every unit maintains a history of all the battles it has participated in.
   * Can be viewed by opening unit details window and reading the top port of the unit description text box.
 * A history of all battles (Player and AI) is also presented to the player in the Lists menu by double-clicking the "Regions" tab.
+
+> NOTE: "mod mach_battle_chronicler.pack;" must be added to your "C:\Users\<user>\AppData\Roaming\The Creative Assembly\Empire\scripts\user.empire_script.txt" file in order for mod "Machiavelli's Battle Chronicler" to be enabled.
+
+
+## How to Install
+1. Copy all files from [Github repository](https://github.com/szmania/MACH_armchair_general_mods/releases) into your Empire Total War directory and overwrite. (the empire_start_wali_mach.bat file should be in the same directory as your Empire.exe file, ie: C:\Program Files (x86)\Empire Total War)
+2. Add mod packs to your "C:\Users\<user>\AppData\Roaming\The Creative Assembly\Empire\scripts\user.empire_script.txt" file.
+ie:```mod mach_battle_chronicler.pack;```
+3. Run with empire_start_wali_mach.bat file. (this will start WALI and Empire Total War; and monitor if Empire.exe is running and kill WALI when Empire.exe closes)
