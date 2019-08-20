@@ -21,7 +21,7 @@ This Mod adds a battle chronicler to Empire: Total War. This is a mechanism that
     * Can be viewed by hovering the mouse over the character portrait in character details window.
 * Every unit maintains a history of all the battles it has participated in.
     * Can be viewed by opening unit details window and reading the top portion of the unit description text box.
-* A history of all battles (Player and AI) is presented to the player within the Lists menu by double-clicking the "Regions" tab. 
+* A history of all battles (Player and AI) is presented to the player within the "Lists" menu by double-clicking the "Regions" tab. 
 
 > NOTE: "mod mach_battle_chronicler.pack;" must be added to your "C:\Users\<user>\AppData\Roaming\The Creative Assembly\Empire\scripts\user.empire_script.txt" file in order for mod "Machiavelli's Battle Chronicler" to be enabled.
 
