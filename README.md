@@ -34,4 +34,4 @@ ie:```mod mach_battle_chronicler.pack;```
 
 
 ## Found a Bug???
-Post bugs [HERE](https://github.com/szmania/MACH_armchair_general_mods/issues).
+Post bugs [HERE](https://github.com/szmania/MACH_armchair_general_mods/issues)
