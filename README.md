@@ -41,3 +41,7 @@ Machiavelli's Armchair General Mods should be compatible with ALL mods.
 
 ## Found a Bug???
 Post bugs [HERE](https://github.com/szmania/MACH_armchair_general_mods/issues)
+
+1. Please describe the bug.
+2. Please post the log file. The mach_lua.log file. (found in "C:\Program Files (x86)\Empire Total War\data\WALI\Logs\mach_lua.log")
+3. Please post the Mach Mod save game file. (will be the same name as your saved game, found in "C:\Users\<user>\AppData\Roaming\The Creative Assembly\Empire\save_games\mach_mod\")
