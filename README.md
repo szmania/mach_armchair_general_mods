@@ -18,18 +18,19 @@ This Mod adds a battle chronicler to Empire: Total War. This is a mechanism that
 
 * Battle events are presented to the player via messages (AI battles) and a history of all battles (both AI and Player battles) is maintained.
 * Every character maintains a history of all the battles it has participated in.
-    * Can be viewed by hovering the mouse over the character portrait in character details window.
+    (can be viewed by hovering the mouse over the character portrait in character details window)
 * Every unit maintains a history of all the battles it has participated in.
-    * Can be viewed by opening unit details window and reading the top portion of the unit description text box.
+    (can be viewed by opening unit details window and reading the top portion of the unit description text box)
 * A history of all battles (Player and AI) is presented to the player within the "Lists" menu by double-clicking the "Regions" tab. 
 
 > NOTE: "mod mach_battle_chronicler.pack;" must be added to your "C:\Users\<user>\AppData\Roaming\The Creative Assembly\Empire\scripts\user.empire_script.txt" file in order for mod "Machiavelli's Battle Chronicler" to be enabled.
 
 
 ## How to Install
-1. Copy all files from [Github repository](https://github.com/szmania/MACH_armchair_general_mods/releases) into your Empire Total War directory and overwrite. (the empire_start_wali_mach.bat file should be in the same directory as your Empire.exe file, ie: C:\Program Files (x86)\Empire Total War)
+1. Copy all files from [Github repository](https://github.com/szmania/MACH_armchair_general_mods/releases) into your Empire Total War directory and overwrite. I advise using [JSGME](https://www.filecroco.com/download-jsgme/) for this. (the empire_start_wali_mach.bat file should be in the same directory as your Empire.exe file, ie: C:\Program Files (x86)\Empire Total War)
 2. Add mod packs to your "C:\Users\<user>\AppData\Roaming\The Creative Assembly\Empire\scripts\user.empire_script.txt" file.
-ie:```mod mach_battle_chronicler.pack;```
+ie:
+```mod mach_battle_chronicler.pack;```
 (each mod pack name should be on its own line)
 3. Run with empire_start_wali_mach.bat file. (this will start WALI and Empire Total War; and monitor if Empire.exe is running and kill WALI when Empire.exe closes)
 
