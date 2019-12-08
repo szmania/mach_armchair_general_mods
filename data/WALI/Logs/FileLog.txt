@@ -1,45 +1,45 @@
-[17:56:51:593] LOG START:-
+[18:7:0:434] LOG START:-
 
 
-[17:56:51:593] CheckAttrition.wcf - Reading WCF
+[18:7:0:434] CheckAttrition.wcf - Reading WCF
 
-[17:56:51:594] CheckWALIStatus.wcf - Reading WCF
+[18:7:0:435] CheckWALIStatus.wcf - Reading WCF
 
-[17:56:51:595] GetAlphaPointer.wcf - Reading WCF
+[18:7:0:435] GetAlphaPointer.wcf - Reading WCF
 
-[17:56:51:596] GetCampaignUnitMultiplier.wcf - Reading WCF
+[18:7:0:436] GetCampaignUnitMultiplier.wcf - Reading WCF
 
-[17:56:51:596] GetUnitReplenishable.wcf - Reading WCF
+[18:7:0:436] GetUnitReplenishable.wcf - Reading WCF
 
-[17:56:51:597] SetArtillery.wcf - Reading WCF
+[18:7:0:437] SetArtillery.wcf - Reading WCF
 
-[17:56:51:598] SetUnitReplenishable.wcf - Reading WCF
+[18:7:0:437] SetUnitReplenishable.wcf - Reading WCF
 
-[17:56:51:599] UnitExp.wcf - Reading WCF
+[18:7:0:438] UnitExp.wcf - Reading WCF
 
-[17:56:51:600] UnitMaxSize.wcf - Reading WCF
+[18:7:0:438] UnitMaxSize.wcf - Reading WCF
 
-[17:56:51:600] UnitSize.wcf - Reading WCF
+[18:7:0:439] UnitSize.wcf - Reading WCF
 
-[17:56:51:604] Attrition.WaliConfig - Reading Attrition Config
+[18:7:0:443] Attrition.WaliConfig - Reading Attrition Config
 
-[17:56:51:615] attrition.png - Loading Attrition Map
+[18:7:0:456] attrition.png - Loading Attrition Map
 
-[17:57:25:83] 0.WALI - Registered
+[18:7:19:78] 0.WALI - Registered
 
-[17:57:25:84] 0.WALI - Checking if file is in use...
+[18:7:19:79] 0.WALI - Checking if file is in use...
 
-[17:57:25:84] 0.WALI - File not locked
+[18:7:19:79] 0.WALI - File not locked
 
-[17:57:25:84] 0.WALI - Attempting Read...
+[18:7:19:80] 0.WALI - Attempting Read...
 
-[17:57:25:86] 0.WALI - Read Success (nil;CHECK_STATUS;0;0)
+[18:7:19:82] 0.WALI - Read Success (nil;CHECK_STATUS;0;0)
 
-[17:57:25:87] 0.WALI - Expects command in format: Address/Command/Value
+[18:7:19:82] 0.WALI - Expects command in format: Address/Command/Value
 
-[17:57:25:87] 0.WALI - Sorted extra values (0/0)
+[18:7:19:82] 0.WALI - Sorted extra values (0/0)
 
-[17:57:25:88] 0.WALI - Command activator matched: CHECK_STATUS
+[18:7:19:83] 0.WALI - Command activator matched: CHECK_STATUS
 
-[17:57:25:89] 0.WALI - Deleting
+[18:7:19:83] 0.WALI - Deleting
 
