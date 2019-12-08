@@ -182,6 +182,24 @@ function create_mach_lua_log()
 end
 
 
+--- Check if a file or directory exists in this path
+function dir_exists(dir_path)
+	update_mach_lua_log(string.format('Checking if directory exists: "%s"', dir_path))
+	local ok, err, code = os.rename(dir_path, dir_path)
+	if not ok then
+		if code == 13 then
+			-- Permission denied, but it exists
+			update_mach_lua_log(string.format('Directory does exist: "%s"', dir_path))
+			return true
+		end
+		update_mach_lua_log(string.format('Directory does NOT exist: "%s"', dir_path))
+		return ok, err
+	end
+	update_mach_lua_log(string.format('Directory does exist: "%s"', dir_path))
+	return ok, err
+end
+
+
 function export_string(s)
 	return string.format("%q", s)
 end
@@ -2437,7 +2455,7 @@ function on_ui_created(context)
 		__wali_m_root__ = UIComponent(context.component)
 
 		if mach_config.__MACH_DEBUG_MODE__ then
-			update_mach_lua_log('DEBUG MODE is enabled. Setting Fog of War to "Fase"')
+			update_mach_lua_log('DEBUG MODE is enabled. Setting Fog of War to "False"')
 			set_fog_of_war(false)
 		end
 		mach_data.__faction_id_list__ = get_faction_id_list()
@@ -2689,9 +2707,13 @@ function save_mach_save_game()
 	update_mach_lua_log(string.format('Saving Machiavelli Mod game to file path.'))
 	local latest_save_game = get_latest_save_game()
 	local extension, path = CampaignUI.FileExtenstionAndPathForWriteClass("save_game")
-	os.execute('mkdir "'..path..'mach_mod"')
+	local mach_mod_save_dir = path..'mach_mod'
+	if not dir_exists(mach_mod_save_dir) then
+		update_mach_lua_log(string.format('Creating MACH save game directory: "%s"', mach_mod_save_dir))
+		os.execute('mkdir "'..mach_mod_save_dir..'"')
+	end
 	local empire_save_game_file_name_no_ext = latest_save_game.FileName:gsub(".empire_save", "")
-	local mach_save_game_file_path = path..'mach_mod\\'..empire_save_game_file_name_no_ext..'.mach_save'
+	local mach_save_game_file_path = mach_mod_save_dir..'\\'..empire_save_game_file_name_no_ext..'.mach_save'
 	update_mach_lua_log(string.format('Saving MACH save game to: "%s"', mach_save_game_file_path))
 	mach_data.__mach_saved_games_list__[__mach_save_game_id__] = latest_save_game
 	save_mach_saved_games_list()
