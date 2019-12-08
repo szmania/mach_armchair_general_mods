@@ -2455,6 +2455,8 @@ function on_ui_created(context)
 			mach_data.__town_id_to_town_name_list__ = get_town_id_to_town_name_list()
 		end
 		mach_data.__all_factions_military_forces_list__ = get_all_factions_military_forces()
+	else
+		__wali_is_on_campaign_map__ = false
 	end
 	update_mach_lua_log("MACH LIB - Finished UICreated.")
 end

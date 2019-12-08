@@ -9,24 +9,34 @@ copy "%~dp0\data\campaigns\main\scripting.lua" "%~dp0\data\campaigns\main\script
 copy "%~dp0\data\campaigns\main_2\scripting.lua" "%~dp0\data\campaigns\main_2\scripting.lua.bak"
 copy "%~dp0\data\campaigns\natives\scripting.lua" "%~dp0\data\campaigns\natives\scripting.lua.bak"
 
+
 echo Adding MACH mod to scripting.lua files for early, late and native campaigns
-echo --Starting Machiavelli's Mods >> "%~dp0\data\campaigns\main\scripting.lua"
+echo --START Machiavelli's Mods > "%~dp0\data\campaigns\main\scripting.lua"
 echo mach = require "WALI/mach" >> "%~dp0\data\campaigns\main\scripting.lua"
 echo mach_lib = require "WALI/mach_lib" >> "%~dp0\data\campaigns\main\scripting.lua"
 echo mach_lib.update_mach_lua_log("Calling initialize_mach()") >> "%~dp0\data\campaigns\main\scripting.lua"
 echo mach.initialize_mach() >> "%~dp0\data\campaigns\main\scripting.lua"
+echo --END Machiavelli's Mods >> "%~dp0\data\campaigns\main\scripting.lua"
+echo.>> "%~dp0\data\campaigns\main\scripting.lua"
+type "%~dp0\data\campaigns\main\scripting.lua.bak" >> "%~dp0\data\campaigns\main\scripting.lua"
 
-echo --Starting Machiavelli's Mods >> "%~dp0\data\campaigns\main_2\scripting.lua"
+echo --Starting Machiavelli's Mods > "%~dp0\data\campaigns\main_2\scripting.lua"
 echo mach = require "WALI/mach" >> "%~dp0\data\campaigns\main_2\scripting.lua"
 echo mach_lib = require "WALI/mach_lib" >> "%~dp0\data\campaigns\main_2\scripting.lua"
 echo mach_lib.update_mach_lua_log("Calling initialize_mach()") >> "%~dp0\data\campaigns\main_2\scripting.lua"
 echo mach.initialize_mach() >> "%~dp0\data\campaigns\main_2\scripting.lua"
+echo --END Machiavelli's Mods >> "%~dp0\data\campaigns\main_2\scripting.lua"
+echo.>> "%~dp0\data\campaigns\main_2\scripting.lua"
+type "%~dp0\data\campaigns\main_2\scripting.lua.bak" >> "%~dp0\data\campaigns\main_2\scripting.lua"
 
-echo --Starting Machiavelli's Mods >> "%~dp0\data\campaigns\natives\scripting.lua"
+echo --Starting Machiavelli's Mods > "%~dp0\data\campaigns\natives\scripting.lua"
 echo mach = require "WALI/mach" >> "%~dp0\data\campaigns\natives\scripting.lua"
 echo mach_lib = require "WALI/mach_lib" >> "%~dp0\data\campaigns\natives\scripting.lua"
 echo mach_lib.update_mach_lua_log("Calling initialize_mach()") >> "%~dp0\data\campaigns\natives\scripting.lua"
 echo mach.initialize_mach() >> "%~dp0\data\campaigns\natives\scripting.lua"
+echo --END Machiavelli's Mods >> "%~dp0\data\campaigns\natives\scripting.lua"
+echo.>> "%~dp0\data\campaigns\natives\scripting.lua"
+type "%~dp0\data\campaigns\natives\scripting.lua.bak" >> "%~dp0\data\campaigns\natives\scripting.lua"
 
 echo Starting WALI
 
