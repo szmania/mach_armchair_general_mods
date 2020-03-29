@@ -1,63 +1,27 @@
-[20:0:58:482] LOG START:-
+[23:34:23:414] LOG START:-
 
 
-[20:0:58:482] CheckAttrition.wcf - Reading WCF
+[23:34:23:414] CheckAttrition.wcf - Reading WCF
 
-[20:0:58:483] CheckWALIStatus.wcf - Reading WCF
+[23:34:23:414] CheckWALIStatus.wcf - Reading WCF
 
-[20:0:58:483] GetAlphaPointer.wcf - Reading WCF
+[23:34:23:414] GetAlphaPointer.wcf - Reading WCF
 
-[20:0:58:483] GetCampaignUnitMultiplier.wcf - Reading WCF
+[23:34:23:415] GetCampaignUnitMultiplier.wcf - Reading WCF
 
-[20:0:58:484] GetUnitReplenishable.wcf - Reading WCF
+[23:34:23:415] GetUnitReplenishable.wcf - Reading WCF
 
-[20:0:58:484] SetArtillery.wcf - Reading WCF
+[23:34:23:415] SetArtillery.wcf - Reading WCF
 
-[20:0:58:484] SetUnitReplenishable.wcf - Reading WCF
+[23:34:23:416] SetUnitReplenishable.wcf - Reading WCF
 
-[20:0:58:485] UnitExp.wcf - Reading WCF
+[23:34:23:416] UnitExp.wcf - Reading WCF
 
-[20:0:58:485] UnitMaxSize.wcf - Reading WCF
+[23:34:23:416] UnitMaxSize.wcf - Reading WCF
 
-[20:0:58:485] UnitSize.wcf - Reading WCF
+[23:34:23:417] UnitSize.wcf - Reading WCF
 
-[20:0:58:488] Attrition.WaliConfig - Reading Attrition Config
+[23:34:23:419] Attrition.WaliConfig - Reading Attrition Config
 
-[20:0:58:499] attrition.png - Loading Attrition Map
-
-[20:1:17:562] 0.WALI - Registered
-
-[20:1:17:563] 0.WALI - Checking if file is in use...
-
-[20:1:17:563] 0.WALI - File not locked
-
-[20:1:17:564] 0.WALI - Attempting Read...
-
-[20:1:17:566] 0.WALI - Read Success (nil;CHECK_STATUS;0;0)
-
-[20:1:17:566] 0.WALI - Expects command in format: Address/Command/Value
-
-[20:1:17:567] 0.WALI - Sorted extra values (0/0)
-
-[20:1:17:567] 0.WALI - Command activator matched: CHECK_STATUS
-
-[20:1:17:568] 0.WALI - Deleting
-
-[20:2:29:841] 0.WALI - Registered
-
-[20:2:29:842] 0.WALI - Checking if file is in use...
-
-[20:2:29:842] 0.WALI - File not locked
-
-[20:2:29:843] 0.WALI - Attempting Read...
-
-[20:2:29:843] 0.WALI - Read Success (nil;CHECK_STATUS;0;0)
-
-[20:2:29:843] 0.WALI - Expects command in format: Address/Command/Value
-
-[20:2:29:844] 0.WALI - Sorted extra values (0/0)
-
-[20:2:29:844] 0.WALI - Command activator matched: CHECK_STATUS
-
-[20:2:29:845] 0.WALI - Deleting
+[23:34:23:430] attrition.png - Loading Attrition Map
 
