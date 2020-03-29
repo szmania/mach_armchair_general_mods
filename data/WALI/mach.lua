@@ -79,6 +79,7 @@ function initialize_mach()
 		mach_battle_chronicler.mach_battle_chronicler()
 	end
 
+
 --	mach_lib.load_mach_config_file()
 	--mach_lib.__mach_log_func_name__("MACH.initialise_mach")
 

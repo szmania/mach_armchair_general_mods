@@ -34,10 +34,10 @@ function Army:new (character_details, faction_id, character_context)
 	if character_details then
 --		mach_lib.update_mach_lua_log("testing")
 		self.garrison_address = CampaignUI.CharacterResidence(self.address)
-		mach_lib.update_mach_lua_log("testing - garrison army")
+--		mach_lib.update_mach_lua_log("testing - garrison army")
 		if self.garrison_address then
 			mach_lib.update_mach_lua_log(string.format('Garrison address: %s', tostring(self.garrison_address)))
-			mach_lib.update_mach_lua_log("testing2")
+--			mach_lib.update_mach_lua_log("testing2")
 
 			local garrison_entities = CampaignUI.RetrieveContainedEntitiesFromGarrison(self.garrison_address, self.address)
 			mach_lib.output_table_to_mach_log(garrison_entities, 1)
@@ -48,7 +48,7 @@ function Army:new (character_details, faction_id, character_context)
 				mach_lib.update_mach_lua_log("Army is in settlement.")
 				self.settlement_in_name = garrison_entities.ContainerName
 				self.region_in_id = mach_lib.get_region_id_from_settlement_name(self.settlement_in_name)
-				mach_lib.update_mach_lua_log("testing3232")
+--				mach_lib.update_mach_lua_log("testing3232")
 				if not mach_lib.is_key_in_table(self.region_in_id, mach_data.region_to_settlement_coordinates_list) then
 					mach_data.region_to_settlement_coordinates_list[self.region_in_id] = {}
 					mach_data.region_to_settlement_coordinates_list[self.region_in_id][1] = self.pos_x

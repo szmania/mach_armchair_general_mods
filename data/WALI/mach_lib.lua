@@ -175,7 +175,7 @@ end
 --Creates a new MACH log in the logging directory
 -- Creates MACH log
 function create_mach_lua_log()
-	local error_log = io.open(__mach_log_file__,"w")
+	local error_log = io.open(__mach_log_file__, "w")
 	local date_and_time = os.date("%H:%M.%S")
     error_log:write("Log Created: "..date_and_time)
     error_log:close()
@@ -1376,15 +1376,6 @@ function get_military_force_from_unit_id(faction_military_forces, unit_id)
 	return military_force
 end
 
---function get_mach_saved_games_list()
---	update_mach_lua_log(string.format('Getting Machiavelli Mod saved games list.'))
---	local extension, path = CampaignUI.FileExtenstionAndPathForWriteClass("save_game")
---	local mach_saved_games_list_path = path..'mach_mod\\saved_games_list.txt'
---	local mach_saved_games_list = load_table_from_file(mach_saved_games_list_path)
---	update_mach_lua_log(string.format('Finished getting Machiavelli Mod saved games list.'))
---	return mach_saved_games_list
---end
-
 
 function get_nationality_from_faction_id(faction_id, location)
 	update_mach_lua_log(string.format('Getting nationality from faction id: "%s"', faction_id))
@@ -2461,12 +2452,13 @@ function on_ui_created(context)
 		mach_data.__faction_id_list__ = get_faction_id_list()
 		__current_faction_turn_id__ = get_faction_id_from_context(context, "UICreated")
 		mach_data.__character_names_list__ = get_character_names_list()
+
 --		mach_data.__region_id_list__ = get_region_id_list()
 --		mach_data.__settlement_names_list__ = get_settlement_names_list()
 		mach_data.__settlement_to_region_list__ = get_settlement_to_region_list()
 		mach_data.__port_id_to_port_name_list__ = mach_data.__port_id_to_port_name_list__
 		if get_num_of_elements_in_table(mach_data.__port_id_to_port_name_list__) == 0 then
-			mach_data.__port_id_to_port_name_list__ = get_port_id_to_port_name_list()
+			mach_dataget_mach_saved_games_list.__port_id_to_port_name_list__ = get_port_id_to_port_name_list()
 		end
 		mach_data.__town_id_to_town_name_list__ = mach_data.__town_id_to_town_name_list__
 		if get_num_of_elements_in_table(mach_data.__town_id_to_town_name_list__) == 0 then
