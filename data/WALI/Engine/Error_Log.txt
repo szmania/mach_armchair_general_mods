@@ -636,3 +636,48 @@ WALI_Engine.exe:-2/18/2019 6:57:48 PM ==> Access to the path 'G:\Program Files (
 **** WALI START ****
 
 WALI_Engine.exe:-8/18/2019 2:18:51 AM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-3/29/2020 7:20:18 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-3/29/2020 7:51:42 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-3/29/2020 8:24:26 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-3/29/2020 9:02:00 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-3/29/2020 9:05:25 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-3/29/2020 9:08:08 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-3/29/2020 9:14:03 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-3/29/2020 9:16:50 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-3/29/2020 9:20:48 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-3/29/2020 9:24:46 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-3/29/2020 9:26:12 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-3/29/2020 9:31:03 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-3/29/2020 9:32:49 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-3/29/2020 9:40:41 PM ==> Game instance of Empire could not be found!
+**** WALI START ****
+
+WALI_Engine.exe:-3/29/2020 9:45:26 PM ==> Game instance of Empire could not be found!

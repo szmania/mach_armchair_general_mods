@@ -2370,7 +2370,7 @@ function on_loading_game(context)
 	update_mach_lua_log("MACH LIB - LoadingGame.")
 	local mach_loaded_game_id = scripting.game_interface:load_value(-1, context)
 	if mach_loaded_game_id ~= -1 then
-		update_mach_lua_log(string.format('MACH save game ID loading: %s', mach_loaded_game_id))
+		update_mach_lua_log(string.format('MACH save game ID loading: "%s"', mach_loaded_game_id))
 		if not load_mach_save_game(mach_loaded_game_id) then
 			update_mach_lua_log("Error, could not load Machiavelli Mod saved game!")
 		end

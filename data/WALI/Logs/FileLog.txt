@@ -1,27 +1,45 @@
-[23:34:23:414] LOG START:-
+[22:38:57:243] LOG START:-
 
 
-[23:34:23:414] CheckAttrition.wcf - Reading WCF
+[22:38:57:243] CheckAttrition.wcf - Reading WCF
 
-[23:34:23:414] CheckWALIStatus.wcf - Reading WCF
+[22:38:57:244] CheckWALIStatus.wcf - Reading WCF
 
-[23:34:23:414] GetAlphaPointer.wcf - Reading WCF
+[22:38:57:244] GetAlphaPointer.wcf - Reading WCF
 
-[23:34:23:415] GetCampaignUnitMultiplier.wcf - Reading WCF
+[22:38:57:245] GetCampaignUnitMultiplier.wcf - Reading WCF
 
-[23:34:23:415] GetUnitReplenishable.wcf - Reading WCF
+[22:38:57:245] GetUnitReplenishable.wcf - Reading WCF
 
-[23:34:23:415] SetArtillery.wcf - Reading WCF
+[22:38:57:245] SetArtillery.wcf - Reading WCF
 
-[23:34:23:416] SetUnitReplenishable.wcf - Reading WCF
+[22:38:57:246] SetUnitReplenishable.wcf - Reading WCF
 
-[23:34:23:416] UnitExp.wcf - Reading WCF
+[22:38:57:246] UnitExp.wcf - Reading WCF
 
-[23:34:23:416] UnitMaxSize.wcf - Reading WCF
+[22:38:57:246] UnitMaxSize.wcf - Reading WCF
 
-[23:34:23:417] UnitSize.wcf - Reading WCF
+[22:38:57:247] UnitSize.wcf - Reading WCF
 
-[23:34:23:419] Attrition.WaliConfig - Reading Attrition Config
+[22:38:57:250] Attrition.WaliConfig - Reading Attrition Config
 
-[23:34:23:430] attrition.png - Loading Attrition Map
+[22:38:57:261] attrition.png - Loading Attrition Map
+
+[22:39:14:640] 0.WALI - Registered
+
+[22:39:14:640] 0.WALI - Checking if file is in use...
+
+[22:39:14:641] 0.WALI - File not locked
+
+[22:39:14:641] 0.WALI - Attempting Read...
+
+[22:39:14:643] 0.WALI - Read Success (nil;CHECK_STATUS;0;0)
+
+[22:39:14:643] 0.WALI - Expects command in format: Address/Command/Value
+
+[22:39:14:643] 0.WALI - Sorted extra values (0/0)
+
+[22:39:14:644] 0.WALI - Command activator matched: CHECK_STATUS
+
+[22:39:14:645] 0.WALI - Deleting
 
