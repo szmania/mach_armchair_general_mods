@@ -11,9 +11,6 @@ echo Deleting log file "!log_file_path!" >"!empire_dir!_" && type "!empire_dir!_
 
 for /f "tokens=*" %%G in ('dir /b /a:d "!empire_dir!data\campaigns\*"') DO (call :campaign_scripting %%G)
 
-REM echo Adding "mod mach_battle_chronicler.pack;" to "!package_script_path!" >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
-REM echo mod mach_battle_chronicler.pack; >> !package_script_path!
-REM echo Finished adding "mod mach_battle_chronicler.pack;" to "!package_script_path!" >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
 
 echo Starting WALI >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
 
