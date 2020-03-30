@@ -32,7 +32,7 @@ This Mod adds a battle chronicler to Empire: Total War. This is a mechanism that
 ie:
 ```mod mach_battle_chronicler.pack;```
 (each mod pack name should be on its own line)
-3. Run with empire_start_wali_mach.bat file. (this will start WALI and Empire Total War; and monitor if Empire.exe is running and kill WALI when Empire.exe closes)
+3. Run with empire_start_wali_mach.bat file. This will start WALI and Empire Total War, or a compatible mod launcher. Currently supported mod launchers are ACW Brother vs. Brother, Imperial Splendour and Darth Mod Empire Platinum. The .bat file will monitor if Empire.exe/Mod Launcher is running and kill WALI when Empire.exe/Mod Launcher closes.
 
 
 ## Is it Compatible with my mods?
