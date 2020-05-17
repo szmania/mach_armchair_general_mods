@@ -30,7 +30,6 @@ local settlement_names_list = {}
 local artillery_to_gun_type_list = {}
 --local besiegedSettlements_list = {}
 
-
 local function _get_mach_enabled_mods_list()
 	mach_lib.update_mach_lua_log("Getting MACH enabled mods list.")
 	local save_game_extension, save_game_path = CampaignUI.FileExtenstionAndPathForWriteClass("save_game")
@@ -68,7 +67,7 @@ end
 function initialize_mach()
 --	mach_lib.set_debug(true)
 
-	mach_lib.create_mach_lua_log()
+--	mach_lib.create_mach_lua_log()
 	mach_lib.update_mach_lua_log("Initializing Machiavelli's Mods.")
 	mach_data.__mach_saved_games_list__ = mach_lib.get_mach_saved_games_list()
 
@@ -144,6 +143,3 @@ scripting.AddEventCallBack("RegionRebels", mach_lib.on_region_rebels)
 scripting.AddEventCallBack("SavingGame", mach_lib.on_saving_game)
 scripting.AddEventCallBack("TimeTrigger", mach_lib.on_time_trigger)
 scripting.AddEventCallBack("UICreated", mach_lib.on_ui_created)
-
-
-

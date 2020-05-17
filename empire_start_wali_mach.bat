@@ -11,17 +11,20 @@ echo Deleting log file "!log_file_path!" >"!empire_dir!_" && type "!empire_dir!_
 
 for /f "tokens=*" %%G in ('dir /b /a:d "!empire_dir!data\campaigns\*"') DO (call :campaign_scripting %%G)
 
+if not exist "VDM_Start.bat" (
+    echo Preparing to start WALI >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
 
-echo Starting WALI >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+    echo Changing directory to ./data/WALI >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+    cd /d "%~dp0\data\WALI"
 
-echo Changing directory to ./data/WALI >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
-cd /d "%~dp0\data\WALI"
+    echo Launching WALI >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+    start launch.bat 2>&1
 
-echo Launching WALI >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
-start launch.bat 2>&1
-
-echo Changing directory to Empire directory "%~dp0" >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
-cd /d "%~dp0"
+    echo Changing directory to Empire directory "%~dp0" >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+    cd /d "%~dp0"
+) else (
+ 	echo No need to start WALI because VadAntS Disease Mod is installed >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+)
 
 SET process_name=
 if exist Imperial.Splendour.exe (
@@ -39,6 +42,11 @@ if exist Imperial.Splendour.exe (
     start "data\\DME\\DME Platinum.exe" > output.log
     SET exe_name="data\\DME\\DME Platinum.exe"
     SET process_name="DME Platinum.exe"
+) else if exist "VDM_Start.bat" (
+    echo Starting VadAntS Disease Mod Launcher "VDM_Start.bat" >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+    start VDM_Start.bat > output.log
+    SET exe_name=VDM_Start.bat
+    SET process_name=Empire.exe
 ) else (
 	echo Starting Empire Total War "Empire.exe" >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
 	start Empire.exe > output.log
@@ -119,11 +127,20 @@ echo Adding MACH mod to scripting.lua files for "%campaign_dir%" >"!empire_dir!_
 echo --START Machiavelli's Mods > %scripting_lua%
 echo mach = require "WALI/mach" >> %scripting_lua%
 echo mach_lib = require "WALI/mach_lib" >> %scripting_lua%
-echo mach_lib.update_mach_lua_log("Calling initialize_mach()") >> %scripting_lua%
+echo mach_lib.create_mach_lua_log() >> %scripting_lua%
+echo mach_lib.update_mach_lua_log("Finished creating MACH log.") >> %scripting_lua%
+echo function error_catch_function() >> %scripting_lua%
 echo mach.initialize_mach() >> %scripting_lua%
 echo --END Machiavelli's Mods >> %scripting_lua%
 echo.>> %scripting_lua%
 type "!empire_dir!\data\campaigns\main\scripting.lua.bak" >> %scripting_lua%
+
+echo.>> %scripting_lua%
+echo --START Machiavelli's Mods >> %scripting_lua%
+echo end >> %scripting_lua%
+echo val,err = pcall(error_catch_function) >> %scripting_lua%
+echo mach_lib.update_mach_lua_log(err.."\n") >> %scripting_lua%
+echo --END Machiavelli's Mods >> %scripting_lua%
 
 echo Finished preparing campaign directory "%campaign_dir%" for MACH Mods >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
 
