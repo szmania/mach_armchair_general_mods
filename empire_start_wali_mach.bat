@@ -43,7 +43,7 @@ if exist Imperial.Splendour.exe (
     SET exe_name="data\\DME\\DME Platinum.exe"
     SET process_name="DME Platinum.exe"
 ) else if exist "VDM_Start.bat" (
-    echo Starting VadAntS Disease Mod Launcher "VDM_Start.bat" >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+    echo Starting VadAnts Disease Mod Launcher "VDM_Start.bat" >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
     start VDM_Start.bat > output.log
     SET exe_name=VDM_Start.bat
     SET process_name=Empire.exe
@@ -133,7 +133,7 @@ echo function error_catch_function() >> %scripting_lua%
 echo mach.initialize_mach() >> %scripting_lua%
 echo --END Machiavelli's Mods >> %scripting_lua%
 echo.>> %scripting_lua%
-type "!empire_dir!\data\campaigns\main\scripting.lua.bak" >> %scripting_lua%
+type "!empire_dir!\data\campaigns\%campaign_dir%\scripting.lua.bak" >> %scripting_lua%
 
 echo.>> %scripting_lua%
 echo --START Machiavelli's Mods >> %scripting_lua%
