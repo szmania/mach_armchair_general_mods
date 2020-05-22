@@ -9,7 +9,14 @@ SET log_file_path=!empire_dir!empire_start_wali_mach.log
 
 echo Deleting log file "!log_file_path!" >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" > !log_file_path!
 
+SET exe_name=
+if exist "VDM_Start.bat" (
+    echo "VadAnts Disease Mod" Launcher "VDM_Start.bat" is detected >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+    SET exe_name=VDM_Start.bat
+)
+
 for /f "tokens=*" %%G in ('dir /b /a:d "!empire_dir!data\campaigns\*"') DO (call :campaign_scripting %%G)
+
 
 if not exist "VDM_Start.bat" (
     echo Preparing to start WALI >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
@@ -133,7 +140,18 @@ echo function error_catch_function() >> %scripting_lua%
 echo mach.initialize_mach() >> %scripting_lua%
 echo --END Machiavelli's Mods >> %scripting_lua%
 echo.>> %scripting_lua%
+
+echo Finished adding MACH mod prefix to scripting.lua >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+
 type "!empire_dir!\data\campaigns\%campaign_dir%\scripting.lua.bak" >> %scripting_lua%
+
+echo Finished adding original contents to scripting.lua >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+
+if "!exe_name!"=="VDM_Start.bat" (
+    if "%campaign_dir%"=="main" (
+        call :vadants_disease_mod_scripting_edits
+    )
+)
 
 echo.>> %scripting_lua%
 echo --START Machiavelli's Mods >> %scripting_lua%
@@ -142,8 +160,97 @@ echo val,err = pcall(error_catch_function) >> %scripting_lua%
 echo mach_lib.update_mach_lua_log(err.."\n") >> %scripting_lua%
 echo --END Machiavelli's Mods >> %scripting_lua%
 
+echo Finished adding MACH mod suffix to scripting.lua >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+
+
 echo Finished preparing campaign directory "%campaign_dir%" for MACH Mods >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
 
+ENDLOCAL
+exit /b
+
+
+:vadants_disease_mod_scripting_edits
+SETLOCAL
+echo Making additional compatibility edits for "VadAnts Disease Mod" >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+set scripting_lua_vadants="!empire_dir!data\campaigns\%campaign_dir%\scripting.lua.new"
+set scripting_lua_vadants2="!empire_dir!data\campaigns\%campaign_dir%\scripting.lua.new2"
+set found_first_line=false
+del /f %scripting_lua_vadants%
+del /f %scripting_lua_vadants2%
+
+setlocal enabledelayedexpansion
+
+echo Editing scripting.lua >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+for /f "tokens=1* delims=:" %%f in ('findstr /n "^" %scripting_lua%') do (
+    set prefix=%%f
+    set scripting_line=%%g
+    if "!scripting_line!"=="events.PanelOpenedCampaign[#events.PanelOpenedCampaign+1] = function (context)" (
+        if !found_first_line!==false (
+            echo found line: "events.PanelOpenedCampaign[#events.PanelOpenedCampaign+1] = function (context)" in scripting.lua >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+            echo !scripting_line!>> %scripting_lua_vadants%
+            echo --START Machiavelli's Mods >> %scripting_lua_vadants%
+            echo   if path then>> %scripting_lua_vadants%
+            echo --END Machiavelli's Mods >> %scripting_lua_vadants%
+            set found_first_line=true
+        )
+    ) else if "!scripting_line!"=="   	justSaved = false" (
+        if !found_first_line!==true (
+          echo found line: "   	justSaved = false" in scripting.lua >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+          echo   !scripting_line!>> %scripting_lua_vadants%
+          echo --START Machiavelli's Mods >> %scripting_lua_vadants%
+          echo   end>> %scripting_lua_vadants%
+          echo --END Machiavelli's Mods >> %scripting_lua_vadants%
+          set found_first_line=false
+        )
+    ) else if "!scripting_line!"==" " (
+         echo.>> %scripting_lua_vadants%
+    ) else if "!scripting_line!"=="<TAB>" (
+          echo.>> %scripting_lua_vadants%
+    ) else if "!scripting_line!"=="    " (
+         echo.>> %scripting_lua_vadants%
+    ) else if "!scripting_line!"=="" (
+         echo.>> %scripting_lua_vadants%
+    ) else if !scripting_line!=="" (
+         echo.>> %scripting_lua_vadants%
+    ) else if not defined scripting_line (
+        echo.>> %scripting_lua_vadants%
+    ) else if "!scripting_line!"=="ECHO is off." (
+        echo.>> %scripting_lua_vadants%
+    ) else if !found_first_line!==true (
+        echo   !scripting_line!>> %scripting_lua_vadants%
+    ) else (
+        echo !scripting_line!>> %scripting_lua_vadants%
+    )
+)
+echo Removing "ECHO is off." statements from scripting.lua >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+
+for /f "tokens=1* delims=:" %%f in ('findstr /n "^" %scripting_lua_vadants%') do (
+    set prefix=%%f
+    set scripting_line2=%%g
+    if "!scripting_line!"==" " (
+         echo.>> %scripting_lua_vadants2%
+    ) else if "!scripting_line2!"=="<TAB>" (
+          echo.>> %scripting_lua_vadants2%
+    ) else if "!scripting_line2!"=="    " (
+         echo.>> %scripting_lua_vadants2%
+    ) else if "!scripting_line2!"=="" (
+         echo.>> %scripting_lua_vadants2%
+    ) else if !scripting_line2!=="" (
+         echo.>> %scripting_lua_vadants2%
+    ) else if not defined scripting_line2 (
+        echo.>> %scripting_lua_vadants2%
+    ) else if "!scripting_line2!"=="ECHO is off." (
+        echo.>> %scripting_lua_vadants2%
+    ) else (
+        echo !scripting_line2!>> %scripting_lua_vadants2%
+    )
+)
+echo Finished removing "ECHO is off." statements from scripting.lua >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+
+del /f %scripting_lua%
+del /f %scripting_lua_vadants%
+rename %scripting_lua_vadants2% scripting.lua
+echo Finished making additional compatibility edits for "VadAnts Disease Mod" >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
 ENDLOCAL
 exit /b
 
@@ -165,8 +272,8 @@ if "%campaign_dir%"=="episodic_3" (
     exit /b
 )
 if "%campaign_dir%"=="episodic_5" (
-  echo This is not a compatible campaign directory "%campaign_dir%" for MACH Mods >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
-  exit /b
+    echo This is not a compatible campaign directory "%campaign_dir%" for MACH Mods >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+    exit /b
 )
 
 
