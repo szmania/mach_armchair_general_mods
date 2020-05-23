@@ -11,7 +11,7 @@ echo Deleting log file "!log_file_path!" >"!empire_dir!_" && type "!empire_dir!_
 
 SET exe_name=
 if exist "VDM_Start.bat" (
-    echo "VadAnts Disease Mod" Launcher "VDM_Start.bat" is detected >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+    echo "VadAntS Disease Mod" Launcher "VDM_Start.bat" is detected >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
     SET exe_name=VDM_Start.bat
 )
 
@@ -50,7 +50,7 @@ if exist Imperial.Splendour.exe (
     SET exe_name="data\\DME\\DME Platinum.exe"
     SET process_name="DME Platinum.exe"
 ) else if exist "VDM_Start.bat" (
-    echo Starting VadAnts Disease Mod Launcher "VDM_Start.bat" >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+    echo Starting VadAntS Disease Mod Launcher "VDM_Start.bat" >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
     start VDM_Start.bat > output.log
     SET exe_name=VDM_Start.bat
     SET process_name=Empire.exe
@@ -171,7 +171,7 @@ exit /b
 
 :vadants_disease_mod_scripting_edits
 SETLOCAL
-echo Making additional compatibility edits for "VadAnts Disease Mod" >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+echo Making additional compatibility edits for "VadAntS Disease Mod" >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
 set scripting_lua_vadants="!empire_dir!data\campaigns\%campaign_dir%\scripting.lua.new"
 set scripting_lua_vadants2="!empire_dir!data\campaigns\%campaign_dir%\scripting.lua.new2"
 set found_first_line=false
@@ -250,7 +250,7 @@ echo Finished removing "ECHO is off." statements from scripting.lua >"!empire_di
 del /f %scripting_lua%
 del /f %scripting_lua_vadants%
 rename %scripting_lua_vadants2% scripting.lua
-echo Finished making additional compatibility edits for "VadAnts Disease Mod" >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
+echo Finished making additional compatibility edits for "VadAntS Disease Mod" >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
 ENDLOCAL
 exit /b
 
