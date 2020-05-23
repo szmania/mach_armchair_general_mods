@@ -278,7 +278,8 @@ data/WALI/docs/*
 data/WALI/Engine/Engine_src - backup/*
 data/WALI/Logs/*
 data/WALI/WIP/*
- 
+data/WALI/Logs
+
 #allow
 !data/
 !.gitignore

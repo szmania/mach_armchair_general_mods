@@ -65,7 +65,12 @@ end
 
 -- Initialise MACH 
 function initialize_mach()
---	mach_lib.set_debug(true)
+
+	if mach_config.__MACH_DEBUG_MODE__ then
+		mach_lib.enable_etw_debug_console_setup()
+	end
+
+	--	mach_lib.set_debug(true)
 
 --	mach_lib.create_mach_lua_log()
 	mach_lib.update_mach_lua_log("Initializing Machiavelli's Mods.")
@@ -131,6 +136,7 @@ end
 
 
 scripting.AddEventCallBack("CampaignArmiesMerge", mach_lib.on_campaign_armies_merge)
+scripting.AddEventCallBack("CharacterCompletedBattle", mach_lib.on_character_completed_battle)
 scripting.AddEventCallBack("CharacterCreated", mach_lib.on_character_created)
 scripting.AddEventCallBack("CharacterSelected", mach_lib.on_character_selected)
 scripting.AddEventCallBack("ComponentLClickUp", mach_lib.on_component_left_click_up)

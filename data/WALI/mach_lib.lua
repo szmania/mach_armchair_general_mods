@@ -8,6 +8,8 @@ mach_classes = require "WALI/mach_classes"
 mach_config = require "WALI/mach_config"
 mach_data = require "WALI/mach_data"
 
+--utils = require("utilities")
+
 --require("WALI/external_libs/json")
 
 
@@ -33,7 +35,6 @@ __wali_is_on_campaign_map__ = false
 __wali_is_first_click_on_army__ = false
 __wali_army_is_selected__ = false
 __wali_previously_selected_character_pointer__ = nil
-
 
 
 function concat_tables(t1, t2)
@@ -199,6 +200,144 @@ function dir_exists(dir_path)
 	return ok, err
 end
 
+
+
+
+
+function enable_etw_debug_console()
+
+	update_mach_lua_log('MACH LIB - "enable_etw_debug_console"')
+
+	--EDITS
+
+	update_mach_lua_log('TESFGDSAF')
+
+	update_mach_lua_log('out')
+
+	output_table_to_mach_log(out)
+
+	update_mach_lua_log('defined')
+
+	output_table_to_mach_log(defined)
+
+	update_mach_lua_log('TESFGDSAF 2')
+
+	profiler = require("profiler")
+	profiler.start("data/WALI/Logs/lua_profiler_campaign.profile")
+
+
+	output_table_to_mach_log(profiler)
+
+	out.dylan("test1")
+	out.shane("test1")
+	out.tom("test2")
+	out.ting("test2")
+	out.kostas("test2")
+	out.design("test2")
+
+	g_hud = __wali_m_root__:Find("veneer_DY")
+	CampaignUI.DebugViewLuaComponentPtr(g_hud)
+	UIComponent(g_hud):PropagateVisibility(true)
+	out.shane("g_hud assigned value: " .. tostring(g_hud))
+	update_mach_lua_log("g_hud assigned value: " .. tostring(g_hud))
+
+	g_review_panel = __wali_m_root__:Find("review_DY")
+	UIComponent(g_review_panel):PropagateVisibility(true)
+	out.shane("g_review_panel assigned value: " .. tostring(g_review_panel))
+	update_mach_lua_log("g_review_panel assigned value: " .. tostring(g_review_panel))
+	update_mach_lua_log('TEST2')
+
+	out.shane('TEST shane')
+	update_mach_lua_log('TEST shane')
+
+	out.tom('TEST tom')
+	update_mach_lua_log('TEST tom')
+
+
+	g_construction_buttons = __wali_m_root__:Find("buttons_build")
+	UIComponent(g_construction_buttons):PropagateVisibility(false)
+
+	g_army_buttons = __wali_m_root__:Find("buttons_army")
+	UIComponent(g_army_buttons):PropagateVisibility(false)
+
+	g_navy_buttons = __wali_m_root__:Find("buttons_navy")
+	UIComponent(g_navy_buttons):PropagateVisibility(false)
+
+	g_agents_buttons = __wali_m_root__:Find("buttons_agents")
+	UIComponent(g_agents_buttons):PropagateVisibility(false)
+
+	g_recruitment_buttons = __wali_m_root__:Find("buttons_recruit")
+	UIComponent(g_recruitment_buttons):PropagateVisibility(false)
+
+	g_siege_equipment_buttons = __wali_m_root__:Find("buttons_siege")
+	UIComponent(g_siege_equipment_buttons):PropagateVisibility(false)
+
+	g_unit_cardgroup = UIComponent(__wali_m_root__:Find("UnitCardGroup"))
+	g_unit_cardgroup:DestroyChildren()
+
+	g_agent_cardgroup = UIComponent(__wali_m_root__:Find("AgentCardGroup"))
+	g_agent_cardgroup:DestroyChildren()
+
+	g_construction_cardgroup = UIComponent(__wali_m_root__:Find("ConstructionCardGroup"))
+	g_construction_cardgroup:DestroyChildren()
+
+	g_recruitment_cardgroup = UIComponent(__wali_m_root__:Find("RecruitmentCardGroup"))
+	g_recruitment_cardgroup:DestroyChildren()
+
+	g_siege_equipment_cardgroup = UIComponent(__wali_m_root__:Find("SiegeEquipmentCardGroup"))
+	g_siege_equipment_cardgroup:DestroyChildren()
+
+	local bg = UIComponent(__wali_m_root__:Find("layout"))
+	update_mach_lua_log('ClearHud')
+	bg:LuaCall('ClearHud')
+	update_mach_lua_log('ClearHud 2')
+	bg:LuaCall('ShaneOutput', 'OUTPUT TEST')
+	--		local bg_root = bg:Find("root")
+	--		update_mach_lua_log('bg_root:ClearHud')
+	--		bg_root:LuaCall('ClearHud')
+	out.shane('TEST shane 2')
+	update_mach_lua_log('TEST shane 2')
+
+	out.tom('TEST tom 2')
+	update_mach_lua_log('TEST tom 2')
+
+	out.dylan("test1")
+	update_mach_lua_log('TEST dylan 2')
+
+
+
+	update_mach_lua_log('TEST')
+
+	--EDITS
+	update_mach_lua_log('MACH LIB - Finished "enable_etw_debug_console"')
+end
+
+
+function enable_etw_debug_console_setup()
+	update_mach_lua_log('MACH LIB - "enable_etw_debug_console_setup"')
+	--	profiler = require("profiler")
+	--	profiler.start("data/WALI/Logs/lua_profiler_campaign.profile")
+
+	mach_lib.update_mach_lua_log(defined)
+	mach_lib.update_mach_lua_log(defined.shane)
+	mach_lib.update_mach_lua_log(defined.debug)
+	mach_lib.update_mach_lua_log(defined.tom)
+	mach_lib.update_mach_lua_log(defined.demo)
+	mach_lib.update_mach_lua_log(defined.intel)
+	mach_lib.update_mach_lua_log(defined.kostas)
+	mach_lib.update_mach_lua_log(defined.final_release)
+
+	defined.final_release = false
+	defined.shane = true
+	defined.debug = true
+	defined.tom = true
+	defined.dylan = true
+	--	defined.intel = true
+	defined.demo = true
+	defined.kostas = true
+
+	update_mach_lua_log('MACH LIB - FINISHED "enable_etw_debug_console_setup"')
+end
 
 function export_string(s)
 	return string.format("%q", s)
@@ -2296,10 +2435,60 @@ function on_campaign_armies_merge(context)
     update_mach_lua_log('MACH LIB - Finished CampaignArmiesMerge.')
 end
 
+
+function on_character_completed_battle(context)
+	update_mach_lua_log('MACH LIB - CharacterCompletedBattle.')
+	output_obj_attributes_to_mach_log(context)
+	output_table_to_mach_log(context)
+	char_comp = UIComponent(context.component)
+	update_mach_lua_log(char_comp)
+	update_mach_lua_log(__wali_m_root__)
+
+	char_addr = UIComponent(char_comp):Address()
+	update_mach_lua_log(char_addr)
+	wali_root_addr = __wali_m_root__:Address()
+	update_mach_lua_log(tostring(wali_root_addr))
+
+
+--	output_obj_attributes_to_mach_log(UIComponent(char_comp))
+--	update_mach_lua_log(UIComponent(__wali_m_root__):GlobalExists("ComponentType"))
+
+--	output_table_to_mach_log  (__wali_m_root__)
+
+--	output_table_to_mach_log(UIComponent(char_comp))
+--	output_obj_to_mach_log(UIComponent(char_comp))
+--	output_obj_attributes_to_mach_log(UIComponent(char_comp))
+
+--	update_mach_lua_log(UIComponent(char_comp):Id())
+--	output_obj_attributes_to_mach_log(__wali_m_root__)
+--	update_mach_lua_log(UIComponent(char_comp):Id())
+--	update_mach_lua_log(UIComponent(char_comp):Visible())
+--	update_mach_lua_log(UIComponent(char_comp):Position())
+
+--	char_addr_2 =  UIComponent(char_comp):GlobalExists("Address")
+--	update_mach_lua_log(char_addr_2)
+--
+--	char_type =  UIComponent(char_comp):GlobalExists("ComponentType")
+--	update_mach_lua_log(char_type)
+
+	update_mach_lua_log('test')
+
+	local details =  char_comp:GlobalExists("UnitDetails")
+--	output_table_to_mach_log(details)
+
+	char_details = CampaignUI.InitialiseCharacterDetails(char_addr)
+--	output_table_to_mach_log(char_details)
+	update_mach_lua_log(char_details.Address)
+
+	update_mach_lua_log('MACH LIB - Finished CharacterCompletedBattle.')
+end
+
+
 function on_character_created(context)
     update_mach_lua_log('MACH LIB - CharacterCreated.')
     update_mach_lua_log('MACH LIB - Finished CharacterCreated.')
 end
+
 
 -- This function executes when a character is selected on the campaign map
 -- @param contect: character context
@@ -2449,9 +2638,11 @@ function on_ui_created(context)
 		__wali_is_on_campaign_map__ = true
 		__wali_m_root__ = UIComponent(context.component)
 
+
 		if mach_config.__MACH_DEBUG_MODE__ then
 			update_mach_lua_log('DEBUG MODE is enabled. Setting Fog of War to "False"')
-			set_fog_of_war(false)
+			set_fog_of_war(true)
+			enable_etw_debug_console()
 		end
 		mach_data.__faction_id_list__ = get_faction_id_list()
 		__current_faction_turn_id__ = get_faction_id_from_context(context, "UICreated")
@@ -2497,14 +2688,15 @@ function output_globals_to_mach_log(obj,str)
 end
 
 function output_obj_attributes_to_mach_log(obj)
-	update_mach_lua_log("Outputting object attributes to mach log.")
+	update_mach_lua_log("MACH LIB - Outputting object attributes to mach log.")
 	for key,value in pairs(getmetatable(obj)) do
-		update_mach_lua_log("Found obj member: " .. key);
+		update_mach_lua_log('Found obj attribute: "' .. key..'" and value: "'..tostring(value));
 	end
+	update_mach_lua_log("MACH LIB - FINISHED Outputting object attributes to mach log.")
 end
 
-function output_obj_to_mach_log(obj, tab_num)
-	update_mach_lua_log("Outputting object to mach log.")
+function output_obj_to_mach_log(obj, tab_num, prev_data)
+	update_mach_lua_log("MACH LIB - Outputting object to mach log.")
 	tab_num = tab_num or 1
 	local tab_str = '\t'
 	for idx = 1, tab_num do
@@ -2513,11 +2705,11 @@ function output_obj_to_mach_log(obj, tab_num)
 	if type(obj) == "table" then
 		update_mach_lua_log("Object is table.")
 		for key1, value1 in pairs(obj) do
-			pdate_mach_lua_log('pdate_mach_lua_log')
+			update_mach_lua_log('pdate_mach_lua_log')
 			update_mach_lua_log(tostring(tab_str)..'"'..tostring(key1)..'": "'..tostring(value1)..'"')
 			output_obj_to_mach_log(value1, tab_num + 1)
 			-- if type(value1) == "table" then
-				
+
 --				for key2, value2 in pairs(data) do
 --					update_mach_lua_log('\t"'..tostring(key2)..'": "'..tostring(value2)..'"')
 --					if type(value2) == "table" then
@@ -2528,9 +2720,10 @@ function output_obj_to_mach_log(obj, tab_num)
 --				end
 --			end
 		end
+
+
 	elseif is_array(obj) then
 		update_mach_lua_log("Object is array.")
-
 		for idx = 1, #obj do
 			update_mach_lua_log(tostring(tab_str)..'"'..tostring(idx)..'": "'..tostring(obj[idx])..'"')
 			output_obj_to_mach_log(obj[idx], tab_num + 1)
@@ -2538,7 +2731,31 @@ function output_obj_to_mach_log(obj, tab_num)
 	else
 		update_mach_lua_log("Object is neither table nor array.")
 		update_mach_lua_log(tostring(tab_str)..'"'..tostring(obj)..'"')
-	end
+ 	end
+
+--	local data = prev_data or {}
+--
+--	-- copy all the attributes from t
+--	for k,v in pairs(obj) do
+--		data[k] = data[k] or v
+--	end
+--
+--	-- get t's metatable, or exit if not existing
+--	local mt = getmetatable(obj)
+--	if type(mt)~='table' then
+--		update_mach_lua_log(data)
+--		return
+--	end
+--
+--	-- get the __index from mt, or exit if not table
+--	local index = mt.__index
+--	if type(index)~='table' then
+--		update_mach_lua_log(data)
+--		return
+--	end
+--	update_mach_lua_log('test')
+	-- include the data from index into data, recursively, and return
+	update_mach_lua_log("MACH LIB - FINISHED Outputting object to mach log.")
 end
 
 
