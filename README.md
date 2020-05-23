@@ -35,6 +35,45 @@ ie:
 3. Run with empire_start_wali_mach.bat file. This will start WALI and Empire Total War, or a compatible mod launcher. Currently supported mod launchers are ACW Brother vs. Brother, Imperial Splendour and Darth Mod Empire Platinum. The .bat file will monitor if Empire.exe/Mod Launcher is running and kill WALI when Empire.exe/Mod Launcher closes.
 
 
+#### Additional Installation Notes
+##### VadAntS Disease Mod (VDM) compatibility
+Edit your `user.empire_script.txt` file, as you would normally. Just be sure to include your MACH mod packages with the VDM packages like so:
+```
+mod VDM.pack;
+mod VDM_DP.pack;
+mod VDM_src.pack;
+mod ui_vdm.pack;
+mod Replenishment.pack;
+mod mach_battle_chronicler.pack;
+```
+
+The `empire_start_wali_mach.bat` script automatically edits `data/campaigns/main/scripting.lua` file, but if that fails please edit that file manually.
+From (line 1124):
+```
+events.PanelOpenedCampaign[#events.PanelOpenedCampaign+1] = function (context)
+	oldSavegameList = CampaignUI.EnumerateCampaignSaves(path,"*")
+	if justSaved then
+		conductSave()
+	end
+	justSaved = false
+end
+
+```
+To:
+```
+events.PanelOpenedCampaign[#events.PanelOpenedCampaign+1] = function (context)
+	if path then
+		oldSavegameList = CampaignUI.EnumerateCampaignSaves(path,"*")
+		if justSaved then
+			conductSave()
+		end
+		justSaved = false
+	end
+end 
+```
+
+
+
 ## Is it Compatible with my mods?
 Machiavelli's Armchair General Mods should be compatible with ALL mods.
 
