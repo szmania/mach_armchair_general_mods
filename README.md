@@ -34,9 +34,10 @@ ie:
 (each mod pack name should be on its own line)
 3. Run with empire_start_wali_mach.bat file. This will start WALI and Empire Total War, or a compatible mod launcher. Currently supported mod launchers are ACW Brother vs. Brother, Imperial Splendour and Darth Mod Empire Platinum. The .bat file will monitor if Empire.exe/Mod Launcher is running and kill WALI when Empire.exe/Mod Launcher closes.
 
+## Is it Compatible with my mods?
+Machiavelli's Armchair General Mods should be compatible with ALL mods.
 
-#### Additional Installation Notes
-##### VadAntS Disease Mod (VDM) compatibility
+#### VadAntS Disease Mod (VDM) compatibility
 Edit your `user.empire_script.txt` file, as you would normally. Just be sure to include your MACH mod packages with the VDM packages like so:
 ```
 mod VDM.pack;
@@ -46,6 +47,7 @@ mod ui_vdm.pack;
 mod Replenishment.pack;
 mod mach_battle_chronicler.pack;
 ```
+Then launch the mod using `empire_start_wali_mach.bat`, as you normally would.
 
 The `empire_start_wali_mach.bat` script automatically edits `data/campaigns/main/scripting.lua` file, but if that fails please edit that file manually.
 From (line 1124):
@@ -73,9 +75,6 @@ end
 ```
 
 
-
-## Is it Compatible with my mods?
-Machiavelli's Armchair General Mods should be compatible with ALL mods.
 
 
 ## Found a Bug???
