@@ -70,6 +70,8 @@ function initialize_mach()
 		mach_lib.enable_etw_debug_console_setup()
 	end
 
+	mach_lib.create_etw_debug_lua_log()
+
 	--	mach_lib.set_debug(true)
 
 --	mach_lib.create_mach_lua_log()
