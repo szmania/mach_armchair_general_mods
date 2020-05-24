@@ -20,12 +20,15 @@ mach_data = require "WALI/mach_data"
 scripting = require "EpisodicScripting"
 
 
+__campaign_lua_profiler_path__ = "data/WALI/Logs/lua_profiler_campaign.profile"
 __character_names_file_path__ =	"data/WALI/mach_data/character_names.txt"
 __current_year__ = nil
 __current_turn__ = nil
 __current_season_string__ = nil
 __current_faction_turn_id__ = nil
+__etw_debug_log_file__ = "data/WALI/Logs/etw_debug_lua.log"
 __loading_game__ = false
+__mach_campaign_lua_profiler__ = nil
 __mach_log_func_name__ = ""
 __mach_log_file__ = "data/WALI/Logs/mach_lua.log"
 __mach_save_game_id__ = nil
@@ -175,15 +178,30 @@ function copy_table(tbl)
 end
 
 
+--Creates a new ETW debug log in the logging directory
+-- Creates ETW debug log
+function create_etw_debug_lua_log()
+	local etw_debug_log = io.open(__mach_log_file__, "w")
+	local date_and_time = os.date("%H:%M.%S")
+	etw_debug_log:write("Log Created: "..date_and_time)
+	etw_debug_log:close()
+	out.design = update_etw_debug_lua_log
+	out.dylan = update_etw_debug_lua_log
+	out.kostas = update_etw_debug_lua_log
+	out.shane = update_etw_debug_lua_log
+	out.tom = update_etw_debug_lua_log
+	out.ting =update_etw_debug_lua_log
+end
+
+
 --Creates a new MACH log in the logging directory
 -- Creates MACH log
 function create_mach_lua_log()
-	local error_log = io.open(__mach_log_file__, "w")
+	local mach_log = io.open(__mach_log_file__, "w")
 	local date_and_time = os.date("%H:%M.%S")
-    error_log:write("Log Created: "..date_and_time)
-    error_log:close()
+    mach_log:write("Log Created: "..date_and_time)
+	mach_log:close()
 end
-
 
 --- Check if a file or directory exists in this path
 function dir_exists(dir_path)
@@ -201,9 +219,6 @@ function dir_exists(dir_path)
 	update_mach_lua_log(string.format('Directory does exist: "%s"', dir_path))
 	return ok, err
 end
-
-
-
 
 
 function enable_etw_debug_console()
@@ -229,18 +244,17 @@ function enable_etw_debug_console()
 
 	update_mach_lua_log('TESFGDSAF 2')
 
-	profiler = require("profiler")
---	profiler.start("data/WALI/Logs/lua_profiler_campaign.profile")
+	start_campaign_lua_profiler()
 
 
 	output_table_to_mach_log(profiler)
 
-	out.dylan("test1")
-	out.shane("test1")
-	out.tom("test2")
-	out.ting("test2")
-	out.kostas("test2")
-	out.design("test2")
+--	out.dylan("test1")
+--	out.shane("test1")
+--	out.tom("test2")
+--	out.ting("test2")
+--	out.kostas("test2")
+--	out.design("test2")
 
 	g_hud = __wali_m_root__:Find("veneer_DY")
 	CampaignUI.DebugViewLuaComponentPtr(g_hud)
@@ -251,15 +265,15 @@ function enable_etw_debug_console()
 
 	g_review_panel = __wali_m_root__:Find("review_DY")
 	UIComponent(g_review_panel):PropagateVisibility(true)
-	out.shane("g_review_panel assigned value: " .. tostring(g_review_panel))
-	update_mach_lua_log("g_review_panel assigned value: " .. tostring(g_review_panel))
-	update_mach_lua_log('TEST2')
+--	out.shane("g_review_panel assigned value: " .. tostring(g_review_panel))
+--	update_mach_lua_log("g_review_panel assigned value: " .. tostring(g_review_panel))
+--	update_mach_lua_log('TEST2')
 
-	out.shane('TEST shane')
-	update_mach_lua_log('TEST shane')
-
-	out.tom('TEST tom')
-	update_mach_lua_log('TEST tom')
+--	out.shane('TEST shane')
+--	update_mach_lua_log('TEST shane')
+--
+--	out.tom('TEST tom')
+--	update_mach_lua_log('TEST tom')
 
 
 	g_construction_buttons = __wali_m_root__:Find("buttons_build")
@@ -303,14 +317,14 @@ function enable_etw_debug_console()
 	--		local bg_root = bg:Find("root")
 	--		update_mach_lua_log('bg_root:ClearHud')
 	--		bg_root:LuaCall('ClearHud')
-	out.shane('TEST shane 2')
-	update_mach_lua_log('TEST shane 2')
-
-	out.tom('TEST tom 2')
-	update_mach_lua_log('TEST tom 2')
-
-	out.dylan("test1")
-	update_mach_lua_log('TEST dylan 2')
+--	out.shane('TEST shane 2')
+--	update_mach_lua_log('TEST shane 2')
+--
+--	out.tom('TEST tom 2')
+--	update_mach_lua_log('TEST tom 2')
+--
+--	out.dylan("TEST dylan 2")
+--	update_mach_lua_log('TEST dylan 2')
 
 
 
@@ -326,14 +340,25 @@ function enable_etw_debug_console_setup()
 	--	profiler = require("profiler")
 	--	profiler.start("data/WALI/Logs/lua_profiler_campaign.profile")
 
-	mach_lib.update_mach_lua_log(defined)
-	mach_lib.update_mach_lua_log(defined.shane)
-	mach_lib.update_mach_lua_log(defined.debug)
-	mach_lib.update_mach_lua_log(defined.tom)
-	mach_lib.update_mach_lua_log(defined.demo)
-	mach_lib.update_mach_lua_log(defined.intel)
-	mach_lib.update_mach_lua_log(defined.kostas)
-	mach_lib.update_mach_lua_log(defined.final_release)
+	update_mach_lua_log(defined)
+	update_mach_lua_log(defined.shane)
+	update_mach_lua_log(defined.debug)
+	update_mach_lua_log(defined.tom)
+	update_mach_lua_log(defined.demo)
+	update_mach_lua_log(defined.intel)
+	update_mach_lua_log(defined.kostas)
+	update_mach_lua_log(defined.final_release)
+
+	create_etw_debug_lua_log()
+
+
+	out.dylan = update_etw_debug_lua_log
+	out.shane = update_etw_debug_lua_log
+	out.tom = update_etw_debug_lua_log
+	out.ting =update_etw_debug_lua_log
+	out.kostas = update_etw_debug_lua_log
+	out.design = update_etw_debug_lua_log
+
 
 	defined.final_release = false
 	defined.shane = true
@@ -3272,9 +3297,36 @@ function split_str(str, sep)
 end
 
 
+function start_campaign_lua_profiler()
+	__mach_campaign_lua_profiler__ = require("profiler")
+	__mach_campaign_lua_profiler__.start(__campaign_lua_profiler_path__)
+end
+
+
 function string_starts_with(string_to_check, starts_with)
 	update_mach_lua_log('Checking if string "%s" starts with "%s"', string_to_check, starts_with)
 	return string.sub(string_to_check,1,string.len(starts_with))==starts_with
+end
+
+
+-- Writes to the ETW debug log file
+-- @param update_arg: what to write to mach log file as string
+function update_etw_debug_lua_log(update_arg)
+	--	if not mach_config.__MACH_DEBUG_MODE__ then
+	--		return
+	--	end
+	local date_and_time = os.date("%Y-%m-%d %H:%M.%S")
+	local file_name_str = debug.getinfo(2, "S").source:sub(2)
+	local file_name = file_name_str:match("^.*/(.*).lua$") or file_name_str
+	local func_name = debug.getinfo(2).name
+	local etw_debug_handler = io.open(__etw_debug_log_file__,"a")
+
+	if type(update_arg) ~= "nil" then
+		etw_debug_handler:write("\n[".. date_and_time .."]\t\t"..tostring(file_name).."."..tostring(func_name)..": "..tostring(update_arg))
+	elseif type(update_arg) == "nil" then
+		etw_debug_handler:write("\n[".. date_and_time .."]\t\tLogging error: input type nil")
+	end
+	etw_debug_handler:close()
 end
 
 
