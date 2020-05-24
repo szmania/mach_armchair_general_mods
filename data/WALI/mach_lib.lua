@@ -189,8 +189,8 @@ function create_etw_debug_lua_log()
 	out.dylan = update_etw_debug_lua_log
 	out.kostas = update_etw_debug_lua_log
 	out.shane = update_etw_debug_lua_log
-	out.tom = update_etw_debug_lua_log
 	out.ting =update_etw_debug_lua_log
+	out.tom = update_etw_debug_lua_log
 end
 
 
