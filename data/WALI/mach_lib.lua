@@ -8,6 +8,8 @@ mach_classes = require "WALI/mach_classes"
 mach_config = require "WALI/mach_config"
 mach_data = require "WALI/mach_data"
 
+--utils = require "Utilities"
+
 --utils = require("utilities")
 
 --require("WALI/external_libs/json")
@@ -210,6 +212,11 @@ function enable_etw_debug_console()
 
 	--EDITS
 
+	output_locals_to_mach_log(1)
+	output_upvalues_to_mach_log(1)
+	CliExecute("echo HELLO WORLD!")
+--	CliExecute("hello_kitty_kitty")
+
 	update_mach_lua_log('TESFGDSAF')
 
 	update_mach_lua_log('out')
@@ -223,7 +230,7 @@ function enable_etw_debug_console()
 	update_mach_lua_log('TESFGDSAF 2')
 
 	profiler = require("profiler")
-	profiler.start("data/WALI/Logs/lua_profiler_campaign.profile")
+--	profiler.start("data/WALI/Logs/lua_profiler_campaign.profile")
 
 
 	output_table_to_mach_log(profiler)
@@ -237,6 +244,7 @@ function enable_etw_debug_console()
 
 	g_hud = __wali_m_root__:Find("veneer_DY")
 	CampaignUI.DebugViewLuaComponentPtr(g_hud)
+	CampaignUI.DebugMessage('test')
 	UIComponent(g_hud):PropagateVisibility(true)
 	out.shane("g_hud assigned value: " .. tostring(g_hud))
 	update_mach_lua_log("g_hud assigned value: " .. tostring(g_hud))
@@ -335,6 +343,15 @@ function enable_etw_debug_console_setup()
 	--	defined.intel = true
 	defined.demo = true
 	defined.kostas = true
+
+--	output_table_to_mach_log(debug)
+--	update_mach_lua_log(debug.traceback())
+
+--	output_globals_to_mach_log(1)
+--	output_locals_to_mach_log(1)
+--	output_upvalues_to_mach_log(1)
+	CliExecute("echo HELLO WORLD!")
+
 
 	update_mach_lua_log('MACH LIB - FINISHED "enable_etw_debug_console_setup"')
 end
@@ -2667,35 +2684,60 @@ function on_ui_created(context)
 end
 
 
-function output_globals_to_mach_log(obj,str)
-	update_mach_lua_log("Outputting global variables to mach log.")
+function output_globals_to_mach_log(level)
+	update_mach_lua_log("MACH LIB - Outputting global variables to mach log.")
 
-	seen[t]=true
-	local s={}
-	local n=0
-	for k in pairs(obj) do
-		n=n+1 s[n]=k
-	end
-	table.sort(s)
-	for k,v in ipairs(s) do
-		update_mach_lua_log(tostring(str).."- "..tostring(v))
-		v=t[v]
-		if type(v)=="table" and not seen[v] then
-			output_globals_to_mach_log(v,str.."\t")
-		end
-	end
-	update_mach_lua_log("Finished outputting global variables to mach log.")
+--	seen[t]=true
+--	local s={}
+--	local n=0
+--	for k in pairs(obj) do
+--		n=n+1 s[n]=k
+--	end
+--	table.sort(s)
+--	for k,v in ipairs(s) do
+--		update_mach_lua_log(tostring(str).."- "..tostring(v))
+--		v=t[v]
+--		if type(v)=="table" and not seen[v] then
+--			output_globals_to_mach_log(v,str.."\t")
+--		end
+--	end
+	output_table_to_mach_log(_G, level)
+	update_mach_lua_log("MACH LIB - Finished outputting global variables to mach log.")
 end
+
+
+function output_locals_to_mach_log(level)
+	update_mach_lua_log('MACH LIB - Outputting locals to MACH log')
+	local variables = {}
+	local idx = 1
+	while true do
+		local ln, lv = debug.getlocal(2, idx)
+		if ln ~= nil then
+			variables[ln] = lv
+		else
+			break
+		end
+		idx = 1 + idx
+	end
+	output_obj_to_mach_log(variables)
+	update_mach_lua_log('MACH LIB - FINISHED Outputting locals to MACH log')
+end
+
 
 function output_obj_attributes_to_mach_log(obj)
 	update_mach_lua_log("MACH LIB - Outputting object attributes to mach log.")
-	for key,value in pairs(getmetatable(obj)) do
+	if getmetatable(obj) ~= nil then
+		for key,value in pairs(getmetatable(obj)) do
 		update_mach_lua_log('Found obj attribute: "' .. key..'" and value: "'..tostring(value));
+		end
+	else
+		update_mach_lua_log('getmetatable() response is nil, cannot get attributes.')
 	end
 	update_mach_lua_log("MACH LIB - FINISHED Outputting object attributes to mach log.")
 end
 
-function output_obj_to_mach_log(obj, tab_num, prev_data)
+
+function output_obj_to_mach_log(obj, tab_num)
 	update_mach_lua_log("MACH LIB - Outputting object to mach log.")
 	tab_num = tab_num or 1
 	local tab_str = '\t'
@@ -2763,7 +2805,7 @@ function output_table_to_mach_log(tbl, level)
 	level = level or 10
     update_mach_lua_log("")
     update_mach_lua_log("")
-    update_mach_lua_log("Outputting table to mach log.")
+    update_mach_lua_log("MACH LIB - Outputting table to MACH log.")
 	if type(tbl) == "table" and level >= 1 then
 		update_mach_lua_log(tostring(tbl))
 		for key1, value1 in pairs(tbl) do
@@ -2797,10 +2839,29 @@ function output_table_to_mach_log(tbl, level)
 	else
 		update_mach_lua_log(tostring(tbl))
 	end
+	update_mach_lua_log("MACH LIB - FINISHED Outputting table to MACH log.")
     update_mach_lua_log("")
     update_mach_lua_log("")
 end
 
+
+function output_upvalues_to_mach_log(level)
+	update_mach_lua_log('MACH LIB - Outputting upvalues to MACH log')
+	local variables = {}
+	local idx = 1
+	local func = debug.getinfo(2, "f").func
+	while true do
+		local ln, lv = debug.getupvalue(func, idx)
+		if ln ~= nil then
+			variables[ln] = lv
+		else
+			break
+		end
+		idx = 1 + idx
+	end
+	output_obj_to_mach_log(variables)
+	update_mach_lua_log('MACH LIB - FINISHED Outputting upvalues to MACH log')
+end
 
 function read_lines_from_file(file_path)
 	update_mach_lua_log(string.format('Reading lines from file: "%s"', file_path))

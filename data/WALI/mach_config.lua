@@ -5,7 +5,7 @@ module(..., package.seeall)
 --isDebugMode = true
 
 --NEED TO SET TO FALSE BEFORE RELEASE
-__MACH_DEBUG_MODE__ = true
+__MACH_DEBUG_MODE__ = false
 
 --MACH----------------
 

@@ -158,6 +158,7 @@ echo --START Machiavelli's Mods >> %scripting_lua%
 echo end >> %scripting_lua%
 echo val,err = pcall(error_catch_function) >> %scripting_lua%
 echo mach_lib.update_mach_lua_log(err.."\n") >> %scripting_lua%
+echo mach_lib.update_mach_lua_log(debug.traceback()) >> %scripting_lua%
 echo --END Machiavelli's Mods >> %scripting_lua%
 
 echo Finished adding MACH mod suffix to scripting.lua >"!empire_dir!_" && type "!empire_dir!_" && type "!empire_dir!_" >> !log_file_path!
