@@ -175,10 +175,28 @@ end
 --Creates a new MACH log in the logging directory
 -- Creates MACH log
 function create_mach_lua_log()
-	local error_log = io.open(__mach_log_file__,"w")
+	local error_log = io.open(__mach_log_file__, "w")
 	local date_and_time = os.date("%H:%M.%S")
     error_log:write("Log Created: "..date_and_time)
     error_log:close()
+end
+
+
+--- Check if a file or directory exists in this path
+function dir_exists(dir_path)
+	update_mach_lua_log(string.format('Checking if directory exists: "%s"', dir_path))
+	local ok, err, code = os.rename(dir_path, dir_path)
+	if not ok then
+		if code == 13 then
+			-- Permission denied, but it exists
+			update_mach_lua_log(string.format('Directory does exist: "%s"', dir_path))
+			return true
+		end
+		update_mach_lua_log(string.format('Directory does NOT exist: "%s"', dir_path))
+		return ok, err
+	end
+	update_mach_lua_log(string.format('Directory does exist: "%s"', dir_path))
+	return ok, err
 end
 
 
@@ -225,7 +243,7 @@ function get_all_factions_army_forces()
         local faction_army_forces = get_faction_army_forces(faction_id)
         total_army_forces = total_army_forces + get_num_of_elements_in_table(faction_army_forces)
         all_factions_army_forces[faction_id] = faction_army_forces
-    end
+	end
     update_mach_lua_log('Finished getting all factions army forces. Total army forces: '..tostring(total_army_forces))
     return all_factions_army_forces
 end
@@ -237,6 +255,7 @@ function get_all_factions_military_forces()
 	local total_military_forces = 0
 	local faction_id_list = mach_data.__faction_id_list__
 	for _, faction_id in pairs(faction_id_list) do
+        all_factions_military_forces[faction_id] = nil
 		local faction_military_forces = get_faction_military_forces(faction_id)
 		total_military_forces = total_military_forces + get_num_of_elements_in_table(faction_military_forces)
 		all_factions_military_forces[faction_id] = faction_military_forces
@@ -327,7 +346,7 @@ function get_army_garrisoned_in_slot_address(slot_address)
     local army_garrisoned_in_slot
 	local slot_faction_id
 	local slot_region_id = CampaignUI.RegionKeyFromSlot(slot_address)
-	local all_factions_regions = mach_lib.get_all_factions_regions()
+	local all_factions_regions = get_all_factions_regions()
 	for faction_id, faction_regions in pairs(all_factions_regions) do
 		for region_idx, region in pairs(faction_regions) do
 			if slot_region_id == region.region_id then
@@ -466,7 +485,7 @@ function get_battles_with_character_name(character_name, character_faction_id)
 				pre_battle_faction_units_or_ships = battle.pre_battle_units_list[character_faction_id]
 			else
 				for pre_battle_units_faction_id, pre_battle_faction_units_list in pairs(battle.pre_battle_units_list) do
-					pre_battle_faction_units_or_ships = mach_lib.concat_tables(pre_battle_faction_units_or_ships, pre_battle_faction_units_list)
+					pre_battle_faction_units_or_ships = concat_tables(pre_battle_faction_units_or_ships, pre_battle_faction_units_list)
 				end
 			end
 		else
@@ -474,7 +493,7 @@ function get_battles_with_character_name(character_name, character_faction_id)
 				pre_battle_faction_units_or_ships = battle.pre_battle_ships_list[character_faction_id]
 			else
 				for pre_battle_ships_faction_id, pre_battle_faction_ships_list in pairs(battle.pre_battle_ships_list) do
-					pre_battle_faction_units_or_ships = mach_lib.concat_tables(pre_battle_faction_units_or_ships, pre_battle_faction_ships_list)
+					pre_battle_faction_units_or_ships = concat_tables(pre_battle_faction_units_or_ships, pre_battle_faction_ships_list)
 				end
 			end
 		end
@@ -505,17 +524,17 @@ function get_battles_with_unit_unique_id(unit_unique_id, unit_faction_id)
 			local pre_battle_faction_units_and_ships = {}
 			if unit_faction_id then
 				if battle.pre_battle_units_list[unit_faction_id] then
-					pre_battle_faction_units_and_ships = mach_lib.concat_tables(pre_battle_faction_units_and_ships, battle.pre_battle_units_list[unit_faction_id])
+					pre_battle_faction_units_and_ships = concat_tables(pre_battle_faction_units_and_ships, battle.pre_battle_units_list[unit_faction_id])
 				end
 				if battle.pre_battle_ships_list[unit_faction_id] then
-					pre_battle_faction_units_and_ships =  mach_lib.concat_tables(pre_battle_faction_units_and_ships, battle.pre_battle_ships_list[unit_faction_id])
+					pre_battle_faction_units_and_ships =  concat_tables(pre_battle_faction_units_and_ships, battle.pre_battle_ships_list[unit_faction_id])
 				end
 			else
 				for faction_id, faction_pre_battle_units_list in pairs(battle.pre_battle_units_list) do
-					pre_battle_faction_units_and_ships =  mach_lib.concat_tables(pre_battle_faction_units_and_ships, faction_pre_battle_units_list)
+					pre_battle_faction_units_and_ships =  concat_tables(pre_battle_faction_units_and_ships, faction_pre_battle_units_list)
 				end
 				for faction_id, faction_pre_battle_ships_list in pairs(battle.pre_battle_ships_list) do
-					pre_battle_faction_units_and_ships =  mach_lib.concat_tables(pre_battle_faction_units_and_ships, faction_pre_battle_ships_list)
+					pre_battle_faction_units_and_ships =  concat_tables(pre_battle_faction_units_and_ships, faction_pre_battle_ships_list)
 				end
 			end
 
@@ -628,8 +647,8 @@ function get_character_details_from_entity_type_selected(entity_type_selected)
 		local unit_details = CampaignUI.InitialiseUnitDetails(entity_type_selected.Entity)
 		character_details =  CampaignUI.InitialiseCharacterDetails(unit_details.CharacterPtr)
 	end
-	if not character_details then
-		update_mach_lua_log(string.format('Error, unable to get character details of character!'))
+	if character_details == nil then
+		update_mach_lua_log(string.format('ERROR: unable to get character details of character!'))
 	end
 	update_mach_lua_log("Finished getting character details from address.")
 	return character_details
@@ -674,7 +693,7 @@ function get_character_details_from_character_context(context, context_type)
 			end
 		end
 		if character_details == nil then
-			update_mach_lua_log(string.format('Error, unable to get character details of character "%s"!', character_full_name))
+			update_mach_lua_log(string.format('ERROR: unable to get character details of character "%s"!', character_full_name))
 		end
 	end
 	update_mach_lua_log(string.format('Finished getting character details from context "%s".', context_type))
@@ -689,7 +708,7 @@ function get_character_full_name_from_character_context(character_context)
 	local character_full_name
 
 --    update_mach_lua_log(get_num_of_elements_in_table(mach_data.__character_names_list__))
-	update_mach_lua_log(assert(get_num_of_elements_in_table(mach_data.__character_names_list__) ~= 0, 'Error, __character_names_list__ is empty!'))
+	update_mach_lua_log(assert(get_num_of_elements_in_table(mach_data.__character_names_list__) ~= 0, 'ERROR: __character_names_list__ is empty!'))
 	for character_name_loc_id, character_name in pairs(mach_data.__character_names_list__) do
 		--		update_mach_lua_log(character_name_loc_id)
 		if character_forename == nil and conditions.CharacterForename(character_name_loc_id, character_context) then
@@ -979,20 +998,23 @@ function get_faction_id_list()
     update_mach_lua_log('Getting faction id list.')
 	local faction_id_list = copy_table(mach_data.faction_id_list)
     local faction_id_list_for_diplomacy = CampaignUI.RetrieveFactionListForDiplomacy()
+	local total_faction_count = 0
 	for faction_id_list_for_diplomacy_key, faction_id_list_for_diplomacy_value in pairs(faction_id_list_for_diplomacy) do
 		local found_diplomacy_faction = false
 		for faction_id_list_idx = 1, #faction_id_list do
 			local faction_id = faction_id_list[faction_id_list_idx]
 			if faction_id_list_for_diplomacy_key == faction_id then
+				total_faction_count = total_faction_count + 1
 				found_diplomacy_faction = true
 				break
 			end
 		end
 		if not found_diplomacy_faction then
+			total_faction_count = total_faction_count + 1
 			faction_id_list[#faction_id_list+1] = faction_id_list_for_diplomacy_key
 		end
 	end
-    update_mach_lua_log('Finished getting faction id list.')
+    update_mach_lua_log(string.format('Finished getting faction id list. Total factions in list: "%s"', total_faction_count))
     return faction_id_list
 end
 
@@ -1357,15 +1379,6 @@ function get_military_force_from_unit_id(faction_military_forces, unit_id)
 	update_mach_lua_log(string.format('Error, unable to get military force from unit id: "%s"', unit_id))
 	return military_force
 end
-
---function get_mach_saved_games_list()
---	update_mach_lua_log(string.format('Getting Machiavelli Mod saved games list.'))
---	local extension, path = CampaignUI.FileExtenstionAndPathForWriteClass("save_game")
---	local mach_saved_games_list_path = path..'mach_mod\\saved_games_list.txt'
---	local mach_saved_games_list = load_table_from_file(mach_saved_games_list_path)
---	update_mach_lua_log(string.format('Finished getting Machiavelli Mod saved games list.'))
---	return mach_saved_games_list
---end
 
 
 function get_nationality_from_faction_id(faction_id, location)
@@ -1825,7 +1838,7 @@ end
 --determine if army is located on a friendly fleet
 function is_army_obj_on_fleet(army_obj)
 	update_mach_lua_log("Determining if army obj is on a fleet.")
-	local faction_id = mach_lib.get_faction_id_from_character_address(army_obj.Address)
+	local faction_id = get_faction_id_from_character_address(army_obj.Address)
 	if faction_id == nil then
 		update_mach_lua_log("Error, could not get faction id to determine if army is on fleet.")
 		return false
@@ -2353,7 +2366,7 @@ function on_faction_turn_start(context)
 	__current_turn__ = CampaignUI.CurrentTurn()
 	__current_faction_turn_id__ = get_faction_id_from_context(context, "FactionTurnStart")
     mach_data.__all_factions_military_forces_list__[__current_faction_turn_id__] = get_faction_military_forces(__current_faction_turn_id__)
-    update_mach_lua_log("MACH LIB - Finished FactionTurnStart.")
+	update_mach_lua_log("MACH LIB - Finished FactionTurnStart.")
 end
 
 
@@ -2361,7 +2374,7 @@ function on_loading_game(context)
 	update_mach_lua_log("MACH LIB - LoadingGame.")
 	local mach_loaded_game_id = scripting.game_interface:load_value(-1, context)
 	if mach_loaded_game_id ~= -1 then
-		update_mach_lua_log(string.format('MACH save game ID loading: %s', mach_loaded_game_id))
+		update_mach_lua_log(string.format('MACH save game ID loading: "%s"', mach_loaded_game_id))
 		if not load_mach_save_game(mach_loaded_game_id) then
 			update_mach_lua_log("Error, could not load Machiavelli Mod saved game!")
 		end
@@ -2437,12 +2450,13 @@ function on_ui_created(context)
 		__wali_m_root__ = UIComponent(context.component)
 
 		if mach_config.__MACH_DEBUG_MODE__ then
-			update_mach_lua_log('DEBUG MODE is enabled. Setting Fog of War to "Fase"')
+			update_mach_lua_log('DEBUG MODE is enabled. Setting Fog of War to "False"')
 			set_fog_of_war(false)
 		end
 		mach_data.__faction_id_list__ = get_faction_id_list()
 		__current_faction_turn_id__ = get_faction_id_from_context(context, "UICreated")
 		mach_data.__character_names_list__ = get_character_names_list()
+
 --		mach_data.__region_id_list__ = get_region_id_list()
 --		mach_data.__settlement_names_list__ = get_settlement_names_list()
 		mach_data.__settlement_to_region_list__ = get_settlement_to_region_list()
@@ -2455,6 +2469,8 @@ function on_ui_created(context)
 			mach_data.__town_id_to_town_name_list__ = get_town_id_to_town_name_list()
 		end
 		mach_data.__all_factions_military_forces_list__ = get_all_factions_military_forces()
+	else
+		__wali_is_on_campaign_map__ = false
 	end
 	update_mach_lua_log("MACH LIB - Finished UICreated.")
 end
@@ -2687,9 +2703,13 @@ function save_mach_save_game()
 	update_mach_lua_log(string.format('Saving Machiavelli Mod game to file path.'))
 	local latest_save_game = get_latest_save_game()
 	local extension, path = CampaignUI.FileExtenstionAndPathForWriteClass("save_game")
-	os.execute('mkdir "'..path..'mach_mod"')
+	local mach_mod_save_dir = path..'mach_mod'
+	if not dir_exists(mach_mod_save_dir) then
+		update_mach_lua_log(string.format('Creating MACH save game directory: "%s"', mach_mod_save_dir))
+		os.execute('mkdir "'..mach_mod_save_dir..'"')
+	end
 	local empire_save_game_file_name_no_ext = latest_save_game.FileName:gsub(".empire_save", "")
-	local mach_save_game_file_path = path..'mach_mod\\'..empire_save_game_file_name_no_ext..'.mach_save'
+	local mach_save_game_file_path = mach_mod_save_dir..'\\'..empire_save_game_file_name_no_ext..'.mach_save'
 	update_mach_lua_log(string.format('Saving MACH save game to: "%s"', mach_save_game_file_path))
 	mach_data.__mach_saved_games_list__[__mach_save_game_id__] = latest_save_game
 	save_mach_saved_games_list()
@@ -3032,4 +3052,5 @@ end
 
 
 
+update_mach_lua_log('Finished initializing mach_lib')
 

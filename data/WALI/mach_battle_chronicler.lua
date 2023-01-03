@@ -7,7 +7,7 @@ mach_classes = require "WALI/mach_classes"
 
 
 function mach_battle_chronicler()
-	mach_lib.update_mach_lua_log("Activating Machiavelli's 'Battle Chronicler'")
+	mach_lib.update_mach_lua_log("Activating Machiavelli's \"Battle Chronicler\"")
 
     mach.__mach_features_enabled__[#mach.__mach_features_enabled__+1] = "MACH Battle Chronicler"
     local __current_battle__ = nil
@@ -24,13 +24,14 @@ function mach_battle_chronicler()
 
 
     function _finish_processing_battle()
-        mach_lib.update_mach_lua_log('Finishing processing of battle.')
+        mach_lib.update_mach_lua_log('Finishing processing battle tear down started.')
         if __winner_unit_seen__ == true then
             mach_lib.update_mach_lua_log('Battle winner unit seen.')
             if __loser_unit_seen__ == false then
                 mach_lib.update_mach_lua_log('Battle losers not seen, getting post battle all factions forces to find losers.')
                 local post_battle_all_factions_military_forces_list = mach_lib.get_all_factions_military_forces()
                 local pre_battle_loser_military_forces, post_battle_loser_military_forces = _get_pre_and_post_battle_loser_military_forces(__current_battle__.pre_battle_winner_military_forces[1], mach_data.__all_factions_military_forces_list__, post_battle_all_factions_military_forces_list)
+                assert(pre_battle_loser_military_forces and post_battle_loser_military_forces, mach_lib.update_mach_lua_log('ERROR: Unable to find battle losers after going through all factions forces!'))
                 for pre_battle_loser_military_forces_idx = 1, #pre_battle_loser_military_forces do
                     local pre_battle_loser_military_force = pre_battle_loser_military_forces[pre_battle_loser_military_forces_idx]
                 end
@@ -54,9 +55,10 @@ function mach_battle_chronicler()
             end
             mach_lib.update_mach_lua_log("Finished processing battle.")
         else
-            mach_lib.update_mach_lua_log(string.format('Battle winner unit NOT seen! Cannot finish processing battle of unique id "%s"', __current_battle__.battle_unique_id))
+            mach_lib.update_mach_lua_log(string.format('ERROR: Battle winners unit NOT seen! Cannot finish processing battle of unique id "%s"', __current_battle__.battle_unique_id))
         end
         __current_battle__ = nil
+        mach_lib.update_mach_lua_log('Finishing processing battle tear down completed.')
     end
 
 
@@ -264,16 +266,18 @@ function mach_battle_chronicler()
         for _, enemy_faction_id in pairs(faction_ids_at_war_with_faction) do
             mach_lib.update_mach_lua_log(string.format('Searching as a possible battle opponent "%s" to battle won by "%s".', enemy_faction_id, pre_battle_winner_military_force.faction_id))
 
+            mach_lib.update_mach_lua_log(assert(pre_battle_all_factions_military_forces_list[enemy_faction_id], string.format('ERROR: Faction id "%s" is not in table "pre_battle_all_factions_military_forces_list".', enemy_faction_id)))
             local pre_battle_enemy_military_forces = pre_battle_all_factions_military_forces_list[enemy_faction_id]
-
+            mach_lib.update_mach_lua_log(assert(post_battle_all_factions_military_forces_list[enemy_faction_id], string.format('ERROR: Faction id "%s" is not in table "post_battle_all_factions_military_forces_list".', enemy_faction_id)))
             local post_battle_enemy_military_forces = post_battle_all_factions_military_forces_list[enemy_faction_id]
+
             for _, pre_battle_enemy_military_force in pairs(pre_battle_enemy_military_forces) do
                 local post_battle_enemy_military_force = post_battle_enemy_military_forces[pre_battle_enemy_military_force.address]
                 if not post_battle_enemy_military_force then
-                    mach_lib.update_mach_lua_log('post battle enemy military force not exists!!!!')
+                    mach_lib.update_mach_lua_log('Post battle enemy military force not exists!!!!')
                 end
                 mach_lib.update_mach_lua_log(' ')
-                mach_lib.update_mach_lua_log(string.format('current faction turn: %s', mach_lib.__current_faction_turn_id__))
+                mach_lib.update_mach_lua_log(string.format('Current faction turn: %s', mach_lib.__current_faction_turn_id__))
                 mach_lib.update_mach_lua_log(pre_battle_winner_military_force.commander_name)
                 mach_lib.update_mach_lua_log(pre_battle_enemy_military_force.commander_name)
                 mach_lib.update_mach_lua_log(pre_battle_winner_military_force.commander_type)
@@ -286,11 +290,11 @@ function mach_battle_chronicler()
                 mach_lib.update_mach_lua_log(pre_battle_enemy_military_force.pos_y)
 
                 if post_battle_enemy_military_force then
-                    mach_lib.update_mach_lua_log('enemy soldier counts, pre battle')
+                    mach_lib.update_mach_lua_log('Enemy soldier counts, pre battle')
                     mach_lib.update_mach_lua_log(pre_battle_enemy_military_force.num_of_soldiers)
                     mach_lib.update_mach_lua_log(pre_battle_enemy_military_force.num_of_units)
                     mach_lib.update_mach_lua_log(pre_battle_enemy_military_force.num_of_ships)
-                    mach_lib.update_mach_lua_log('enemy soldier counts, post battle')
+                    mach_lib.update_mach_lua_log('Enemy soldier counts, post battle')
                     mach_lib.update_mach_lua_log(post_battle_enemy_military_force.num_of_soldiers)
                     mach_lib.update_mach_lua_log(post_battle_enemy_military_force.num_of_units)
                     mach_lib.update_mach_lua_log(post_battle_enemy_military_force.num_of_ships)
@@ -910,10 +914,12 @@ function mach_battle_chronicler()
             if not __winner_unit_seen__ then
                 __current_battle__:add_winner_military_force(pre_battle_military_force, true, nil)
                 __current_battle__:add_winner_military_force(post_battle_military_force, false, nil)
+                mach_lib.update_mach_lua_log("Setting __winner_unit_seen__ to \"true\"")
                 __winner_unit_seen__ = true
             else
                 __current_battle__:add_loser_military_force(pre_battle_military_force, true, nil)
                 __current_battle__:add_loserr_military_force(post_battle_military_force, false, nil)
+                mach_lib.update_mach_lua_log("Setting __loser_unit_seen__ to \"true\"")
                 __loser_unit_seen__ = true
             end
             mach_lib.update_mach_lua_log(string.format('Finished processing created character military force.'))
@@ -1006,7 +1012,7 @@ function mach_battle_chronicler()
 --                mach_lib.update_mach_lua_log("Character lost battle.")
 --            end
             __current_battle__ = mach_classes.Battle:new()
-            mach_lib.update_mach_lua_log('Adding time trigger of 0.01 seconds or "battle_processing_completed"')
+            mach_lib.update_mach_lua_log('Adding time trigger of 0.01 seconds for "battle_processing_completed"')
             mach_lib.scripting.game_interface:add_time_trigger("battle_processing_completed", 0.01)
         end
 
@@ -1021,7 +1027,7 @@ function mach_battle_chronicler()
         end
 
         local post_battle_military_force = nil
-        if not character_details then
+        if character_details == nil then
 --            mach_lib.update_mach_lua_log('tank')
             post_battle_military_force = mach_classes.Army:new(nil, faction_id, context)
         else
@@ -1045,27 +1051,38 @@ function mach_battle_chronicler()
         if conditions.CharacterWonBattle(context) then
             mach_lib.update_mach_lua_log("Character won battle.")
             local pre_battle_winner_military_force = nil
-            if not character_details then
+            if character_details == nil then
+                mach_lib.update_mach_lua_log("test1c")
                 pre_battle_winner_military_force = post_battle_military_force
             else
+                mach_lib.update_mach_lua_log("test1d")
+                for faction_id2, faction_id2_value in pairs(mach_data.__all_factions_military_forces_list__) do
+                    mach_lib.update_mach_lua_log("test1d3a")
+                    mach_lib.update_mach_lua_log(faction_id2)
+                end
+                mach_lib.update_mach_lua_log("test1d3")
+                assert(mach_data.__all_factions_military_forces_list__[faction_id], mach_lib.update_mach_lua_log(string.format('ERROR: Faction id "%s" not in "mach_data.__all_factions_military_forces_list__"!', faction_id)))
                 pre_battle_winner_military_force = mach_data.__all_factions_military_forces_list__[faction_id][post_battle_military_force.address]
             end
+            mach_lib.update_mach_lua_log("test1e")
             __current_battle__:add_winner_military_force(pre_battle_winner_military_force, true, is_attacker)
             __current_battle__:add_winner_military_force(post_battle_military_force, false, is_attacker)
+            mach_lib.update_mach_lua_log("Setting __winner_unit_seen__ to \"true\"")
             __winner_unit_seen__ = true
         else
             mach_lib.update_mach_lua_log("Character lost battle.")
             local pre_battle_loser_military_force = nil
-            if not character_details then
---                mach_lib.update_mach_lua_log("test")
+            if character_details == nil then
+                mach_lib.update_mach_lua_log("test")
                 pre_battle_loser_military_force = post_battle_military_force
             else
---                mach_lib.update_mach_lua_log("test2")
+                mach_lib.update_mach_lua_log("test2")
                 pre_battle_loser_military_force = mach_data.__all_factions_military_forces_list__[faction_id][post_battle_military_force.address]
             end
             mach_lib.update_mach_lua_log("test3")
             __current_battle__:add_loser_military_force(pre_battle_loser_military_force, true, is_attacker)
             __current_battle__:add_loser_military_force(post_battle_military_force, false, is_attacker)
+            mach_lib.update_mach_lua_log("Setting __loser_unit_seen__ to \"true\"")
             __loser_unit_seen__ = true
         end
 

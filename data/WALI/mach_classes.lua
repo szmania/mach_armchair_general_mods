@@ -34,10 +34,10 @@ function Army:new (character_details, faction_id, character_context)
 	if character_details then
 --		mach_lib.update_mach_lua_log("testing")
 		self.garrison_address = CampaignUI.CharacterResidence(self.address)
-		mach_lib.update_mach_lua_log("testing - garrison army")
+--		mach_lib.update_mach_lua_log("testing - garrison army")
 		if self.garrison_address then
 			mach_lib.update_mach_lua_log(string.format('Garrison address: %s', tostring(self.garrison_address)))
-			mach_lib.update_mach_lua_log("testing2")
+--			mach_lib.update_mach_lua_log("testing2")
 
 			local garrison_entities = CampaignUI.RetrieveContainedEntitiesFromGarrison(self.garrison_address, self.address)
 			mach_lib.output_table_to_mach_log(garrison_entities, 1)
@@ -48,7 +48,7 @@ function Army:new (character_details, faction_id, character_context)
 				mach_lib.update_mach_lua_log("Army is in settlement.")
 				self.settlement_in_name = garrison_entities.ContainerName
 				self.region_in_id = mach_lib.get_region_id_from_settlement_name(self.settlement_in_name)
-				mach_lib.update_mach_lua_log("testing3232")
+--				mach_lib.update_mach_lua_log("testing3232")
 				if not mach_lib.is_key_in_table(self.region_in_id, mach_data.region_to_settlement_coordinates_list) then
 					mach_data.region_to_settlement_coordinates_list[self.region_in_id] = {}
 					mach_data.region_to_settlement_coordinates_list[self.region_in_id][1] = self.pos_x
@@ -624,6 +624,7 @@ function MilitaryForce:new (character_details, faction_id, character_context)
 	mach_lib.update_mach_lua_log("Finished declaring variables.")
 
 	if character_details then
+		mach_lib.update_mach_lua_log('"character_context" provided for military force initialization')
 		self.action_points_per_turn = character_details.ActionPointsPerTurn
 		self.address = character_details.Address
 		self.commander_name = character_details.Name
@@ -669,6 +670,7 @@ function MilitaryForce:new (character_details, faction_id, character_context)
 			end
 		end
 	elseif character_context then
+		mach_lib.update_mach_lua_log('"character_context" provided for military force initialization')
 		self.commander_name = mach_lib.get_character_full_name_from_character_context(character_context)
 		self.name = self.commander_name
 		local region_id = mach_lib.get_character_region_from_character_context(character_context)
@@ -684,6 +686,8 @@ function MilitaryForce:new (character_details, faction_id, character_context)
 		self.pos_x = mach_data.region_to_settlement_coordinates_list[region_id][1] or 0
 		self.pos_y = mach_data.region_to_settlement_coordinates_list[region_id][2] or 0
 		self.character_context = character_context
+	else
+		mach_lib.update_mach_lua_log('ERROR: "character_details" nor "character_context" provided for military force initialization!')
 	end
 	self.is_rebel = string.find(self.faction_id, 'rebels')
 
