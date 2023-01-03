@@ -289,5 +289,6 @@ data/WALI/WIP/*
 !data/WALI/Interface/WL
 !data/WALI/Logs/FileLog.txt
 !empire_start_wali_mach.bat
+!img/
 
 data/WALI/.idea/
